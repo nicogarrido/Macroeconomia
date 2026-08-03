@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICOM401 · Macroeconomía II · UNAB</title>
+<meta name="description" content="Material del curso Macroeconomía II (ICOM401), Escuela de Ingeniería Comercial, Universidad Andrés Bello.">
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f4f4f1; --card:#ffffff;
+  --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --good:#0ca30c;
+  --wash:rgba(42,120,214,0.10);
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d; --card:#181817;
+  --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --good:#0ca30c;
+  --wash:rgba(57,135,229,0.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--page);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+.topbar{
+  position:sticky;top:0;z-index:50;background:var(--page);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;padding:10px 20px;flex-wrap:wrap;
+}
+.topbar .brand{font-weight:650;font-size:14px}
+.topbar nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+.topbar nav a{font-size:12.5px;color:var(--ink2);text-decoration:none;padding:5px 9px;border-radius:7px}
+.topbar nav a:hover{background:var(--wash);color:var(--ink)}
+.tbtn{
+  border:1px solid var(--border);background:var(--card);color:var(--ink2);
+  border-radius:7px;padding:5px 10px;font-size:12.5px;cursor:pointer;font-family:inherit;
+}
+.tbtn:hover{color:var(--ink)}
+
+.hero{padding:60px 0 10px}
+.kicker{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--s2);font-weight:650;margin-bottom:14px}
+h1{font-size:clamp(32px,5.5vw,52px);line-height:1.08;margin:0 0 18px;letter-spacing:-.025em;font-weight:680}
+.lede{font-size:18px;color:var(--ink2);max-width:60ch;margin:0}
+.meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:28px;font-size:13.5px;color:var(--ink2)}
+.meta div b{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:650;margin-bottom:2px}
+
+section{padding-top:56px}
+h2{font-size:clamp(22px,3.2vw,30px);line-height:1.2;margin:0 0 8px;letter-spacing:-.015em;font-weight:670}
+.eyebrow{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:650;margin-bottom:9px}
+p{margin:0 0 14px;font-size:15.5px;color:var(--ink2);max-width:74ch}
+p.lead{color:var(--ink)}
+
+/* ---------- material cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:20px}
+a.mat{
+  display:block;text-decoration:none;color:inherit;background:var(--card);
+  border:1px solid var(--border);border-radius:14px;padding:18px 19px;
+  transition:border-color .12s, transform .12s;
+}
+a.mat:hover{border-color:var(--s1);transform:translateY(-2px)}
+.mat .tag{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:660;color:var(--s2)}
+.mat .ttl{font-size:17px;font-weight:650;margin:6px 0 7px;letter-spacing:-.01em;line-height:1.25}
+.mat .dsc{font-size:13.5px;color:var(--ink2);margin:0}
+.mat .go{font-size:13px;color:var(--s1);font-weight:620;margin-top:12px;display:block}
+.mat.soon{opacity:.62;pointer-events:none}
+.mat.soon .go{color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.chip{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--wash);color:var(--ink2)}
+
+/* ---------- units ---------- */
+.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:20px}
+.unit{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:19px 20px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.unit::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--s1)}
+.unit.u2::before{background:var(--s2)}
+.unit.u3::before{background:var(--s3)}
+.unit .n{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;font-weight:660;color:var(--muted)}
+.unit .t{font-size:17px;font-weight:650;margin:5px 0 4px;line-height:1.25}
+.unit .w{font-size:12.5px;color:var(--muted);margin-bottom:9px}
+.unit ul{margin:0;padding-left:17px;font-size:13.5px;color:var(--ink2)}
+.unit li{margin-bottom:4px}
+.bar{height:5px;border-radius:3px;background:var(--grid);margin-top:auto;padding-top:0;overflow:hidden}
+.unit ul{margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--s1);border-radius:3px}
+.unit.u2 .bar i{background:var(--s2)} .unit.u3 .bar i{background:var(--s3)}
+
+/* ---------- tables ---------- */
+.tblwrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:6px 4px;margin-top:18px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--grid);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:650}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.wk{white-space:nowrap;color:var(--muted);font-size:12.5px;font-variant-numeric:tabular-nums}
+tr.ev td{background:var(--wash)}
+tr.ev td:first-child{font-weight:650;color:var(--ink);white-space:nowrap}
+.u-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-top:18px}
+.card h3{margin:0 0 8px;font-size:16px;font-weight:640}
+.card p:last-child{margin-bottom:0}
+.biblio{font-size:14.5px;color:var(--ink2);margin:0;padding-left:18px}
+.biblio li{margin-bottom:7px}
+.biblio b{color:var(--ink);font-weight:620}
+
+hr{border:0;border-top:1px solid var(--border);margin:52px 0 0}
+.foot{font-size:12.5px;color:var(--muted);padding-top:18px;max-width:74ch}
+.foot a{color:var(--s1)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">ICOM401 · Macroeconomía II</div>
+  <nav>
+    <a href="#material">Material</a>
+    <a href="#programa">Programa</a>
+    <a href="#calendario">Calendario</a>
+    <a href="#evaluacion">Evaluación</a>
+    <a href="#bibliografia">Bibliografía</a>
+  </nav>
+  <button class="tbtn" id="theme">◐ Tema</button>
+</div>
+
+<div class="wrap">
+
+<div class="hero">
+  <div class="kicker">Universidad Andrés Bello · Escuela de Ingeniería Comercial</div>
+  <h1>Macroeconomía II</h1>
+  <p class="lede">Economía abierta, IS-LM-BP y crecimiento. Todo el material de clase,
+  los simuladores interactivos y el calendario del curso, en un solo lugar.</p>
+  <div class="meta">
+    <div><b>Código</b>ICOM401</div>
+    <div><b>Período</b>Cuarto semestre</div>
+    <div><b>Horas</b>4 teóricas + 1 ayudantía</div>
+    <div><b>Duración</b>18 semanas</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MATERIAL DE CLASE
+     Para agregar una clase nueva, copiar este bloque y cambiar
+     href, tag, título y descripción:
+
+     <a class="mat" href="clases/mi-archivo.html">
+       <div class="tag">Unidad I · Clase 3</div>
+       <div class="ttl">Título de la clase</div>
+       <p class="dsc">Una línea describiendo qué contiene.</p>
+       <div class="chips"><span class="chip">tema</span></div>
+       <span class="go">Abrir →</span>
+     </a>
+
+     Para una clase que todavía no está lista, usar class="mat soon"
+     y dejar el href vacío.
+     ============================================================ -->
+<section id="material">
+  <div class="eyebrow">Recursos</div>
+  <h2>Material de clase</h2>
+  <p class="lead">Páginas interactivas para proyectar en clase y revisar después. Se van sumando
+  a medida que avanza el semestre.</p>
+
+  <div class="cards">
+
+    <a class="mat" href="clase1-noticias-macro-chile-2026.html">
+      <div class="tag">Semana 1 · Clase 1</div>
+      <div class="ttl">La economía chilena hoy: tres noticias que no calzan</div>
+      <p class="dsc">Cobre en máximo histórico con actividad en rojo, el dilema del Banco Central
+      e informalidad al alza. Incluye simulador IS-LM de economía cerrada.</p>
+      <div class="chips">
+        <span class="chip">datos 2026</span>
+        <span class="chip">gráficos</span>
+        <span class="chip">simulador IS-LM</span>
+      </div>
+      <span class="go">Abrir →</span>
+    </a>
+
+    <a class="mat soon">
+      <div class="tag">Unidad I · Semanas 2–3</div>
+      <div class="ttl">Balanza de pagos y mercado de divisas</div>
+      <p class="dsc">Cuenta corriente, cuenta financiera y de capitales, sistemas cambiarios,
+      paridad y tasa de interés internacional.</p>
+      <span class="go">Próximamente</span>
+    </a>
+
+    <a class="mat soon">
+      <div class="tag">Unidad II · Semanas 5–11</div>
+      <div class="ttl">Simulador IS-LM-BP</div>
+      <p class="dsc">Perfecta movilidad de capitales con tipo de cambio fijo y variable:
+      efectividad de la política fiscal, monetaria y cambiaria.</p>
+      <span class="go">Próximamente</span>
+    </a>
+
+    <a class="mat soon">
+      <div class="tag">Unidad III · Semanas 13–17</div>
+      <div class="ttl">Simulador del modelo de Solow</div>
+      <p class="dsc">Acumulación de capital per cápita, equilibrio de estado estacionario,
+      trayectorias de convergencia y contabilidad del crecimiento.</p>
+      <span class="go">Próximamente</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="programa">
+  <div class="eyebrow">Contenidos</div>
+  <h2>Programa del curso</h2>
+  <p class="lead">Tres unidades. La primera monta el andamiaje de una economía abierta, la segunda
+  lo convierte en un modelo de política y la tercera cambia el horizonte del corto al largo plazo.</p>
+
+  <div class="units">
+    <div class="unit u1">
+      <div class="n">Unidad I</div>
+      <div class="t">Conceptos económicos básicos en una economía abierta</div>
+      <div class="w">40% del curso · AE1</div>
+      <ul>
+        <li>Balanza de pagos: cuenta corriente</li>
+        <li>Balanza de pagos: cuenta de capitales</li>
+        <li>Sistemas cambiarios y paridad</li>
+        <li>El mercado de las divisas</li>
+        <li>Tasa de interés internacional</li>
+      </ul>
+      <div class="bar"><i style="width:40%"></i></div>
+    </div>
+
+    <div class="unit u2">
+      <div class="n">Unidad II</div>
+      <div class="t">El modelo IS-LM-BP con perfecta movilidad de capitales</div>
+      <div class="w">30% del curso · AE2 y AE3</div>
+      <ul>
+        <li>El modelo IS-LM-BP</li>
+        <li>Efectividad de la política fiscal</li>
+        <li>Efectividad de la política monetaria</li>
+        <li>Efectividad de la política cambiaria</li>
+        <li>Trayectorias hacia el equilibrio: corto, mediano y largo plazo</li>
+        <li>Mención de la imperfecta movilidad de capitales</li>
+      </ul>
+      <div class="bar"><i style="width:30%"></i></div>
+    </div>
+
+    <div class="unit u3">
+      <div class="n">Unidad III</div>
+      <div class="t">Crecimiento económico</div>
+      <div class="w">30% del curso · AE3</div>
+      <ul>
+        <li>Modelo neoclásico de Solow</li>
+        <li>Función de acumulación de capital per cápita</li>
+        <li>Consumidores e impuestos</li>
+        <li>Equilibrio y trayectorias de ajuste</li>
+        <li>Contabilidad del crecimiento</li>
+      </ul>
+      <div class="bar"><i style="width:30%"></i></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Aprendizajes esperados</h3>
+    <p style="margin-bottom:8px"><b>AE1.</b> Utilizar los conceptos básicos de una economía abierta
+    para comprender el funcionamiento de los mercados en una economía global.</p>
+    <p style="margin-bottom:8px"><b>AE2.</b> Determinar las trayectorias de ajuste hacia el equilibrio
+    en una economía con tipo de cambio fijo y perfecta movilidad de capitales, usando IS-LM-BP,
+    para implementar política monetaria y fiscal.</p>
+    <p><b>AE3.</b> Determinar las trayectorias de ajuste hacia el equilibrio en una economía abierta
+    con imperfecta movilidad de capitales, usando IS-LM-BP, para implementar política monetaria y fiscal.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="calendario">
+  <div class="eyebrow">18 semanas</div>
+  <h2>Calendario del semestre</h2>
+  <p class="lead">
+    <span class="u-dot" style="background:var(--s1)"></span>Unidad I
+    <span class="u-dot" style="background:var(--s2);margin-left:16px"></span>Unidad II
+    <span class="u-dot" style="background:var(--s3);margin-left:16px"></span>Unidad III
+  </p>
+
+  <div class="tblwrap">
+  <table>
+    <thead>
+      <tr><th style="width:104px">Semana</th><th style="width:82px">Clases</th><th>Contenido</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="wk">1</td><td class="wk">1–2</td>
+        <td><span class="u-dot" style="background:var(--s1)"></span>Introducción al curso y reglamento · Balanza de pagos: cuenta corriente</td></tr>
+      <tr><td class="wk">2</td><td class="wk">3–4</td>
+        <td><span class="u-dot" style="background:var(--s1)"></span>Cuenta financiera y de capitales · Equilibrio de la balanza de pagos</td></tr>
+      <tr><td class="wk">3</td><td class="wk">5–6</td>
+        <td><span class="u-dot" style="background:var(--s1)"></span>Tipo de cambio y sistemas cambiarios · Paridad, mercado de divisas y tasa de interés internacional</td></tr>
+      <tr><td class="wk">4</td><td class="wk">7–8</td>
+        <td><span class="u-dot" style="background:var(--s1)"></span>Holgura Unidad I, repaso y/o control · <b>Repaso IS-LM economía cerrada</b></td></tr>
+      <tr><td class="wk">5</td><td class="wk">9–10</td>
+        <td><span class="u-dot" style="background:var(--s2)"></span>IS-LM-BP, perfecta movilidad, tipo de cambio variable: elementos y equilibrio</td></tr>
+      <tr class="ev"><td>Semana 6</td><td class="wk">—</td><td><b>Solemne 1</b> · 30% de la nota de presentación</td></tr>
+      <tr><td class="wk">7</td><td class="wk">11–12</td>
+        <td><span class="u-dot" style="background:var(--s2)"></span>Tipo de cambio variable: efectos de política fiscal y monetaria</td></tr>
+      <tr><td class="wk">8</td><td class="wk">13–14</td>
+        <td><span class="u-dot" style="background:var(--s2)"></span>Trayectorias y ejercicios · Inicio de tipo de cambio fijo</td></tr>
+      <tr><td class="wk">9</td><td class="wk">15–16</td>
+        <td><span class="u-dot" style="background:var(--s2)"></span>Tipo de cambio fijo: efectos de política fiscal y monetaria</td></tr>
+      <tr><td class="wk">10</td><td class="wk">17–18</td>
+        <td><span class="u-dot" style="background:var(--s2)"></span>Trayectorias y ejercicios · IS-LM-BP con imperfecta movilidad de capitales</td></tr>
+      <tr><td class="wk">11</td><td class="wk">19–20</td>
+        <td><span class="u-dot" style="background:var(--s2)"></span>Imperfecta movilidad de capitales · Holgura Unidad II, repaso y/o control</td></tr>
+      <tr class="ev"><td>Semana 12</td><td class="wk">—</td><td><b>Solemne 2</b> · 40% de la nota de presentación</td></tr>
+      <tr><td class="wk">13</td><td class="wk">21–22</td>
+        <td><span class="u-dot" style="background:var(--s3)"></span>Cierre de IS-LM-BP y revisión de prueba · Crecimiento económico: ¿por qué importa?</td></tr>
+      <tr><td class="wk">14</td><td class="wk">23–24</td>
+        <td><span class="u-dot" style="background:var(--s3)"></span>Modelando crecimiento: equilibrios vs. trayectorias · Función de acumulación de capital</td></tr>
+      <tr><td class="wk">15</td><td class="wk">25–26</td>
+        <td><span class="u-dot" style="background:var(--s3)"></span>Capital per cápita · Consumidores e impuestos</td></tr>
+      <tr><td class="wk">16</td><td class="wk">27–28</td>
+        <td><span class="u-dot" style="background:var(--s3)"></span>Modelo neoclásico: equilibrio y trayectorias al equilibrio</td></tr>
+      <tr><td class="wk">17</td><td class="wk">29–30</td>
+        <td><span class="u-dot" style="background:var(--s3)"></span>Contabilidad del crecimiento · Holgura Unidad III</td></tr>
+      <tr class="ev"><td>Semana 18</td><td class="wk">—</td><td><b>Examen final</b> · 30% de la nota final</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="evaluacion">
+  <div class="eyebrow">Reglas del juego</div>
+  <h2>Evaluación</h2>
+  <p class="lead">Nota final = 70% nota de presentación + 30% examen.</p>
+
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Evaluación</th><th>Semana</th><th class="num">Ponderación</th><th>Instrumento</th></tr></thead>
+    <tbody>
+      <tr><td><b>Solemne 1</b></td><td class="wk">6</td><td class="num">30%</td><td>Prueba teórica</td></tr>
+      <tr><td><b>Solemne 2</b></td><td class="wk">12</td><td class="num">40%</td><td>Prueba teórica</td></tr>
+      <tr><td><b>Controles</b></td><td class="wk">—</td><td class="num">30%</td><td>Controles teóricos</td></tr>
+      <tr><td><b>Examen final</b></td><td class="wk">18</td><td class="num">30% de la nota final</td><td>Solo para quienes no se eximan</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="card">
+    <h3>Lo que conviene tener claro desde el día uno</h3>
+    <ul style="margin:0;padding-left:19px;font-size:14.5px;color:var(--ink2)">
+      <li style="margin-bottom:6px"><b>Eximición:</b> nota de presentación ≥ 5,5 <i>y</i> nota ≥ 4,0 en las dos solemnes.</li>
+      <li style="margin-bottom:6px"><b>Asistencia mínima de 75%</b> a clases y ayudantías. Bajo eso, el examen se califica 1,0.</li>
+      <li style="margin-bottom:6px"><b>Una solemne se puede faltar sin justificar:</b> esa nota se reemplaza por la del examen. La segunda inasistencia es 1,0.</li>
+      <li style="margin-bottom:6px"><b>No aplica</b> el Artículo 35° de eliminar una calificación parcial.</li>
+      <li style="margin-bottom:6px"><b>Recorrección:</b> por escrito y con argumentos, dentro de 5 días hábiles. Se recorrige la prueba completa.</li>
+      <li>Toda ausencia a una evaluación sin justificar se califica 1,0.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="bibliografia">
+  <div class="eyebrow">Para leer</div>
+  <h2>Bibliografía</h2>
+
+  <div class="card">
+    <h3>Obligatoria</h3>
+    <ul class="biblio">
+      <li><b>De Gregorio, J. (2007).</b> <i>Macroeconomía: Teoría y Políticas.</i> Pearson / Prentice Hall.</li>
+      <li><b>Blanchard, O., y Pérez, D. (2011).</b> <i>Macroeconomía: aplicaciones para Latinoamérica.</i> Pearson Education.</li>
+      <li><b>Acemoglu, D., Laibson, D., y List, J. (2018).</b> <i>Macroeconomics, Global Edition.</i> Pearson Education.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Complementaria</h3>
+    <ul class="biblio">
+      <li><b>The CORE Team.</b> <i>La Economía.</i> Disponible en <a href="https://www.core-econ.org" style="color:var(--s1)">core-econ.org</a>.</li>
+      <li><b>Larraín, F., y Sachs, J.</b> <i>Macroeconomía en la Economía Global</i> (2ª ed.). Pearson / Prentice Hall.</li>
+      <li><b>Mankiw, G. (2005).</b> <i>Macroeconomía</i> (5ª ed.). McGraw Hill.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Datos para seguir el curso en tiempo real</h3>
+    <ul class="biblio">
+      <li><a href="https://www.bcentral.cl/web/banco-central/areas/estadisticas/imacec" style="color:var(--s1)">Imacec</a> — actividad económica mensual, primer día hábil de cada mes.</li>
+      <li><a href="https://si3.bcentral.cl/Siete" style="color:var(--s1)">Base de datos estadísticos del Banco Central</a> — series de TPM, tipo de cambio, cuentas nacionales y balanza de pagos.</li>
+      <li><a href="https://www.bcentral.cl/en/areas/monetary-politics/monetary-policy-report-ipom" style="color:var(--s1)">Informe de Política Monetaria (IPoM)</a> — proyecciones oficiales, cuatro veces al año.</li>
+      <li><a href="https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor" style="color:var(--s1)">IPC del INE</a> — inflación mensual y anual.</li>
+    </ul>
+  </div>
+</section>
+
+<hr>
+<p class="foot">
+  Sitio del curso Macroeconomía II (ICOM401) · Escuela de Ingeniería Comercial, Facultad de Economía
+  y Negocios, Universidad Andrés Bello. El programa y el calendario están sujetos a modificaciones
+  según la contingencia del semestre.
+</p>
+
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem('icom401-theme'); }catch(e){}
+  var pref=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  root.setAttribute('data-theme', saved || (pref?'dark':'light'));
+  document.getElementById('theme').addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{ localStorage.setItem('icom401-theme',next); }catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
