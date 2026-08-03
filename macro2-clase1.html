@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Macro II · Clase 1 — La economía chilena, agosto 2026</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f4f4f1; --card:#ffffff;
+  --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --pos:#2a78d6; --neg:#e34948;
+  --good:#0ca30c; --warn:#fab219; --crit:#d03b3b;
+  --wash:rgba(42,120,214,0.10);
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d; --card:#181817;
+  --ink:#ffffff; --ink2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --pos:#3987e5; --neg:#e66767;
+  --good:#0ca30c; --warn:#fab219; --crit:#d03b3b;
+  --wash:rgba(57,135,229,0.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--page); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;background:var(--page);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;padding:10px 20px;flex-wrap:wrap;
+}
+.topbar .brand{font-weight:650;font-size:14px;letter-spacing:.01em}
+.topbar nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+.topbar nav a{
+  font-size:12.5px;color:var(--ink2);text-decoration:none;padding:5px 9px;border-radius:7px;
+}
+.topbar nav a:hover{background:var(--wash);color:var(--ink)}
+.tbtn{
+  border:1px solid var(--border);background:var(--card);color:var(--ink2);
+  border-radius:7px;padding:5px 10px;font-size:12.5px;cursor:pointer;font-family:inherit;
+}
+.tbtn:hover{color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 28px}
+.kicker{
+  font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--s2);
+  font-weight:650;margin-bottom:14px;
+}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.1;margin:0 0 18px;letter-spacing:-.02em;font-weight:680}
+.lede{font-size:18px;color:var(--ink2);max-width:64ch;margin:0}
+.hero-note{
+  margin-top:26px;padding:14px 16px;border-left:3px solid var(--s2);
+  background:var(--card);border-radius:0 10px 10px 0;font-size:14.5px;color:var(--ink2);
+}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:30px 0 10px}
+@media(max-width:900px){.tiles{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 15px;
+}
+.tile .lab{font-size:12px;color:var(--muted);margin-bottom:5px;line-height:1.3}
+.tile .val{font-size:26px;font-weight:660;letter-spacing:-.02em;line-height:1.1}
+.tile .sub{font-size:11.5px;color:var(--ink2);margin-top:5px;line-height:1.35}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+
+/* ---------- sections ---------- */
+section{padding-top:52px}
+h2{font-size:clamp(22px,3.2vw,30px);line-height:1.2;margin:0 0 6px;letter-spacing:-.015em;font-weight:670}
+h3{font-size:17px;margin:26px 0 8px;font-weight:640}
+.eyebrow{
+  font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  font-weight:650;margin-bottom:9px;
+}
+p{margin:0 0 13px;font-size:15.5px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:18px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+ul{margin:0 0 13px;padding-left:20px;font-size:15px}
+li{margin-bottom:6px}
+.quote{
+  border-left:3px solid var(--axis);padding-left:14px;color:var(--ink2);
+  font-size:15px;font-style:italic;margin:14px 0;
+}
+
+/* ---------- charts ---------- */
+.chart{background:var(--surface-1);border:1px solid var(--border);border-radius:14px;padding:18px 18px 12px;margin:18px 0}
+.chart h4{margin:0 0 3px;font-size:15.5px;font-weight:640}
+.chart .csub{margin:0 0 12px;font-size:13px;color:var(--ink2)}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin:8px 0 0}
+.legend span{display:flex;align-items:center;gap:6px}
+.lk{width:14px;height:2px;border-radius:1px;display:inline-block}
+.cfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.src{font-size:11.5px;color:var(--muted)}
+.tv{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;font-variant-numeric:tabular-nums}
+.tv th,.tv td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
+.tv th:first-child,.tv td:first-child{text-align:left}
+.tv th{color:var(--muted);font-weight:600}
+.hidden{display:none}
+.tip{
+  position:fixed;pointer-events:none;z-index:99;background:var(--card);color:var(--ink);
+  border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12.5px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);opacity:0;transition:opacity .1s;font-variant-numeric:tabular-nums;
+}
+
+/* ---------- question boxes ---------- */
+.q{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--s2);border-radius:0 12px 12px 0;padding:16px 18px;margin:16px 0}
+.q .qh{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--s2);font-weight:660;margin-bottom:8px}
+.q ol{margin:0;padding-left:20px;font-size:15px}
+.q ol li{margin-bottom:7px}
+details{border-top:1px solid var(--grid);margin-top:12px;padding-top:10px}
+summary{cursor:pointer;font-size:13.5px;color:var(--ink2);font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--s2)}
+details[open] summary::before{content:"▾ "}
+details .body{font-size:14.5px;color:var(--ink2);padding-top:9px}
+
+/* ---------- simulator ---------- */
+.sim{display:grid;grid-template-columns:280px 1fr;gap:22px}
+@media(max-width:860px){.sim{grid-template-columns:1fr}}
+.ctrl{margin-bottom:15px}
+.ctrl label{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-bottom:5px}
+.ctrl label b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:620}
+input[type=range]{width:100%;accent-color:var(--s1)}
+.presets{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 18px}
+.pbtn{
+  border:1px solid var(--border);background:var(--surface-1);color:var(--ink2);
+  border-radius:999px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit;
+}
+.pbtn:hover{border-color:var(--s1);color:var(--ink)}
+.readout{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ro{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.ro .lab{font-size:11.5px;color:var(--muted)}
+.ro .val{font-size:22px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ro .dlt{font-size:11.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+
+/* ---------- roadmap ---------- */
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:16px}
+.unit{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 16px}
+.unit .n{font-size:11.5px;color:var(--s2);font-weight:660;letter-spacing:.06em}
+.unit .t{font-size:15px;font-weight:640;margin:4px 0 6px}
+.unit .d{font-size:13px;color:var(--ink2)}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--wash);color:var(--ink2);margin-top:8px}
+
+/* ---------- sources ---------- */
+.srclist{font-size:13px;color:var(--ink2)}
+.srclist a{color:var(--s1)}
+.srclist li{margin-bottom:5px}
+hr{border:0;border-top:1px solid var(--border);margin:44px 0 0}
+.foot{font-size:12.5px;color:var(--muted);padding-top:16px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none">ICOM401 · Macroeconomía II · UNAB</a></div>
+  <nav>
+    <a href="#gancho">El gancho</a>
+    <a href="#n1">Cobre</a>
+    <a href="#n2">Banco Central</a>
+    <a href="#n3">Empleo</a>
+    <a href="#n4">Aranceles</a>
+    <a href="#islm">Repaso IS-LM</a>
+    <a href="#ruta">El semestre</a>
+    <a href="index.html" style="color:var(--s2)">↑ Índice</a>
+  </nav>
+  <button class="tbtn" id="theme">◐ Tema</button>
+</div>
+
+<div class="wrap">
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="kicker">Clase 1 · 3 de agosto de 2026</div>
+  <h1>El cobre está en su máximo histórico.<br>La economía chilena lleva cinco meses cayendo.</h1>
+  <p class="lede">Las dos frases son ciertas al mismo tiempo. Este semestre se trata, literalmente,
+  de entender por qué. No hay que esperar al final del curso para usar la teoría: los datos de
+  esta semana ya la están pidiendo.</p>
+  <div class="hero-note">
+    <b>Hoy, mientras estamos en clase:</b> el Banco Central publica el Imacec de junio (primer día
+    hábil del mes, 8:30 h). El mercado espera entre <b>+1,2%</b> (Encuesta de Expectativas) y
+    <b>+2,0%</b> (Clapes UC, OCEC-UDP). Sería el primer dato positivo del año.
+    <i>Abramos el sitio del Banco Central y veamos quién le achunta.</i>
+  </div>
+</div>
+
+<!-- ============ TILES ============ -->
+<div class="tiles">
+  <div class="tile">
+    <div class="lab">Imacec, mayo 2026 (var. anual)</div>
+    <div class="val" style="color:var(--neg)">−0,9%</div>
+    <div class="sub">Quinto mes consecutivo en rojo</div>
+  </div>
+  <div class="tile">
+    <div class="lab">IPC, junio 2026 (12 meses)</div>
+    <div class="val">4,3%</div>
+    <div class="sub">Sobre el techo del rango meta (2–4%)</div>
+  </div>
+  <div class="tile">
+    <div class="lab">Desempleo, abr–jun 2026</div>
+    <div class="val">9,4%</div>
+    <div class="sub">El nivel más alto en cinco años</div>
+  </div>
+  <div class="tile">
+    <div class="lab">TPM</div>
+    <div class="val">4,5%</div>
+    <div class="sub">Sin cambios desde el 16-dic-2025</div>
+  </div>
+  <div class="tile">
+    <div class="lab">Cobre, máximo histórico</div>
+    <div class="val">US$6,29</div>
+    <div class="sub">Por libra, 12-may-2026 (LME)</div>
+  </div>
+  <div class="tile">
+    <div class="lab">Arancel de EE.UU. a Chile</div>
+    <div class="val">12,5%</div>
+    <div class="sub">Vigente desde el 24-jul-2026</div>
+  </div>
+</div>
+
+<!-- ============ GANCHO ============ -->
+<section id="gancho">
+  <div class="eyebrow">Por qué esta clase importa</div>
+  <h2>Tres hechos que, según la intuición, no deberían convivir</h2>
+  <p>Si a alguien le dijeran que el principal producto de exportación de un país está en el precio
+  más alto de su historia, esa persona esperaría una economía en auge: más ingresos, más inversión,
+  más empleo, quizás algo de presión inflacionaria por exceso de demanda. Chile hoy tiene el precio
+  récord y, al mismo tiempo, actividad estancada, desempleo al alza e inflación alta. Los tres
+  hechos son verdaderos.</p>
+  <p>La intuición falla porque le falta el modelo. Y eso es exactamente lo que hace este curso:
+  darles el aparato que permite decir <i>cuál de los canales domina, en qué horizonte y bajo qué
+  supuestos</i>. Al terminar el semestre estas tres noticias deberían dejar de parecer una paradoja.</p>
+
+  <div class="q">
+    <div class="qh">Pregunta de apertura (5 minutos, en parejas)</div>
+    <ol>
+      <li>Escriban <b>tres</b> mecanismos por los que un precio récord del cobre podría <b>no</b>
+      traducirse en más PIB en el corto plazo.</li>
+      <li>De esos tres, ¿cuáles ya podían analizar con lo que vieron en Macro I?</li>
+      <li>¿Cuál de los tres les parece que necesita un modelo que Macro I no les dio?</li>
+    </ol>
+    <details>
+      <summary>Pistas que iremos formalizando este semestre</summary>
+      <div class="body">
+      Concentración de la renta minera (poca demanda interna inducida) · apreciación real que castiga
+      al resto de los transables · caída de producción física que compensa el alza de precio ·
+      inversión minera con rezagos largos · restricciones de oferta (insumos, energía) ·
+      política monetaria contractiva en términos reales · incertidumbre y su efecto sobre la inversión.
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ NOTICIA 1 ============ -->
+<section id="n1">
+  <div class="eyebrow">Noticia 1 · Sector externo</div>
+  <h2>Cobre en máximos: US$6,29 la libra, +62% desde el piso de los aranceles</h2>
+  <p>El 12 de mayo de 2026 el cobre alcanzó <b>US$6,29 por libra</b> en la Bolsa de Metales de
+  Londres, superando el récord de US$6,28 del 29 de enero. Desde el mínimo de US$3,87 del 9 de abril
+  de 2025 —el desplome que siguió al anuncio arancelario de EE.UU.— el metal acumula un alza de
+  <b>62,4%</b>. Las exportaciones chilenas superaron los <b>US$60.000 millones</b> en el primer
+  semestre, empujadas por el cobre.</p>
+  <p>El alza es sobre todo una historia de <b>oferta restringida</b>: China prohibió exportar ácido
+  sulfúrico entre mayo y diciembre de 2026 (Chile compraba allí cerca de un tercio de su ácido),
+  las tensiones en el Estrecho de Ormuz interrumpieron embarques, la mina Grasberg no se normaliza
+  hasta 2028 y la producción chilena cayó en el primer trimestre. Por el lado de la demanda: transición
+  energética, centros de datos e IA, y un PMI manufacturero chino en máximos de cinco años.</p>
+
+  <div class="chart" data-chart="imacec">
+    <h4>La actividad no siguió al cobre</h4>
+    <p class="csub">Imacec, variación anual (%). Enero–mayo 2026.</p>
+    <div class="svg-host"></div>
+    <div class="cfoot">
+      <span class="src">Fuente: Banco Central de Chile, notas de prensa Imacec.</span>
+      <button class="tbtn" data-tv>Ver tabla</button>
+    </div>
+    <div class="tv-host hidden"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Lo que ya saben (Macro I)</h3>
+      <p>Un shock positivo de términos de intercambio es, en el modelo de economía cerrada más simple,
+      un aumento del ingreso: la IS se desplaza a la derecha. Con eso bastaría para esperar
+      más producto y una tasa de interés algo más alta.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Lo que necesitan (Macro II)</h3>
+      <p>Economía abierta: tipo de cambio real, cuenta corriente, movilidad de capitales,
+      Mundell-Fleming, y la distinción entre un shock <i>transitorio</i> y uno <i>permanente</i>.
+      Recién ahí el precio récord del cobre deja de ser "más ingreso" a secas.</p>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qh">Para discutir</div>
+    <ol>
+      <li>El supuesto de precio del cobre del IPoM de junio es <b>US$5,8/lb para 2026</b> y
+      <b>US$5,2 para 2027</b>: el propio Banco Central cree que el precio actual es transitorio.
+      ¿Cómo cambia eso la respuesta óptima del consumo y de la inversión?</li>
+      <li>Si el alza viene de una <b>restricción de oferta global</b> y no de un boom de demanda,
+      ¿es una buena noticia para Chile de la misma manera?</li>
+      <li>¿Quién se lleva la renta: los hogares chilenos, el fisco, o accionistas en el exterior?
+      ¿Importa esa distinción para el PIB de corto plazo?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ NOTICIA 2 ============ -->
+<section id="n2">
+  <div class="eyebrow">Noticia 2 · Política monetaria</div>
+  <h2>El Banco Central proyectó 3% de inflación para principios de 2026. Llegó 4,3%.</h2>
+  <p>En diciembre de 2025 el Consejo bajó la TPM a <b>4,5%</b> y adelantó que la inflación llegaría
+  a la meta de 3% en el primer trimestre de 2026. Ocurrió lo contrario: el IPC anual pasó de 2,4%
+  en febrero a <b>4,3% en junio</b>, empujado por combustibles (en abril el IPC mensual fue 1,3%,
+  el más alto en cuatro años, con la gasolina y el diésel disparados por el petróleo cerca de
+  US$100 el barril).</p>
+  <p>Resultado: la TPM lleva <b>ocho meses congelada en 4,5%</b> y el mercado ya no espera recortes
+  este año. En la reunión del 28 de julio el Consejo mantuvo la tasa citando "un grado de
+  incertidumbre mayor que el habitual", consumo e inversión debilitados y desempleo al alza.
+  La próxima decisión es el <b>8 de septiembre</b>.</p>
+
+  <div class="chart" data-chart="ipc">
+    <h4>Inflación por encima del rango meta, con la tasa quieta</h4>
+    <p class="csub">Variación anual del IPC y TPM (%), 2026. La banda gris es el rango de tolerancia del Banco Central (2–4%).</p>
+    <div class="svg-host"></div>
+    <div class="legend">
+      <span><i class="lk" style="background:var(--s1)"></i> IPC, variación anual</span>
+      <span><i class="lk" style="background:var(--s2)"></i> TPM</span>
+      <span><i class="lk" style="background:var(--axis);height:10px;width:10px;border-radius:2px;opacity:.5"></i> Rango meta 2–4%</span>
+    </div>
+    <div class="cfoot">
+      <span class="src">Fuentes: INE (IPC) y Banco Central de Chile (TPM).</span>
+      <button class="tbtn" data-tv>Ver tabla</button>
+    </div>
+    <div class="tv-host hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">El dilema, en una línea</h3>
+    <p>La inflación está sobre la meta <b>y</b> la actividad está cayendo. Si el shock fuera de
+    demanda no habría dilema alguno: subir la tasa corrige las dos cosas. Pero un shock de
+    <b>oferta</b> —el petróleo— mueve inflación y producto en direcciones opuestas, y ahí el banco
+    central tiene que elegir. Esa elección es un tema central del curso.</p>
+    <div class="quote">La inflación subyacente está en 3,4% y las expectativas a dos años siguen
+    ancladas en 3%. Ese detalle no es menor: es exactamente lo que permite al Consejo "mirar a
+    través" del shock de combustibles en vez de reaccionar a él.</div>
+  </div>
+
+  <div class="q">
+    <div class="qh">Para discutir</div>
+    <ol>
+      <li>Con inflación en 4,3% y TPM en 4,5%, la <b>tasa real ex-post</b> es apenas 0,2%.
+      ¿Es una política monetaria contractiva o expansiva? ¿Contra qué tasa neutral la comparan?</li>
+      <li>Apliquen una regla de Taylor con los datos de hoy (brecha de inflación positiva, brecha
+      de producto negativa). ¿Qué tasa recomienda? ¿Coincide con 4,5%?</li>
+      <li>¿Por qué importa tanto que las expectativas a dos años sigan en 3%? ¿Qué pasaría con la
+      recomendación de política si se desanclaran?</li>
+      <li>El Consejo se equivocó en su proyección de diciembre. ¿Eso destruye la credibilidad,
+      o el que las expectativas sigan ancladas muestra justamente lo contrario?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ NOTICIA 3 ============ -->
+<section id="n3">
+  <div class="eyebrow">Noticia 3 · Mercado laboral y ciclo</div>
+  <h2>Desempleo en 9,4%: el más alto en cinco años, y el diagnóstico no es el obvio</h2>
+  <p>El INE informó el 31 de julio que la desocupación del trimestre abril–junio fue <b>9,4%</b>,
+  medio punto más que hace doce meses. La razón que da el propio informe es interesante:
+  el empleo <b>sí creció</b> (+0,9%), pero la fuerza de trabajo creció más (+1,5%). No es que se
+  estén destruyendo puestos; es que entra más gente a buscar trabajo de la que el mercado logra
+  absorber.</p>
+  <p>Hay un segundo problema, de calidad: el crecimiento del empleo se concentró en
+  <b>cuenta propia (+8,6%)</b> y asalariados informales (+2,8%). La informalidad llegó a <b>27,0%</b>.
+  Y la brecha de género persiste: 10,4% de desempleo en mujeres versus 8,7% en hombres.</p>
+
+  <div class="chart" data-chart="desempleo">
+    <h4>Cinco trimestres móviles de deterioro</h4>
+    <p class="csub">Tasa de desocupación nacional (%), trimestres móviles.</p>
+    <div class="svg-host"></div>
+    <div class="cfoot">
+      <span class="src">Fuente: INE, Encuesta Nacional de Empleo.</span>
+      <button class="tbtn" data-tv>Ver tabla</button>
+    </div>
+    <div class="tv-host hidden"></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Mini-ejercicio: Ley de Okun con datos de hoy</h3>
+    <p>La versión en diferencias es <span style="white-space:nowrap">Δu = −β·(g − g*)</span>, donde
+    <i>g</i> es el crecimiento observado y <i>g*</i> el crecimiento tendencial. Muevan los
+    parámetros y comparen con lo que efectivamente pasó (Δu = +0,5 pp en doce meses).</p>
+    <div class="sim" style="grid-template-columns:260px 1fr">
+      <div>
+        <div class="ctrl">
+          <label>Crecimiento observado <i>g</i> <b><span id="ok-g">0,0</span>%</b></label>
+          <input type="range" id="r-g" min="-3" max="5" step="0.1" value="0">
+        </div>
+        <div class="ctrl">
+          <label>Crecimiento tendencial <i>g*</i> <b><span id="ok-gs">2,0</span>%</b></label>
+          <input type="range" id="r-gs" min="1" max="4" step="0.1" value="2">
+        </div>
+        <div class="ctrl">
+          <label>Coeficiente de Okun <i>β</i> <b><span id="ok-b">0,25</span></b></label>
+          <input type="range" id="r-b" min="0.1" max="0.6" step="0.01" value="0.25">
+        </div>
+      </div>
+      <div>
+        <div class="readout" style="grid-template-columns:1fr 1fr">
+          <div class="ro">
+            <div class="lab">Δu predicho (12 meses)</div>
+            <div class="val" id="ok-du">+0,50 pp</div>
+            <div class="dlt" id="ok-cmp">Observado: +0,5 pp</div>
+          </div>
+          <div class="ro">
+            <div class="lab">Desempleo implícito</div>
+            <div class="val" id="ok-u">9,4%</div>
+            <div class="dlt">Partiendo de 8,9% hace un año</div>
+          </div>
+        </div>
+        <p style="font-size:13.5px;color:var(--ink2);margin-top:12px">
+          Con <i>g</i> ≈ 0 y <i>g*</i> = 2%, un β de 0,25 reproduce casi exactamente el medio punto
+          observado. Que un modelo de una línea acierte no es magia: es que la regularidad existe.
+          Pero fíjense en lo que <b>no</b> captura: la entrada de fuerza de trabajo y la informalidad.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="q">
+    <div class="qh">Para discutir</div>
+    <ol>
+      <li>Si el desempleo sube porque <b>entra</b> gente al mercado laboral, ¿es desempleo cíclico
+      o estructural? ¿Debería responder a política monetaria expansiva?</li>
+      <li>¿Cómo afecta la informalidad de 27% a la medición misma de la brecha de producto?</li>
+      <li>La tasa de participación sube justo cuando cae el ingreso real por inflación.
+      ¿Hay una historia de "trabajador adicional" acá?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ NOTICIA 4 ============ -->
+<section id="n4">
+  <div class="eyebrow">Bonus · Comercio internacional</div>
+  <h2>Desde el 24 de julio, EE.UU. cobra 12,5% a las exportaciones chilenas</h2>
+  <p>El arancel subió de 10% a <b>12,5%</b> y alcanza al <b>40,3%</b> de lo que Chile le vende a
+  Estados Unidos: salmón, uva fresca, arándanos, carnes, sal, vinos, frutas congeladas, tableros de
+  madera, limones y algunos lácteos. Quedan exentos el cobre refinado, el litio, el oro, la plata,
+  las naranjas, los kiwis y las paltas —un 53,5% de los envíos. La Subrei estima el sobrecosto en
+  <b>US$212 millones</b>.</p>
+  <p>El criterio del USTR para asignar la categoría de 12,5% no fue comercial: Chile no cuenta con
+  legislación que prohíba importar bienes producidos con trabajo forzoso; los países que sí la
+  tienen quedaron en 10%.</p>
+  <div class="q">
+    <div class="qh">Para discutir</div>
+    <ol>
+      <li>Un arancel que exime al 53,5% de los envíos —justo los minerales— pero castiga a
+      agricultura y acuicultura: ¿qué le hace eso a la <b>composición</b> sectorial de la economía?
+      ¿Refuerza o compensa lo que hace el precio del cobre?</li>
+      <li>US$212 millones sobre exportaciones semestrales de US$60.000 millones parece poco.
+      ¿Por qué el efecto agregado puede ser mayor que el número directo?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ IS/LM ============ -->
+<section id="islm">
+  <div class="eyebrow">Repaso · Macro I</div>
+  <h2>IS-LM en economía cerrada: el punto de partida común</h2>
+  <p>Antes de abrir la economía, pongámonos todos en la misma página. Este es el modelo que todos
+  vieron en Macro I. Muevan los controles y observen no solo <i>hacia dónde</i> se mueve el
+  equilibrio, sino <b>cuánto</b> del efecto se pierde por desplazamiento (<i>crowding out</i>).</p>
+
+  <div class="card">
+    <div class="sim">
+      <div>
+        <div class="presets">
+          <button class="pbtn" data-preset="base">Reiniciar</button>
+          <button class="pbtn" data-preset="fiscal">Expansión fiscal</button>
+          <button class="pbtn" data-preset="monetaria">Expansión monetaria</button>
+          <button class="pbtn" data-preset="confianza">Caída de confianza</button>
+          <button class="pbtn" data-preset="mix">Mix: G↑ y M↑</button>
+        </div>
+        <div class="ctrl">
+          <label>Gasto público <i>G</i> <b><span id="v-G">250</span></b></label>
+          <input type="range" id="s-G" min="150" max="400" step="5" value="250">
+        </div>
+        <div class="ctrl">
+          <label>Impuestos <i>T</i> <b><span id="v-T">200</span></b></label>
+          <input type="range" id="s-T" min="100" max="350" step="5" value="200">
+        </div>
+        <div class="ctrl">
+          <label>Oferta real de dinero <i>M/P</i> <b><span id="v-M">500</span></b></label>
+          <input type="range" id="s-M" min="300" max="700" step="10" value="500">
+        </div>
+        <div class="ctrl">
+          <label>Confianza / inversión autónoma <i>b₀</i> <b><span id="v-b0">300</span></b></label>
+          <input type="range" id="s-b0" min="150" max="450" step="5" value="300">
+        </div>
+        <div class="ctrl">
+          <label>Sensibilidad de <i>I</i> a la tasa <i>b₁</i> <b><span id="v-b1">20</span></b></label>
+          <input type="range" id="s-b1" min="5" max="60" step="1" value="20">
+        </div>
+        <div class="ctrl">
+          <label>Sensibilidad de <i>L</i> a la tasa <i>d₂</i> <b><span id="v-d2">40</span></b></label>
+          <input type="range" id="s-d2" min="5" max="100" step="1" value="40">
+        </div>
+      </div>
+      <div>
+        <div class="chart" style="margin:0">
+          <div class="svg-host" id="islm-host"></div>
+          <div class="legend">
+            <span><i class="lk" style="background:var(--s1)"></i> IS</span>
+            <span><i class="lk" style="background:var(--s2)"></i> LM</span>
+            <span><i class="lk" style="background:var(--axis)"></i> Situación inicial</span>
+          </div>
+        </div>
+        <div class="readout">
+          <div class="ro">
+            <div class="lab">Producto de equilibrio Y*</div>
+            <div class="val" id="o-Y">1.354</div>
+            <div class="dlt" id="o-dY">—</div>
+          </div>
+          <div class="ro">
+            <div class="lab">Tasa de interés r*</div>
+            <div class="val" id="o-r">4,4%</div>
+            <div class="dlt" id="o-dr">—</div>
+          </div>
+          <div class="ro">
+            <div class="lab">Efecto multiplicador puro</div>
+            <div class="val" id="o-mult">—</div>
+            <div class="dlt">Si la tasa no se moviera</div>
+          </div>
+          <div class="ro">
+            <div class="lab">Crowding out</div>
+            <div class="val" id="o-co">—</div>
+            <div class="dlt">Cuánto se pierde por el alza de <i>r</i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <details>
+      <summary>Las ecuaciones detrás del simulador</summary>
+      <div class="body">
+        <p style="margin:0 0 8px">
+        <b>IS:</b> Y = C(Y−T) + I(r) + G, con C = c₀ + c₁(Y−T), c₀ = 200, c₁ = 0,6,
+        e I = b₀ − b₁·r.<br>
+        <b>LM:</b> M/P = d₁·Y − d₂·r, con d₁ = 0,5.
+        </p>
+        <p style="margin:0">
+        El multiplicador simple es 1/(1−c₁) = 2,5. El efecto <i>total</i> sobre Y de un aumento de G
+        es 1/[(1−c₁) + b₁d₁/d₂], siempre menor. La diferencia entre ambos es el crowding out, y
+        depende de <b>b₁</b> y <b>d₂</b>: llévenlos a los extremos y recuperen los dos casos límite
+        clásicos.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <div class="q">
+    <div class="qh">Puente hacia el curso</div>
+    <ol>
+      <li>Suban <b>d₂</b> al máximo (LM casi plana). ¿Qué caso teórico es ese? ¿Se parece a lo que
+      hace hoy un banco central que fija la tasa en vez de la cantidad de dinero?</li>
+      <li>Bajen <b>b₁</b> a casi cero. La política fiscal se vuelve potentísima. ¿Es realista?</li>
+      <li>Este modelo no tiene precios, ni tipo de cambio, ni expectativas, ni sector externo.
+      Cada una de esas cuatro ausencias es una unidad de este curso.</li>
+      <li>Vuelvan a la noticia del cobre: ¿dónde entraría ese shock en este diagrama?
+      ¿Y qué le falta al diagrama para responder bien?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ RUTA ============ -->
+<section id="ruta">
+  <div class="eyebrow">El semestre</div>
+  <h2>De la noticia al modelo: cómo se ordena el curso</h2>
+  <p>Las tres unidades del programa no son casualidad. Cada una responde una de las preguntas que
+  quedaron abiertas hoy, y en ese orden.</p>
+  <div class="road">
+    <div class="unit">
+      <div class="n">UNIDAD I · 40%</div>
+      <div class="t">Economía abierta: los conceptos básicos</div>
+      <div class="d">Balanza de pagos (cuenta corriente, financiera y de capitales), sistemas
+      cambiarios, paridad, mercado de divisas y tasa de interés internacional.</div>
+      <div class="pill">↑ Cobre récord, US$60.000 millones exportados, arancel 12,5%</div>
+    </div>
+    <div class="unit">
+      <div class="n">SEMANA 4 · CLASE 8</div>
+      <div class="t">Repaso: IS-LM en economía cerrada</div>
+      <div class="d">El puente. Elementos del modelo, equilibrio y efectos de las políticas —
+      justo antes de abrirle la economía al resto del mundo.</div>
+      <div class="pill">↑ El simulador de arriba</div>
+    </div>
+    <div class="unit">
+      <div class="n">UNIDAD II · 30%</div>
+      <div class="t">IS-LM-BP con perfecta movilidad de capitales</div>
+      <div class="d">Tipo de cambio variable y fijo. Efectividad de la política fiscal, monetaria y
+      cambiaria; trayectorias de ajuste. Al final, una mención a la movilidad imperfecta.</div>
+      <div class="pill">↑ TPM congelada y el dólar en torno a $900</div>
+    </div>
+    <div class="unit">
+      <div class="n">UNIDAD III · 30%</div>
+      <div class="t">Crecimiento económico</div>
+      <div class="d">Modelo neoclásico de Solow: acumulación de capital per cápita, consumidores e
+      impuestos, equilibrio y trayectorias. Contabilidad del crecimiento.</div>
+      <div class="pill">↑ ¿Por qué Chile crecería 1,3% este año?</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Una advertencia sobre el horizonte</h3>
+    <p>Las Unidades I y II son de <b>corto plazo</b>: explican por qué la actividad cae este año y
+    qué puede hacer la política al respecto. La Unidad III cambia la pregunta por completo — ya no
+    es el ciclo, es la <b>tendencia</b>. Que Chile crezca 1,3% en 2026 en vez de 2,7% es un problema
+    de ciclo; que su crecimiento tendencial haya bajado de 5% a menos de 2% en dos décadas es un
+    problema de Solow. No los confundan: las noticias de hoy los mezclan todo el tiempo.</p>
+    <p style="margin-bottom:0"><b>El compromiso:</b> en la última clase volvemos a esta misma página
+    y respondemos las preguntas de hoy con los tres modelos en la mano. Guarden sus respuestas de la
+    pregunta de apertura — las vamos a comparar.</p>
+  </div>
+</section>
+
+<!-- ============ FUENTES ============ -->
+<section id="fuentes">
+  <div class="eyebrow">Verificación</div>
+  <h2>Fuentes</h2>
+  <ul class="srclist">
+    <li>Banco Central de Chile — <a href="https://www.bcentral.cl/web/banco-central/areas/estadisticas/imacec">Imacec</a>, notas de prensa de enero a mayo 2026.</li>
+    <li>Banco Central de Chile — <a href="https://www.bcentral.cl/contenido/-/detalle/prensa/nota-de-prensa/bcch-publica-ipom-junio-2026">IPoM junio 2026</a> (proyecciones de PIB 1,0–1,75% para 2026 y supuesto de cobre US$5,8/lb).</li>
+    <li>El Mostrador — <a href="https://www.elmostrador.cl/mercados/2026/07/28/banco-central-congela-la-tasa-de-interes-por-presion-inflacionaria-y-debilidad-economica/">Reunión de política monetaria del 28 de julio de 2026</a>.</li>
+    <li>La Tercera — <a href="https://www.latercera.com/pulso/noticia/banco-central-baja-la-tasa-de-interes-cierra-el-2025-en-su-nivel-mas-bajo-en-casi-cuatro-anos/">Recorte de la TPM a 4,5% el 16 de diciembre de 2025</a>.</li>
+    <li>INE — <a href="https://www.ine.gob.cl/estadisticas-por-tema/precios-e-inflacion/indice-de-precios-al-consumidor">IPC</a>, boletines mensuales 2026.</li>
+    <li>INE — <a href="https://www.ine.gob.cl/sala-de-prensa/prensa/general/noticia/2026/04/29/la-tasa-de-desocupaci%C3%B3n-nacional-fue-8-9-en-el-trimestre-enero-marzo-de-2026">Encuesta Nacional de Empleo</a>; El Dínamo — <a href="https://www.eldinamo.cl/economia/2026/07/31/los-factores-que-explican-el-alza-de-la-tasa-de-desempleo-en-chile-en-doce-meses/">factores detrás del alza del desempleo (31-jul-2026)</a>.</li>
+    <li>La Tercera — <a href="https://www.latercera.com/pulso/noticia/cobre-maximos-historico-fuerte-alza-desde-aranceles-de-trump/">Cobre en máximo histórico de US$6,29/lb</a>.</li>
+    <li>The Clinic — <a href="https://www.theclinic.cl/2026/07/24/arancel-de-125-de-estados-unidos-afecta-al-403-de-las-exportaciones-chilenas-y-deja-fuera-al-cobre-litionaranjas-kiwis-y-paltas/">Arancel de 12,5% de EE.UU. a Chile</a>.</li>
+    <li>Emol — <a href="https://www.emol.com/noticias/Economia/2026/07/10/1205246/pib-13-crecimiento-2026.html">Encuesta de Expectativas Económicas, julio 2026</a>.</li>
+    <li>La Tercera — <a href="https://www.latercera.com/pulso/noticia/tras-cifras-sectoriales-economistas-anticipan-imacec-de-junio-en-torno-a-2/">Proyecciones para el Imacec de junio</a>.</li>
+  </ul>
+  <hr>
+  <p class="foot">Preparado para la primera sesión de ICOM401 Macroeconomía II · Universidad Andrés Bello ·
+  datos al 3 de agosto de 2026. El Imacec de junio se publica hoy: conviene refrescar la cifra antes de clase.</p>
+</section>
+
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+/* ============================ tema ============================ */
+(function(){
+  var root=document.documentElement;
+  var pref=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  root.setAttribute('data-theme', pref?'dark':'light');
+  document.getElementById('theme').addEventListener('click',function(){
+    var d=root.getAttribute('data-theme')==='dark';
+    root.setAttribute('data-theme', d?'light':'dark');
+    drawAll();
+  });
+})();
+
+var cssv = function(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); };
+var tip = document.getElementById('tip');
+function showTip(e,html){ tip.innerHTML=html; tip.style.opacity=1;
+  var x=e.clientX+14, y=e.clientY-10;
+  if(x+200>window.innerWidth) x=e.clientX-190;
+  tip.style.left=x+'px'; tip.style.top=y+'px'; }
+function hideTip(){ tip.style.opacity=0; }
+
+var NBSP=' ';
+function fmt(v,d){ d=(d===undefined)?1:d; return v.toFixed(d).replace('.',','); }
+function sgn(v,d){ return (v>0?'+':(v<0?'−':'')) + fmt(Math.abs(v),d); }
+
+function svgEl(t,a){ var e=document.createElementNS('http://www.w3.org/2000/svg',t);
+  for(var k in a){ e.setAttribute(k,a[k]); } return e; }
+
+/* ============================ datos ============================ */
+var IMACEC = [
+  {m:'Ene', v:-0.1},{m:'Feb', v:-0.3},{m:'Mar', v:-0.1},
+  {m:'Abr', v:-1.2},{m:'May', v:-0.9}
+];
+var IPC = [
+  {m:'Ene', ipc:2.8, tpm:4.5},{m:'Feb', ipc:2.4, tpm:4.5},{m:'Mar', ipc:2.8, tpm:4.5},
+  {m:'Abr', ipc:4.0, tpm:4.5},{m:'May', ipc:3.9, tpm:4.5},{m:'Jun', ipc:4.3, tpm:4.5}
+];
+var DESEMP = [
+  {m:'Dic25–Feb', v:8.3},{m:'Ene–Mar', v:8.9},{m:'Feb–Abr', v:9.1},
+  {m:'Mar–May', v:9.4},{m:'Abr–Jun', v:9.4}
+];
+
+/* ============================ chart: columnas divergentes ============================ */
+function drawImacec(host){
+  host.innerHTML='';
+  var W=760,H=280,mL=44,mR=20,mT=18,mB=34;
+  var pw=W-mL-mR, ph=H-mT-mB;
+  var lo=-1.5, hi=0.5;
+  var y=function(v){ return mT + (hi-v)/(hi-lo)*ph; };
+  var band=pw/IMACEC.length, bw=Math.min(24,band*0.42);
+  var svg=svgEl('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Imacec mensual 2026'});
+
+  [0.5,0,-0.5,-1,-1.5].forEach(function(t){
+    svg.appendChild(svgEl('line',{x1:mL,x2:mL+pw,y1:y(t),y2:y(t),stroke:(t===0?cssv('--axis'):cssv('--grid')),'stroke-width':1}));
+    var lb=svgEl('text',{x:mL-9,y:y(t)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted')});
+    lb.textContent=fmt(t,1)+'%'; svg.appendChild(lb);
+  });
+
+  IMACEC.forEach(function(d,i){
+    var cx=mL+band*i+band/2, y0=y(0), y1=y(d.v);
+    var top=Math.min(y0,y1), h=Math.abs(y1-y0);
+    var neg=d.v<0, r=4;
+    var col=neg?cssv('--neg'):cssv('--pos');
+    var path = neg
+      ? 'M'+(cx-bw/2)+','+top+' H'+(cx+bw/2)+' V'+(top+h-r)+' a'+r+','+r+' 0 0 1 -'+r+','+r+' H'+(cx-bw/2+r)+' a'+r+','+r+' 0 0 1 -'+r+',-'+r+' Z'
+      : 'M'+(cx-bw/2+r)+','+top+' a'+r+','+r+' 0 0 1 '+r+',-0 H'+(cx+bw/2-r)+' a'+r+','+r+' 0 0 1 '+r+','+r+' V'+(top+h)+' H'+(cx-bw/2)+' Z';
+    var p=svgEl('path',{d:path,fill:col});
+    p.style.cursor='pointer';
+    p.addEventListener('mousemove',function(e){ showTip(e,'<b>'+d.m+' 2026</b><br>Imacec '+sgn(d.v,1)+'%'); });
+    p.addEventListener('mouseleave',hideTip);
+    svg.appendChild(p);
+
+    var vl=svgEl('text',{x:cx,y:y1+(neg?15:-8),'text-anchor':'middle','font-size':11.5,fill:cssv('--ink2'),'font-weight':600});
+    vl.textContent=sgn(d.v,1); svg.appendChild(vl);
+    var xl=svgEl('text',{x:cx,y:mT+ph+22,'text-anchor':'middle','font-size':11.5,fill:cssv('--muted')});
+    xl.textContent=d.m; svg.appendChild(xl);
+  });
+  host.appendChild(svg);
+}
+
+/* ============================ chart: IPC + TPM ============================ */
+function drawIPC(host){
+  host.innerHTML='';
+  var W=760,H=300,mL=44,mR=54,mT=18,mB=34;
+  var pw=W-mL-mR, ph=H-mT-mB;
+  var lo=1.5, hi=5.0;
+  var y=function(v){ return mT + (hi-v)/(hi-lo)*ph; };
+  var x=function(i){ return mL + (pw/(IPC.length-1))*i; };
+  var svg=svgEl('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'IPC anual y TPM 2026'});
+
+  svg.appendChild(svgEl('rect',{x:mL,y:y(4),width:pw,height:y(2)-y(4),fill:cssv('--axis'),opacity:0.14}));
+  [2,3,4,5].forEach(function(t){
+    svg.appendChild(svgEl('line',{x1:mL,x2:mL+pw,y1:y(t),y2:y(t),stroke:cssv('--grid'),'stroke-width':1}));
+    var lb=svgEl('text',{x:mL-9,y:y(t)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted')});
+    lb.textContent=t+'%'; svg.appendChild(lb);
+  });
+  var meta=svgEl('text',{x:mL+6,y:y(3)-6,'font-size':10.5,fill:cssv('--muted')});
+  meta.textContent='meta 3%'; svg.appendChild(meta);
+
+  function line(key,col){
+    var d='';
+    IPC.forEach(function(p,i){ d+=(i?' L':'M')+x(i)+','+y(p[key]); });
+    svg.appendChild(svgEl('path',{d:d,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    IPC.forEach(function(p,i){
+      svg.appendChild(svgEl('circle',{cx:x(i),cy:y(p[key]),r:5.5,fill:cssv('--surface-1')}));
+      svg.appendChild(svgEl('circle',{cx:x(i),cy:y(p[key]),r:4,fill:col}));
+    });
+  }
+  line('tpm',cssv('--s2'));
+  line('ipc',cssv('--s1'));
+
+  var last=IPC[IPC.length-1];
+  var l1=svgEl('text',{x:x(IPC.length-1)+10,y:y(last.ipc)+4,'font-size':12,fill:cssv('--ink'),'font-weight':650});
+  l1.textContent='4,3%'; svg.appendChild(l1);
+  var l2=svgEl('text',{x:x(IPC.length-1)+10,y:y(last.tpm)+4,'font-size':12,fill:cssv('--ink'),'font-weight':650});
+  l2.textContent='4,5%'; svg.appendChild(l2);
+
+  IPC.forEach(function(p,i){
+    var xl=svgEl('text',{x:x(i),y:mT+ph+22,'text-anchor':'middle','font-size':11.5,fill:cssv('--muted')});
+    xl.textContent=p.m; svg.appendChild(xl);
+    var hit=svgEl('rect',{x:x(i)-pw/(IPC.length-1)/2,y:mT,width:pw/(IPC.length-1),height:ph,fill:'transparent'});
+    hit.style.cursor='crosshair';
+    hit.addEventListener('mousemove',function(e){ showTip(e,'<b>'+p.m+' 2026</b><br>IPC 12m: '+fmt(p.ipc,1)+'%<br>TPM: '+fmt(p.tpm,1)+'%'); });
+    hit.addEventListener('mouseleave',hideTip);
+    svg.appendChild(hit);
+  });
+  host.appendChild(svg);
+}
+
+/* ============================ chart: desempleo ============================ */
+function drawDesemp(host){
+  host.innerHTML='';
+  var W=760,H=270,mL=44,mR=24,mT=18,mB=40;
+  var pw=W-mL-mR, ph=H-mT-mB;
+  var lo=7.5, hi=10.0;
+  var y=function(v){ return mT + (hi-v)/(hi-lo)*ph; };
+  var x=function(i){ return mL + (pw/(DESEMP.length-1))*i; };
+  var svg=svgEl('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Tasa de desocupación 2026'});
+
+  [8,8.5,9,9.5,10].forEach(function(t){
+    svg.appendChild(svgEl('line',{x1:mL,x2:mL+pw,y1:y(t),y2:y(t),stroke:cssv('--grid'),'stroke-width':1}));
+    var lb=svgEl('text',{x:mL-9,y:y(t)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted')});
+    lb.textContent=fmt(t,1)+'%'; svg.appendChild(lb);
+  });
+
+  var area='M'+x(0)+','+y(lo);
+  DESEMP.forEach(function(p,i){ area+=' L'+x(i)+','+y(p.v); });
+  area+=' L'+x(DESEMP.length-1)+','+y(lo)+' Z';
+  svg.appendChild(svgEl('path',{d:area,fill:cssv('--s1'),opacity:0.10}));
+
+  var d='';
+  DESEMP.forEach(function(p,i){ d+=(i?' L':'M')+x(i)+','+y(p.v); });
+  svg.appendChild(svgEl('path',{d:d,fill:'none',stroke:cssv('--s1'),'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+
+  DESEMP.forEach(function(p,i){
+    svg.appendChild(svgEl('circle',{cx:x(i),cy:y(p.v),r:5.5,fill:cssv('--surface-1')}));
+    svg.appendChild(svgEl('circle',{cx:x(i),cy:y(p.v),r:4,fill:cssv('--s1')}));
+    var xl=svgEl('text',{x:x(i),y:mT+ph+22,'text-anchor':'middle','font-size':10.5,fill:cssv('--muted')});
+    xl.textContent=p.m; svg.appendChild(xl);
+    var hit=svgEl('rect',{x:x(i)-24,y:mT,width:48,height:ph,fill:'transparent'});
+    hit.style.cursor='crosshair';
+    hit.addEventListener('mousemove',function(e){ showTip(e,'<b>'+p.m+'</b><br>Desocupación: '+fmt(p.v,1)+'%'); });
+    hit.addEventListener('mouseleave',hideTip);
+    svg.appendChild(hit);
+  });
+
+  var lastI=DESEMP.length-1;
+  var lb=svgEl('text',{x:x(lastI),y:y(DESEMP[lastI].v)-13,'text-anchor':'end','font-size':12.5,fill:cssv('--ink'),'font-weight':650});
+  lb.textContent='9,4%'; svg.appendChild(lb);
+  host.appendChild(svg);
+}
+
+/* ============================ tablas ============================ */
+function tableFor(kind){
+  var h='<table class="tv">';
+  if(kind==='imacec'){
+    h+='<tr><th>Mes 2026</th><th>Imacec (var. anual)</th></tr>';
+    IMACEC.forEach(function(d){ h+='<tr><td>'+d.m+'</td><td>'+sgn(d.v,1)+'%</td></tr>'; });
+    h+='<tr><td>Jun</td><td>publicación 3-ago-2026</td></tr>';
+  } else if(kind==='ipc'){
+    h+='<tr><th>Mes 2026</th><th>IPC 12m</th><th>TPM</th></tr>';
+    IPC.forEach(function(d){ h+='<tr><td>'+d.m+'</td><td>'+fmt(d.ipc,1)+'%</td><td>'+fmt(d.tpm,1)+'%</td></tr>'; });
+  } else {
+    h+='<tr><th>Trimestre móvil</th><th>Desocupación</th></tr>';
+    DESEMP.forEach(function(d){ h+='<tr><td>'+d.m+'</td><td>'+fmt(d.v,1)+'%</td></tr>'; });
+  }
+  return h+'</table>';
+}
+document.querySelectorAll('[data-tv]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var c=btn.closest('.chart'), host=c.querySelector('.tv-host'), kind=c.getAttribute('data-chart');
+    if(host.classList.contains('hidden')){ host.innerHTML=tableFor(kind); host.classList.remove('hidden'); btn.textContent='Ocultar tabla'; }
+    else { host.classList.add('hidden'); btn.textContent='Ver tabla'; }
+  });
+});
+
+/* ============================ Okun ============================ */
+function okun(){
+  var g=+document.getElementById('r-g').value, gs=+document.getElementById('r-gs').value, b=+document.getElementById('r-b').value;
+  document.getElementById('ok-g').textContent=fmt(g,1);
+  document.getElementById('ok-gs').textContent=fmt(gs,1);
+  document.getElementById('ok-b').textContent=fmt(b,2);
+  var du=-b*(g-gs);
+  document.getElementById('ok-du').textContent=sgn(du,2)+' pp';
+  document.getElementById('ok-u').textContent=fmt(8.9+du,1)+'%';
+  var diff=Math.abs(du-0.5);
+  document.getElementById('ok-cmp').innerHTML='Observado: +0,5 pp'+(diff<0.06?' <span style="color:var(--good)">✓ calza</span>':'');
+}
+['r-g','r-gs','r-b'].forEach(function(id){ document.getElementById(id).addEventListener('input',okun); });
+
+/* ============================ IS-LM ============================ */
+var P={c0:200,c1:0.6,d1:0.5};
+var BASE={G:250,T:200,M:500,b0:300,b1:20,d2:40};
+var cur=Object.assign({},BASE);
+var base_eq=null;
+
+function solve(p){
+  var A=P.c0-P.c1*p.T+p.b0+p.G;
+  var Y=(A+p.b1*p.M/p.d2)/((1-P.c1)+p.b1*P.d1/p.d2);
+  var r=(P.d1*Y-p.M)/p.d2;
+  return {Y:Y,r:r,A:A};
+}
+function isY(r,p){ return (P.c0-P.c1*p.T+p.b0+p.G-p.b1*r)/(1-P.c1); }
+function lmY(r,p){ return (p.M+p.d2*r)/P.d1; }
+
+function drawISLM(){
+  var host=document.getElementById('islm-host');
+  host.innerHTML='';
+  var W=560,H=400,mL=52,mR=22,mT=18,mB=44;
+  var pw=W-mL-mR, ph=H-mT-mB;
+  var Ylo=500,Yhi=2000, rlo=0,rhi=16;
+  var X=function(v){ return mL+(v-Ylo)/(Yhi-Ylo)*pw; };
+  var Yc=function(v){ return mT+(rhi-v)/(rhi-rlo)*ph; };
+  var svg=svgEl('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':'Diagrama IS-LM'});
+
+  [0,4,8,12,16].forEach(function(t){
+    svg.appendChild(svgEl('line',{x1:mL,x2:mL+pw,y1:Yc(t),y2:Yc(t),stroke:cssv('--grid'),'stroke-width':1}));
+    var lb=svgEl('text',{x:mL-9,y:Yc(t)+4,'text-anchor':'end','font-size':11,fill:cssv('--muted')});
+    lb.textContent=t+'%'; svg.appendChild(lb);
+  });
+  [500,1000,1500,2000].forEach(function(t){
+    svg.appendChild(svgEl('line',{x1:X(t),x2:X(t),y1:mT,y2:mT+ph,stroke:cssv('--grid'),'stroke-width':1}));
+    var lb=svgEl('text',{x:X(t),y:mT+ph+20,'text-anchor':'middle','font-size':11,fill:cssv('--muted')});
+    lb.textContent=t.toLocaleString('es-CL'); svg.appendChild(lb);
+  });
+  var ax=svgEl('text',{x:mL+pw/2,y:mT+ph+38,'text-anchor':'middle','font-size':12,fill:cssv('--ink2')});
+  ax.textContent='Producto  Y'; svg.appendChild(ax);
+  var ay=svgEl('text',{x:14,y:mT+ph/2,'font-size':12,fill:cssv('--ink2'),transform:'rotate(-90 14 '+(mT+ph/2)+')','text-anchor':'middle'});
+  ay.textContent='Tasa de interés  r'; svg.appendChild(ay);
+
+  var A_=P.c0-P.c1*cur.T+cur.b0+cur.G;
+  function rIS(Yv,p){ return ((P.c0-P.c1*p.T+p.b0+p.G)-(1-P.c1)*Yv)/p.b1; }
+  function rLM(Yv,p){ return (P.d1*Yv-p.M)/p.d2; }
+  function pts(fn,p){
+    var out=[];
+    for(var Yv=Ylo;Yv<=Yhi+1;Yv+=10){
+      var rv=fn(Yv,p);
+      if(rv>=rlo-0.001&&rv<=rhi+0.001) out.push([Yv,rv]);
+    }
+    return out;
+  }
+  function curve(fn,p,col,w,op){
+    var q=pts(fn,p);
+    if(q.length<2) return null;
+    var d=q.map(function(a,i){ return (i?'L':'M')+X(a[0])+','+Yc(a[1]); }).join(' ');
+    svg.appendChild(svgEl('path',{d:d,fill:'none',stroke:col,'stroke-width':w,opacity:op,'stroke-linecap':'round'}));
+    return q;
+  }
+  var changed = JSON.stringify(cur)!==JSON.stringify(BASE);
+  if(changed){
+    curve(rIS,BASE,cssv('--axis'),1.5,0.8);
+    curve(rLM,BASE,cssv('--axis'),1.5,0.8);
+    var b0e=solve(BASE);
+    svg.appendChild(svgEl('circle',{cx:X(b0e.Y),cy:Yc(b0e.r),r:4.5,fill:cssv('--surface-1'),stroke:cssv('--axis'),'stroke-width':2}));
+  }
+  var qIS=curve(rIS,cur,cssv('--s1'),2,1);
+  var qLM=curve(rLM,cur,cssv('--s2'),2,1);
+
+  var e=solve(cur);
+  var ex=X(e.Y), ey=Yc(e.r);
+  svg.appendChild(svgEl('line',{x1:mL,x2:ex,y1:ey,y2:ey,stroke:cssv('--axis'),'stroke-width':1,'stroke-dasharray':'3 3'}));
+  svg.appendChild(svgEl('line',{x1:ex,x2:ex,y1:ey,y2:mT+ph,stroke:cssv('--axis'),'stroke-width':1,'stroke-dasharray':'3 3'}));
+  svg.appendChild(svgEl('circle',{cx:ex,cy:ey,r:7,fill:cssv('--surface-1')}));
+  svg.appendChild(svgEl('circle',{cx:ex,cy:ey,r:5,fill:cssv('--ink')}));
+
+  function tag(q,txt,at){
+    if(!q) return;
+    var a=q[at==='end'?q.length-1:0];
+    var t=svgEl('text',{x:X(a[0])+(at==='end'?-6:8),y:Yc(a[1])+(at==='end'?16:-8),
+      'text-anchor':(at==='end'?'end':'start'),'font-size':12.5,fill:cssv('--ink2'),'font-weight':650});
+    t.textContent=txt; svg.appendChild(t);
+  }
+  tag(qIS,'IS','start');
+  tag(qLM,'LM','end');
+
+  host.appendChild(svg);
+  return e;
+}
+
+function updISLM(){
+  cur.G=+document.getElementById('s-G').value;
+  cur.T=+document.getElementById('s-T').value;
+  cur.M=+document.getElementById('s-M').value;
+  cur.b0=+document.getElementById('s-b0').value;
+  cur.b1=+document.getElementById('s-b1').value;
+  cur.d2=+document.getElementById('s-d2').value;
+  document.getElementById('v-G').textContent=cur.G;
+  document.getElementById('v-T').textContent=cur.T;
+  document.getElementById('v-M').textContent=cur.M;
+  document.getElementById('v-b0').textContent=cur.b0;
+  document.getElementById('v-b1').textContent=cur.b1;
+  document.getElementById('v-d2').textContent=fmt(cur.d2,1);
+
+  var e=drawISLM();
+  var b=solve(BASE);
+  document.getElementById('o-Y').textContent=Math.round(e.Y).toLocaleString('es-CL');
+  document.getElementById('o-r').textContent=fmt(e.r,1)+'%';
+  var dY=e.Y-b.Y, dr=e.r-b.r;
+  var eY=document.getElementById('o-dY'), er=document.getElementById('o-dr');
+  eY.textContent = Math.abs(dY)<0.5 ? 'igual al inicial' : sgn(dY,0)+' vs. inicial';
+  eY.style.color = Math.abs(dY)<0.5?'var(--muted)':(dY>0?'var(--good)':'var(--crit)');
+  er.textContent = Math.abs(dr)<0.05 ? 'igual al inicial' : sgn(dr,2)+' pp vs. inicial';
+  er.style.color = Math.abs(dr)<0.05?'var(--muted)':'var(--ink2)';
+
+  /* multiplicador puro vs efecto total: solo tiene sentido cuando cambió la IS */
+  var dA=(P.c0-P.c1*cur.T+cur.b0+cur.G)-(P.c0-P.c1*BASE.T+BASE.b0+BASE.G);
+  if(Math.abs(dA)>0.5){
+    var puro=dA/(1-P.c1);
+    document.getElementById('o-mult').textContent=sgn(puro,0);
+    var co=puro-dY;
+    document.getElementById('o-co').textContent=fmt(Math.abs(co)/Math.abs(puro)*100,0)+'%';
+  } else {
+    document.getElementById('o-mult').textContent='—';
+    document.getElementById('o-co').textContent='—';
+  }
+}
+['s-G','s-T','s-M','s-b0','s-b1','s-d2'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',updISLM);
+});
+document.querySelectorAll('[data-preset]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.getAttribute('data-preset');
+    var set={G:250,T:200,M:500,b0:300,b1:20,d2:40};
+    if(p==='fiscal') set.G=360;
+    if(p==='monetaria') set.M=680;
+    if(p==='confianza') set.b0=190;
+    if(p==='mix'){ set.G=360; set.M=680; }
+    document.getElementById('s-G').value=set.G;
+    document.getElementById('s-T').value=set.T;
+    document.getElementById('s-M').value=set.M;
+    document.getElementById('s-b0').value=set.b0;
+    document.getElementById('s-b1').value=set.b1;
+    document.getElementById('s-d2').value=set.d2;
+    updISLM();
+  });
+});
+
+/* ============================ render ============================ */
+function drawAll(){
+  drawImacec(document.querySelector('[data-chart="imacec"] .svg-host'));
+  drawIPC(document.querySelector('[data-chart="ipc"] .svg-host'));
+  drawDesemp(document.querySelector('[data-chart="desempleo"] .svg-host'));
+  updISLM();
+}
+drawAll();
+okun();
+window.addEventListener('resize',function(){ /* svg es responsivo por viewBox */ });
+</script>
+</body>
+</html>
