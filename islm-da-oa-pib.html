@@ -247,7 +247,7 @@ footer a{color:var(--text-secondary)}
     </div>
 
     <div class="chartcard">
-      <p class="charttitle">El PIB en el tiempo</p>
+      <p class="charttitle" id="titleTime">El PIB en el tiempo</p>
       <p class="chartsub" id="subTime">La trayectoria que genera el modelo, periodo a periodo.</p>
       <svg class="chart" id="timeSvg" viewBox="0 0 440 350" role="img" aria-label="Serie simulada del PIB, el nivel de precios y la tasa de interés"></svg>
       <div class="legend">
@@ -687,8 +687,9 @@ function drawDAOA(state){
 
 /* --- Serie de tiempo --- */
 function drawTime(state){
-  const {series, p, cur} = state;
-  const N = 24;
+  const {series, p, xmode} = state;
+  const paso = xmode==="paso";
+  const N = paso ? Math.max(12, series.length-1) : 24;
   const Wt=440, Ht=350;
   const mm={l:46,r:16,t:22,b:26};
   const mainH=176, spark=44, gapv=14;
@@ -721,7 +722,7 @@ function drawTime(state){
   }
   const last = series[series.length-1];
   s+=`<circle cx="${X(last.t).toFixed(1)}" cy="${Y1(last.Y).toFixed(1)}" r="5" fill="var(--s-is)" stroke="var(--surface-1)" stroke-width="2"/>`;
-  if(shockApplied) s+=`<line x1="${X(0.5).toFixed(1)}" y1="${mm.t}" x2="${X(0.5).toFixed(1)}" y2="${(mm.t+mainH).toFixed(1)}" stroke="var(--crit)" stroke-width="1.5" stroke-dasharray="3 3"/><text x="${(X(0.5)+4).toFixed(1)}" y="${(mm.t+11)}" font-size="10" fill="var(--crit)" font-weight="620">shock</text>`;
+  if(shockApplied && !paso) s+=`<line x1="${X(0.5).toFixed(1)}" y1="${mm.t}" x2="${X(0.5).toFixed(1)}" y2="${(mm.t+mainH).toFixed(1)}" stroke="var(--crit)" stroke-width="1.5" stroke-dasharray="3 3"/><text x="${(X(0.5)+4).toFixed(1)}" y="${(mm.t+11)}" font-size="10" fill="var(--crit)" font-weight="620">shock</text>`;
 
   // ---- sparklines ----
   const sparkAt = (top, key, label, color, unit) => {
@@ -746,9 +747,11 @@ function drawTime(state){
 
   // eje x
   for(let g=0;g<=4;g++){
-    const tv=N*g/4;
-    s+=`<text x="${X(tv).toFixed(1)}" y="${(t2+spark+16)}" text-anchor="middle" font-size="10.5" fill="var(--muted)">t=${tv}</text>`;
+    const tv=Math.round(N*g/4);
+    const lab = paso ? (g===0?"inicio":(g===4?"ahora":"")) : "t="+tv;
+    if(lab) s+=`<text x="${X(tv).toFixed(1)}" y="${(t2+spark+16)}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${lab}</text>`;
   }
+  if(paso) s+=`<text x="${(mm.l+iw/2).toFixed(1)}" y="${(t2+spark+16)}" text-anchor="middle" font-size="10.5" fill="var(--muted)">← recorrido de tu exploración →</text>`;
   document.getElementById("timeSvg").innerHTML = s;
 }
 
@@ -758,7 +761,20 @@ function drawTime(state){
 let mode = "A";
 let sliderP = 100;
 let trace = [];
+let exploreHist = [];
 let ghostState = null;
+
+/* Registra cada posición del deslizador en el modo A, para que el tercer
+   panel muestre el recorrido en vez de quedarse congelado. */
+function pushExplore(){
+  const p = {...BASE, lambda:P0.lambda};
+  const Y = adY(sliderP,p), i = lmI(Y,sliderP,p);
+  const last = exploreHist[exploreHist.length-1];
+  if(last && Math.abs(last.P - sliderP) < 1e-9) return;
+  exploreHist.push({t:0, Y, P:sliderP, i});
+  if(exploreHist.length > 140) exploreHist.shift();
+  exploreHist.forEach((d,k)=>{ d.t = k; });
+}
 
 function render(){
   const cur = hist[hist.length-1];
@@ -769,18 +785,24 @@ function render(){
     const i = lmI(Y,P,p);
     drawISLM({p, P, Y, i, ghost: (Math.abs(P-100)>0.3)?{p, P:100}:null});
     drawDAOA({p, P, Y, pe:100, trace, marker:{Y,P}, ghost:null});
-    drawTime({series:hist, p:P0, cur});
-    updateReadout({Y,P,i}, null, "A");
+    if(!exploreHist.length) pushExplore();
+    drawTime({series:exploreHist, p, xmode:"paso"});
+    const prevE = exploreHist.length>1 ? exploreHist[exploreHist.length-2] : null;
+    updateReadout({Y,P,i}, prevE, "A");
     document.getElementById("subISLM").textContent = `Con P = ${fmt(P)}, los saldos reales valen M/P = ${fmt(p.M/P,1)}. Esa es la posición de la LM.`;
     document.getElementById("subDAOA").textContent = `El punto marcado es el par (Y, P) que acaba de salir del IS-LM: un punto de la DA.`;
-    document.getElementById("subTime").textContent = `En el modo A el tiempo no corre: la serie espera en el equilibrio inicial. Pasa al modo B.`;
+    document.getElementById("titleTime").textContent = `El producto que vas generando`;
+    document.getElementById("subTime").textContent = exploreHist.length>2
+      ? `Cada punto es un nivel de precios que probaste. Compara con el potencial: así se ve la brecha.`
+      : `Mueve el deslizador y este panel registra el producto que resulta de cada nivel de precios.`;
   } else {
     const p = P0, P=cur.P, Y=cur.Y, i=cur.i;
     drawISLM({p, P, Y, i, ghost: ghostState});
     drawDAOA({p, P, Y, pe:cur.Pe, ghost: ghostState});
-    drawTime({series:hist, p:P0, cur});
+    drawTime({series:hist, p:P0, xmode:"t"});
     const prev = hist.length>1 ? hist[hist.length-2] : null;
     updateReadout(cur, prev, "B");
+    document.getElementById("titleTime").textContent = `El PIB en el tiempo`;
     document.getElementById("subISLM").textContent = shockApplied
       ? `Periodo t = ${cur.t}. La LM se mueve porque P está cambiando, no porque el Banco Central actúe.`
       : `Equilibrio inicial: Y = 100, i = 5,0%, P = 100.`;
@@ -799,12 +821,13 @@ function updateReadout(cur, prev, m){
   document.getElementById("roGap").textContent = sgn(gap)+"%";
   document.getElementById("roP").textContent = fmt(cur.P);
   document.getElementById("roI").textContent = fmt(cur.i,2)+"%";
-  const infl = prev ? (cur.P/prev.P-1)*100 : 0;
+  // En el modo A los precios no evolucionan: los eliges. Se compara contra el punto de partida.
+  const infl = m==="A" ? (cur.P/100-1)*100 : (prev ? (cur.P/prev.P-1)*100 : 0);
   document.getElementById("roPi").textContent = sgn(infl)+"%";
   document.getElementById("roYd").textContent = m==="A" ? "leído sobre la DA" : (hist.length>1?`t = ${cur.t}`:"nivel inicial");
   document.getElementById("roGapd").textContent = Math.abs(gap)<0.15 ? "en el potencial" : (gap>0?"economía sobrecalentada":"capacidad ociosa");
   document.getElementById("roPd").textContent = m==="A" ? "fijado por ti" : "equilibrio DA-OA";
-  document.getElementById("roPid").textContent = prev ? "respecto de t−1" : "sin variación";
+  document.getElementById("roPid").textContent = m==="A" ? "respecto de P = 100" : (prev ? "respecto de t−1" : "sin variación");
   document.getElementById("roId").textContent = "equilibrio IS-LM";
 }
 
@@ -833,6 +856,7 @@ function syncA(){
   sliderP = +pSlider.value;
   document.getElementById("pVal").textContent = "P = "+fmt(sliderP);
   document.getElementById("mrVal").textContent = "M/P = "+fmt(BASE.M/sliderP,1);
+  pushExplore();
   render(); narrateA();
 }
 pSlider.addEventListener("input", syncA);
@@ -840,19 +864,20 @@ pSlider.addEventListener("input", syncA);
 let sweepRaf=null;
 document.getElementById("sweepBtn").addEventListener("click", ()=>{
   if(sweepRaf){cancelAnimationFrame(sweepRaf);sweepRaf=null;}
-  trace=[]; let v=80;
+  trace=[]; exploreHist=[]; let v=80;
   const stepF = ()=>{
     v += 1.1;
     pSlider.value = v; sliderP=v;
     trace.push([adY(v,BASE), v]);
     document.getElementById("pVal").textContent="P = "+fmt(v);
     document.getElementById("mrVal").textContent="M/P = "+fmt(BASE.M/v,1);
+    pushExplore();
     render(); narrateA();
     if(v<145) sweepRaf=requestAnimationFrame(stepF); else sweepRaf=null;
   };
   stepF();
 });
-document.getElementById("clearTraceBtn").addEventListener("click", ()=>{ trace=[]; render(); });
+document.getElementById("clearTraceBtn").addEventListener("click", ()=>{ trace=[]; exploreHist=[]; render(); });
 
 /* ============================================================
    6. MODO B — shocks
