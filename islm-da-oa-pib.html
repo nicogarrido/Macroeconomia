@@ -161,7 +161,8 @@ footer a{color:var(--text-secondary)}
   <div class="histgrid">
     <div class="chartcard">
       <div class="segbtns" role="group" aria-label="Vista de la serie">
-        <button class="seg" data-view="nivel" aria-pressed="true">Nivel (índice 2018 = 100)</button>
+        <button class="seg" data-view="nivel" aria-pressed="true">Índice (2018 = 100)</button>
+        <button class="seg" data-view="pesos" aria-pressed="false">En pesos (billones)</button>
         <button class="seg" data-view="brecha" aria-pressed="false">Brecha del producto (%)</button>
         <button class="seg" data-view="crec" aria-pressed="false">Crecimiento anual (%)</button>
       </div>
@@ -351,7 +352,7 @@ footer a{color:var(--text-secondary)}
 </section>
 
 <footer>
-  <p><b>Fuentes de los datos del panel 1.</b> Tasas de crecimiento anual del PIB real y cifras de coyuntura: Banco Central de Chile (Cuentas Nacionales, Imacec, Reunión de Política Monetaria y Encuesta de Expectativas Económicas de julio de 2026), reportadas por Diario Financiero, La Tercera y BioBioChile. El índice 2018 = 100 y la tendencia (filtro Hodrick-Prescott, λ = 100) son cálculos propios sobre esas tasas y tienen fines pedagógicos: no reemplazan las series oficiales en pesos encadenados. La cifra de 2026 es la proyección de mercado (1,3%), no un dato observado.</p>
+  <p><b>Fuentes de los datos del panel 1.</b> Tasas de crecimiento anual del PIB real y cifras de coyuntura: Banco Central de Chile (Cuentas Nacionales, Imacec, Reunión de Política Monetaria y Encuesta de Expectativas Económicas de julio de 2026), reportadas por Diario Financiero, La Tercera y BioBioChile. El índice 2018 = 100 y la tendencia (filtro Hodrick-Prescott, λ = 100) son cálculos propios sobre esas tasas y tienen fines pedagógicos: no reemplazan las series oficiales en pesos encadenados. La cifra de 2026 es la proyección de mercado (1,3%), no un dato observado. La vista <b>en pesos</b> ancla ese índice al PIB nominal de 2025 efectivo — $339.978 miles de millones de pesos, según el Informe de Finanzas Públicas del primer trimestre de 2026 de la Dirección de Presupuestos — y expresa cada año en billones de pesos de 2025; el ancla implica unos 957 pesos por dólar frente a la estimación del FMI para 2025 (US$355.346 millones). Es una conversión de nivel para dar magnitud, no la serie encadenada del Banco Central.</p>
   <p>El laboratorio es un modelo calibrado con fines docentes. Los números no son estimaciones de la economía chilena.</p>
 </footer>
 
@@ -382,6 +383,28 @@ const HIST = {
   gap   : [-4.31,-2.15,0.39,2.33,3.20,2.08,1.70,0.93,0.04,1.85,0.39,-7.71,1.02,1.06,-0.49,0.04,0.47,-0.27],
   growth: [null,5.8,6.1,5.3,4.0,1.8,2.3,1.7,1.4,4.0,0.6,-6.2,11.7,2.1,0.5,2.6,2.5,1.3]
 };
+
+/* --- Ancla de nivel -------------------------------------------------------
+   El índice no trae nivel, así que hay que anclarlo a una cifra real. Uso el
+   PIB nominal 2025 efectivo: $339.978 miles de millones de pesos, es decir
+   339,978 billones (DIPRES, Informe de Finanzas Públicas, primer trimestre de
+   2026). Cruza con la estimación del FMI para 2025 (US$355.346 millones), lo
+   que implica unos 957 pesos por dólar — coherente con el mercado.
+
+   La serie queda expresada en BILLONES DE PESOS DE 2025: cada año responde
+   "¿cuánto habría valido esa producción a precios de 2025?".
+
+   Para cambiar el ancla —por ejemplo a pesos encadenados de referencia 2018 del
+   Banco Central— basta editar estas dos constantes; todo lo demás se recalcula.
+--------------------------------------------------------------------------- */
+const ANCLA_BILLONES = 339.978;
+const ANCLA_ANIO     = 2025;
+(function(){
+  const k = ANCLA_BILLONES / HIST.level[HIST.years.indexOf(ANCLA_ANIO)];
+  HIST.pesos      = HIST.level.map(v => v*k);
+  HIST.pesosTrend = HIST.trend.map(v => v*k);
+})();
+
 let histView = "nivel";
 const histSvg = document.getElementById("histSvg");
 
@@ -390,13 +413,18 @@ function drawHist(){
   const iw=W-m.l-m.r, ih=H-m.t-m.b;
   const ys=HIST.years, n=ys.length;
   const X = i => m.l + (i/(n-1))*iw;
-  let series, y0, y1, title, sub, unit, legend, nticks;
+  let series, trendS, isLine=false, y0, y1, title, sub, unit, legend, nticks;
 
   if(histView==="nivel"){
-    series=HIST.level; y0=65; y1=125; unit=""; nticks=6;
+    series=HIST.level; trendS=HIST.trend; isLine=true; y0=65; y1=125; unit=""; nticks=6;
     title="PIB real de Chile — nivel y tendencia";
     sub="Índice 2018 = 100, construido con las tasas de crecimiento anual del Banco Central. Tendencia: filtro HP (λ = 100).";
     legend='<span><i style="background:var(--s-is)"></i>PIB real (índice)</span><span><i class="dash"></i>Tendencia (HP)</span><span style="color:var(--muted)">Tramo punteado 2026 = proyección</span>';
+  } else if(histView==="pesos"){
+    series=HIST.pesos; trendS=HIST.pesosTrend; isLine=true; y0=200; y1=360; unit=""; nticks=4;
+    title="PIB real de Chile — en pesos";
+    sub="Billones de pesos de 2025. El índice real anclado al PIB nominal 2025 efectivo ($339.978 miles de millones, DIPRES). Un billón = un millón de millones.";
+    legend='<span><i style="background:var(--s-is)"></i>PIB real (billones $)</span><span><i class="dash"></i>Tendencia (HP)</span><span style="color:var(--muted)">Tramo punteado 2026 = proyección</span>';
   } else if(histView==="brecha"){
     series=HIST.gap; y0=-9; y1=6; unit="%"; nticks=5;
     title="Brecha del producto — distancia respecto de la tendencia";
@@ -434,22 +462,22 @@ function drawHist(){
   s += `<rect x="${cx0.toFixed(1)}" y="${m.t}" width="${cw.toFixed(1)}" height="${ih}" fill="var(--grid)" opacity="0.55"/>`;
   s += `<text x="${X(HIST.years.indexOf(2020)).toFixed(1)}" y="${m.t+14}" text-anchor="middle" font-size="10.5" fill="var(--muted)">2020</text>`;
 
-  if(histView==="nivel"){
+  if(isLine){
     // trend dashed
-    const tp = HIST.trend.map((v,i)=>[X(i),Y(v)]);
+    const tp = trendS.map((v,i)=>[X(i),Y(v)]);
     s += `<path d="${pathOf(tp)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>`;
     // level: solid up to 2025, dashed to 2026
-    const solid = HIST.level.slice(0,n-1).map((v,i)=>[X(i),Y(v)]);
+    const solid = series.slice(0,n-1).map((v,i)=>[X(i),Y(v)]);
     s += `<path d="${pathOf(solid)}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-linejoin="round"/>`;
-    s += `<path d="${pathOf([[X(n-2),Y(HIST.level[n-2])],[X(n-1),Y(HIST.level[n-1])]])}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-dasharray="3 3"/>`;
+    s += `<path d="${pathOf([[X(n-2),Y(series[n-2])],[X(n-1),Y(series[n-1])]])}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-dasharray="3 3"/>`;
     // etiquetas directas separadas verticalmente
-    const yTop = Y(HIST.level[n-1]) - 16, yBot = Y(HIST.trend[n-1]) + 14;
-    s += `<line x1="${(m.l+iw).toFixed(1)}" y1="${Y(HIST.level[n-1]).toFixed(1)}" x2="${(m.l+iw+6)}" y2="${yTop.toFixed(1)}" stroke="var(--s-is)" stroke-width="1"/>`;
+    const yTop = Y(series[n-1]) - 16, yBot = Y(trendS[n-1]) + 14;
+    s += `<line x1="${(m.l+iw).toFixed(1)}" y1="${Y(series[n-1]).toFixed(1)}" x2="${(m.l+iw+6)}" y2="${yTop.toFixed(1)}" stroke="var(--s-is)" stroke-width="1"/>`;
     s += `<text x="${(m.l+iw+8)}" y="${yTop.toFixed(1)}" font-size="11.5" fill="var(--s-is)" font-weight="650">PIB real</text>`;
     s += `<text x="${(m.l+iw+8)}" y="${(yTop+13).toFixed(1)}" font-size="10.5" fill="var(--muted)">2026 proy.</text>`;
-    s += `<line x1="${(m.l+iw).toFixed(1)}" y1="${Y(HIST.trend[n-1]).toFixed(1)}" x2="${(m.l+iw+6)}" y2="${yBot.toFixed(1)}" stroke="var(--muted)" stroke-width="1"/>`;
+    s += `<line x1="${(m.l+iw).toFixed(1)}" y1="${Y(trendS[n-1]).toFixed(1)}" x2="${(m.l+iw+6)}" y2="${yBot.toFixed(1)}" stroke="var(--muted)" stroke-width="1"/>`;
     s += `<text x="${(m.l+iw+8)}" y="${yBot.toFixed(1)}" font-size="11.5" fill="var(--muted)">Tendencia</text>`;
-    HIST.level.forEach((v,i)=>{ if(i%2===0||i===n-1) s+=`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="3.2" fill="var(--surface-1)" stroke="var(--s-is)" stroke-width="2"/>`; });
+    series.forEach((v,i)=>{ if(i%2===0||i===n-1) s+=`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="3.2" fill="var(--surface-1)" stroke="var(--s-is)" stroke-width="2"/>`; });
   } else {
     const vals = series;
     const bw = Math.min(26, (iw/(n-1))*0.62);
@@ -483,11 +511,12 @@ function drawHist(){
       const px=X(i), py=Y(v);
       const lines = [
         String(HIST.years[i]) + (HIST.years[i]===2026?" (proy.)":""),
+        "PIB: $" + fmt(HIST.pesos[i]) + " bill.",
         "Índice: " + fmt(HIST.level[i]),
         "Crecim.: " + (HIST.growth[i]===null?"—":sgn(HIST.growth[i])+"%"),
         "Brecha: " + sgn(HIST.gap[i])+"%"
       ];
-      const bw=126, bh=16*lines.length+12;
+      const bw=142, bh=16*lines.length+12;
       let bx = px+12; if(bx+bw>W-4) bx = px-bw-12;
       let by = Math.max(m.t+2, Math.min(py-bh/2, m.t+ih-bh-2));
       let t = `<line x1="${px.toFixed(1)}" y1="${m.t}" x2="${px.toFixed(1)}" y2="${m.t+ih}" stroke="var(--axis)" stroke-width="1"/>`;
@@ -501,9 +530,9 @@ function drawHist(){
 }
 
 function buildHistTable(){
-  let t = `<table><thead><tr><th>Año</th><th>Índice 2018=100</th><th>Crecim. anual %</th><th>Tendencia</th><th>Brecha %</th></tr></thead><tbody>`;
+  let t = `<table><thead><tr><th>Año</th><th>Índice 2018=100</th><th>Billones $ de 2025</th><th>Crecim. anual %</th><th>Tendencia (índice)</th><th>Brecha %</th></tr></thead><tbody>`;
   HIST.years.forEach((y,i)=>{
-    t += `<tr><td>${y}${y===2026?" (p)":""}</td><td>${fmt(HIST.level[i],2)}</td><td>${HIST.growth[i]===null?"—":fmt(HIST.growth[i])}</td><td>${fmt(HIST.trend[i],2)}</td><td>${fmt(HIST.gap[i],2)}</td></tr>`;
+    t += `<tr><td>${y}${y===2026?" (p)":""}</td><td>${fmt(HIST.level[i],2)}</td><td>${fmt(HIST.pesos[i],1)}</td><td>${HIST.growth[i]===null?"—":fmt(HIST.growth[i])}</td><td>${fmt(HIST.trend[i],2)}</td><td>${fmt(HIST.gap[i],2)}</td></tr>`;
   });
   document.getElementById("histTable").innerHTML = t+"</tbody></table>";
 }
