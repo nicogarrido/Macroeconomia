@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Del PIB en el tiempo a IS-LM: DA-OA en economía cerrada · Macroeconomía II UNAB</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f4f4f1; --card:#ffffff;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --s-is:#2a78d6;     /* IS / DA / PIB efectivo */
+  --s-lm:#eb6834;     /* LM / dinero */
+  --s-oa:#1baf7a;     /* Oferta agregada de corto plazo */
+  --accent-soft:#eaf2fd;
+  --warn:#fab219; --crit:#d03b3b; --good:#0ca30c;
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d; --card:#151514;
+  --text-primary:#ffffff; --text-secondary:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --s-is:#3987e5; --s-lm:#d95926; --s-oa:#199e70;
+  --accent-soft:#132132;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--page); color:var(--text-primary);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.55;
+}
+.wrap{max-width:1360px;margin:0 auto;padding:0 20px 80px}
+header.top{padding:34px 0 18px;border-bottom:1px solid var(--border);margin-bottom:26px}
+.kicker{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:650}
+h1{font-size:clamp(24px,3.2vw,36px);line-height:1.16;margin:8px 0 10px;letter-spacing:-.02em;max-width:22ch}
+h1 em{font-style:normal;color:var(--s-is)}
+.sub{color:var(--text-secondary);max-width:78ch;margin:0}
+.topbar{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+.themebtn{background:var(--card);border:1px solid var(--border);border-radius:999px;padding:7px 14px;color:var(--text-secondary)}
+.themebtn:hover{border-color:var(--axis)}
+
+nav.jump{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}
+nav.jump a{font-size:13px;color:var(--text-secondary);text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:6px 13px}
+nav.jump a:hover{border-color:var(--s-is);color:var(--s-is)}
+
+section{margin:44px 0 0;scroll-margin-top:16px}
+h2{font-size:21px;margin:0 0 6px;letter-spacing:-.01em}
+h2 .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--s-is);color:#fff;font-size:13px;margin-right:10px;vertical-align:2px}
+h3{font-size:15px;margin:0 0 4px}
+.lede{color:var(--text-secondary);max-width:82ch;margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.chartcard{background:var(--surface-1);border:1px solid var(--border);border-radius:14px;padding:14px 14px 10px}
+.charttitle{font-size:14px;font-weight:650;margin:0 0 1px}
+.chartsub{font-size:12.5px;color:var(--muted);margin:0 0 8px;min-height:17px}
+
+/* ---- historic ---- */
+.histgrid{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(260px,1fr);gap:16px;align-items:start}
+@media(max-width:940px){.histgrid{grid-template-columns:1fr}}
+.segbtns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.seg{background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 11px;color:var(--text-secondary);font-size:13px}
+.seg[aria-pressed="true"]{background:var(--s-is);border-color:var(--s-is);color:#fff;font-weight:600}
+.facts{display:flex;flex-direction:column;gap:10px}
+.fact{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.fact .v{font-size:23px;font-weight:680;letter-spacing:-.02em;line-height:1.1}
+.fact .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.fact .n{font-size:13px;color:var(--text-secondary);margin-top:6px}
+
+/* ---- bridge ---- */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:8px}
+@media(max-width:900px){.flow{grid-template-columns:1fr 1fr}}
+.step{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 14px;position:relative}
+.step b{display:block;font-size:13px;margin-bottom:3px}
+.step span{font-size:13px;color:var(--text-secondary)}
+.step .tag{position:absolute;top:-9px;left:13px;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;background:var(--s-is);color:#fff;border-radius:5px;padding:2px 7px;font-weight:650}
+
+/* ---- lab ---- */
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 15px;color:var(--text-secondary);font-size:14px}
+.tab[aria-selected="true"]{background:var(--s-is);border-color:var(--s-is);color:#fff;font-weight:620}
+.labgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media(max-width:1120px){.labgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.labgrid{grid-template-columns:1fr}}
+svg.chart{display:block;width:100%;height:auto}
+.readout{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:14px}
+@media(max-width:820px){.readout{grid-template-columns:repeat(2,1fr)}}
+.ro{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px 12px}
+.ro .l{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ro .v{font-size:20px;font-weight:670;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.25}
+.ro .d{font-size:12.5px;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.controls{margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.ctitle{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:650;margin:0 0 9px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{background:transparent;border:1px solid var(--border);border-radius:999px;padding:7px 14px;color:var(--text-secondary);font-size:13.5px;text-align:left}
+.chip:hover{border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--s-is);color:var(--s-is);font-weight:620}
+.rowflex{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end;margin-top:14px}
+.sl{min-width:190px}
+.sl label{display:block;font-size:12.5px;color:var(--text-secondary);margin-bottom:3px}
+.sl label b{color:var(--text-primary);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--s-is)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{border:1px solid var(--border);background:var(--card);border-radius:9px;padding:9px 16px;color:var(--text-primary);font-weight:600}
+.btn.primary{background:var(--s-is);border-color:var(--s-is);color:#fff}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn:hover{border-color:var(--axis)}
+.narr{margin-top:14px;background:var(--accent-soft);border:1px solid var(--border);border-left:3px solid var(--s-is);border-radius:0 11px 11px 0;padding:13px 15px;font-size:14px;min-height:64px}
+.narr b{color:var(--s-is)}
+details.adv{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
+details.adv summary{cursor:pointer;font-size:13px;color:var(--text-secondary)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--text-secondary);margin-top:6px}
+.legend i{display:inline-block;width:15px;height:3px;border-radius:2px;vertical-align:3px;margin-right:5px}
+.legend .dash{background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 8px);height:3px}
+
+table.eq{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+table.eq td,table.eq th{border-bottom:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+table.eq th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:650}
+code{background:var(--accent-soft);border-radius:5px;padding:1px 5px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:840px){.cols2{grid-template-columns:1fr}}
+ol.q{padding-left:20px;margin:6px 0 0}
+ol.q li{margin-bottom:9px;color:var(--text-secondary)}
+ol.q li b{color:var(--text-primary);font-weight:620}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+footer a{color:var(--text-secondary)}
+.sronly{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.tblwrap{margin-top:10px}
+.tblwrap summary{cursor:pointer;font-size:13px;color:var(--text-secondary)}
+.tblwrap table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums;margin-top:8px}
+.tblwrap th,.tblwrap td{border-bottom:1px solid var(--grid);padding:4px 7px;text-align:right}
+.tblwrap th:first-child,.tblwrap td:first-child{text-align:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="topbar">
+    <div>
+      <div class="kicker">Macroeconomía II · ICOM401 · UNAB</div>
+      <h1>Del PIB en el tiempo a <em>IS-LM</em>, pasando por oferta y demanda agregada</h1>
+      <p class="sub">Tres ventanas al mismo fenómeno. A la izquierda, el mercado de bienes y el de dinero (IS-LM) determinan la tasa de interés y el gasto para un nivel de precios dado. Al centro, barrer ese nivel de precios traza la curva de <b>demanda agregada</b>, que junto a la <b>oferta agregada</b> fija el equilibrio. A la derecha, ese equilibrio repetido periodo a periodo es exactamente la serie del PIB que leemos en el Imacec.</p>
+    </div>
+    <button class="themebtn" id="themeBtn" aria-label="Cambiar tema">Modo oscuro</button>
+  </div>
+  <nav class="jump">
+    <a href="#dato">1 · El dato: PIB de Chile</a>
+    <a href="#puente">2 · El puente</a>
+    <a href="#lab">3 · Laboratorio interactivo</a>
+    <a href="#clase">4 · Guía de clase</a>
+  </nav>
+</header>
+
+<!-- ============ 1. EL DATO ============ -->
+<section id="dato">
+  <h2><span class="num">1</span>El dato: cómo se mueve el PIB de Chile en el tiempo</h2>
+  <p class="lede">El PIB en niveles casi nunca cae: sube y sube. Lo que sí se mueve es su <b>distancia respecto de la tendencia</b> — la brecha del producto. Todo el modelo que veremos existe para explicar esa distancia y por qué tiende a cerrarse.</p>
+
+  <div class="histgrid">
+    <div class="chartcard">
+      <div class="segbtns" role="group" aria-label="Vista de la serie">
+        <button class="seg" data-view="nivel" aria-pressed="true">Nivel (índice 2018 = 100)</button>
+        <button class="seg" data-view="brecha" aria-pressed="false">Brecha del producto (%)</button>
+        <button class="seg" data-view="crec" aria-pressed="false">Crecimiento anual (%)</button>
+      </div>
+      <p class="charttitle" id="histTitle">PIB real de Chile — nivel y tendencia</p>
+      <p class="chartsub" id="histSub">Índice 2018 = 100, construido con las tasas de crecimiento anual del Banco Central. Tendencia: filtro HP (λ = 100).</p>
+      <svg class="chart" id="histSvg" viewBox="0 0 780 380" role="img" aria-labelledby="histTitle"></svg>
+      <div class="legend" id="histLegend"></div>
+      <details class="tblwrap"><summary>Ver los datos en tabla</summary><div id="histTable"></div></details>
+    </div>
+
+    <div class="facts">
+      <div class="fact">
+        <div class="v">+2,4%</div>
+        <div class="l">Imacec de junio 2026, variación anual</div>
+        <div class="n">Rompe cinco meses consecutivos a la baja. La serie desestacionalizada subió 0,6% respecto de mayo.</div>
+      </div>
+      <div class="fact">
+        <div class="v">−0,5% <span style="font-size:14px;font-weight:500;color:var(--muted)">/ +0,1%</span></div>
+        <div class="l">PIB anual: 1<sup>er</sup> y 2<sup>do</sup> trimestre 2026</div>
+        <div class="n">El peor primer trimestre desde 2009. Chile esquivó por poco una recesión técnica.</div>
+      </div>
+      <div class="fact">
+        <div class="v">4,5% <span style="font-size:14px;font-weight:500;color:var(--muted)">TPM</span></div>
+        <div class="l">Tasa de política monetaria, julio 2026</div>
+        <div class="n">Mantenida por unanimidad, con IPC de 4,3% anual en junio: inflación sobre la meta y actividad débil a la vez.</div>
+      </div>
+      <div class="fact">
+        <div class="v">1,3%</div>
+        <div class="l">Crecimiento esperado 2026 (EEE julio)</div>
+        <div class="n">Revisado a la baja desde 1,6%. Para 2027 el mercado espera 2,7%: la brecha se cerraría por arriba.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>La pregunta que abre el curso</h3>
+    <p style="margin:4px 0 0;color:var(--text-secondary)">Chile tiene hoy inflación <b>sobre</b> la meta (4,3%) y actividad <b>bajo</b> su potencial. Si sólo existiera la demanda agregada, esas dos cosas no podrían pasar juntas: menos demanda debería significar menos precios. El hecho de que ocurran a la vez es la mejor prueba de que necesitamos también una <b>curva de oferta agregada</b> — y de que el Banco Central enfrenta un dilema real, no un problema de aritmética. Usa el laboratorio de abajo para reproducir esa situación con el shock de costos.</p>
+  </div>
+</section>
+
+<!-- ============ 2. PUENTE ============ -->
+<section id="puente">
+  <h2><span class="num">2</span>El puente: de IS-LM a la serie del PIB</h2>
+  <p class="lede">La cadena lógica completa, en cuatro pasos. Cada panel del laboratorio corresponde a un eslabón.</p>
+  <div class="flow">
+    <div class="step"><span class="tag">Paso 1</span><b>IS-LM, con P dado</b><span>El mercado de bienes (IS) y el de dinero (LM) determinan (Y, i) para un nivel de precios <i>fijo</i>. Aquí P es un dato, no una incógnita.</span></div>
+    <div class="step"><span class="tag">Paso 2</span><b>Se libera P → nace la DA</b><span>Si P sube, los saldos reales M/P caen, la LM se desplaza a la izquierda, i sube y Y cae. Cada P entrega un Y: eso <i>es</i> la demanda agregada.</span></div>
+    <div class="step"><span class="tag">Paso 3</span><b>DA se cruza con OA</b><span>La OA de corto plazo depende de los precios esperados y del costo laboral. El cruce DA-OA fija el par (Y, P) de este periodo.</span></div>
+    <div class="step"><span class="tag">Paso 4</span><b>Se repite → serie de tiempo</b><span>Las expectativas se corrigen, la OA se desplaza, y el equilibrio se mueve periodo a periodo hasta el producto potencial. Esa secuencia es la serie del PIB.</span></div>
+  </div>
+</section>
+
+<!-- ============ 3. LABORATORIO ============ -->
+<section id="lab">
+  <h2><span class="num">3</span>Laboratorio: los tres gráficos, siempre sincronizados</h2>
+  <p class="lede">Los tres paneles muestran el <b>mismo</b> equilibrio en tres representaciones distintas. Cambia algo en uno y los otros dos se mueven al instante.</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tabA" aria-selected="true" aria-controls="panelCtl">A · Cómo nace la DA desde IS-LM</button>
+    <button class="tab" role="tab" id="tabB" aria-selected="false" aria-controls="panelCtl">B · Shocks y dinámica del PIB</button>
+  </div>
+
+  <div class="labgrid">
+    <div class="chartcard">
+      <p class="charttitle">IS-LM — mercado de bienes y de dinero</p>
+      <p class="chartsub" id="subISLM">Ejes: producto Y (horizontal), tasa de interés real i% (vertical).</p>
+      <svg class="chart" id="islmSvg" viewBox="0 0 440 350" role="img" aria-label="Diagrama IS-LM"></svg>
+      <div class="legend">
+        <span><i style="background:var(--s-is)"></i>IS — mercado de bienes</span>
+        <span><i style="background:var(--s-lm)"></i>LM — mercado de dinero</span>
+      </div>
+    </div>
+
+    <div class="chartcard">
+      <p class="charttitle">DA-OA — demanda y oferta agregada</p>
+      <p class="chartsub" id="subDAOA">Ejes: producto Y (horizontal), nivel de precios P (vertical).</p>
+      <svg class="chart" id="daoaSvg" viewBox="0 0 440 350" role="img" aria-label="Diagrama de demanda y oferta agregada"></svg>
+      <div class="legend">
+        <span><i style="background:var(--s-is)"></i>DA — demanda agregada</span>
+        <span><i style="background:var(--s-oa)"></i>OA corto plazo</span>
+        <span><i class="dash"></i>OA largo plazo (Y potencial)</span>
+      </div>
+    </div>
+
+    <div class="chartcard">
+      <p class="charttitle">El PIB en el tiempo</p>
+      <p class="chartsub" id="subTime">La trayectoria que genera el modelo, periodo a periodo.</p>
+      <svg class="chart" id="timeSvg" viewBox="0 0 440 350" role="img" aria-label="Serie simulada del PIB, el nivel de precios y la tasa de interés"></svg>
+      <div class="legend">
+        <span><i style="background:var(--s-is)"></i>PIB efectivo</span>
+        <span><i class="dash"></i>PIB potencial</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="readout">
+    <div class="ro"><div class="l">Producto Y</div><div class="v" id="roY">100,0</div><div class="d" id="roYd">nivel inicial</div></div>
+    <div class="ro"><div class="l">Brecha</div><div class="v" id="roGap">0,0%</div><div class="d" id="roGapd">Y = potencial</div></div>
+    <div class="ro"><div class="l">Precios P</div><div class="v" id="roP">100,0</div><div class="d" id="roPd">índice</div></div>
+    <div class="ro"><div class="l">Inflación</div><div class="v" id="roPi">0,0%</div><div class="d" id="roPid">variación de P</div></div>
+    <div class="ro"><div class="l">Tasa i</div><div class="v" id="roI">5,00%</div><div class="d" id="roId">equilibrio IS-LM</div></div>
+  </div>
+
+  <div class="controls" id="panelCtl">
+    <!-- MODE A -->
+    <div id="ctlA">
+      <p class="ctitle">Modo A · Mueve el nivel de precios y observa cómo se construye la DA</p>
+      <div class="rowflex">
+        <div class="sl" style="flex:1 1 320px">
+          <label for="pSlider">Nivel de precios <b id="pVal">P = 100,0</b> &nbsp;·&nbsp; saldos reales <b id="mrVal">M/P = 25,0</b></label>
+          <input type="range" id="pSlider" min="80" max="145" step="0.5" value="100">
+        </div>
+        <div class="acts" style="margin-top:0">
+          <button class="btn primary" id="sweepBtn">Barrer P y trazar la DA</button>
+          <button class="btn" id="clearTraceBtn">Borrar el trazo</button>
+        </div>
+      </div>
+      <div class="narr" id="narrA"></div>
+    </div>
+
+    <!-- MODE B -->
+    <div id="ctlB" hidden>
+      <p class="ctitle">Modo B · Elige un shock</p>
+      <div class="chips" id="shockChips">
+        <button class="chip" data-shock="gasto" aria-pressed="true">Expansión fiscal · G ↑</button>
+        <button class="chip" data-shock="confianza" aria-pressed="false">Caída de confianza · C, I ↓</button>
+        <button class="chip" data-shock="monexp" aria-pressed="false">Política monetaria expansiva · TPM ↓</button>
+        <button class="chip" data-shock="moncon" aria-pressed="false">Política monetaria contractiva · TPM ↑</button>
+        <button class="chip" data-shock="costos" aria-pressed="false">Shock de costos · petróleo, salarios ↑</button>
+        <button class="chip" data-shock="potencial" aria-pressed="false">Shock de productividad · Yn ↑</button>
+      </div>
+      <div class="rowflex">
+        <div class="sl"><label for="magSlider">Magnitud del shock <b id="magVal">1,0×</b></label><input type="range" id="magSlider" min="0.25" max="1.5" step="0.05" value="1"></div>
+        <div class="sl"><label for="thetaSlider">Ajuste de expectativas θ <b id="thetaVal">0,60</b></label><input type="range" id="thetaSlider" min="0" max="1" step="0.05" value="0.6"></div>
+        <div class="sl"><label for="lambdaSlider">Pendiente de la OA λ <b id="lambdaVal">1,50</b></label><input type="range" id="lambdaSlider" min="0.3" max="4" step="0.1" value="1.5"></div>
+      </div>
+      <div class="acts">
+        <button class="btn primary" id="applyBtn">Aplicar shock y animar</button>
+        <button class="btn" id="stepBtn">Avanzar un periodo</button>
+        <button class="btn" id="resetBtn">Reiniciar</button>
+      </div>
+      <div class="narr" id="narrB"></div>
+      <details class="adv">
+        <summary>Parámetros del modelo y ecuaciones</summary>
+        <table class="eq">
+          <tr><th style="width:26%">Bloque</th><th>Ecuación</th><th style="width:34%">Lectura</th></tr>
+          <tr><td>IS</td><td><code>Y = C₀ + c(Y − T) + I₀ − b·i + G</code> ⟹ <code>i = (Ā − (1−c)Y)/b</code></td><td>Más gasto autónomo o menos tasa ⇒ más producto. Pendiente negativa en (Y, i).</td></tr>
+          <tr><td>LM</td><td><code>M/P = k·Y − h·i</code> ⟹ <code>i = (kY − M/P)/h</code></td><td>Con M nominal fijo, si P sube caen los saldos reales y la LM se desplaza a la izquierda.</td></tr>
+          <tr><td>DA</td><td><code>Y = [h·Ā + b·(M/P)] / [b·k + h(1−c)]</code></td><td>Es la solución de IS-LM resuelta para cada P. Por eso la DA <i>hereda</i> todos los shocks de IS y de LM.</td></tr>
+          <tr><td>OA corto plazo</td><td><code>P = Pᵉ + λ(Y − Yn) + z</code></td><td>Precios esperados, brecha del producto y shocks de costo z.</td></tr>
+          <tr><td>OA largo plazo</td><td><code>Y = Yn</code></td><td>Vertical: en el largo plazo el producto lo fija la tecnología y el mercado laboral, no la demanda.</td></tr>
+          <tr><td>Expectativas</td><td><code>Pᵉ(t+1) = Pᵉ(t) + θ·[P(t) − Pᵉ(t)]</code></td><td>Con θ = 0 no hay ajuste: el corto plazo es permanente. Con θ &gt; 0 la economía converge al potencial.</td></tr>
+          <tr><td>Calibración base</td><td><code>c = 0,6 · b = 4 · k = 0,4 · h = 3 · Ā = 60 · M = 2.500 · Yn = 100</code></td><td>Elegida para que el equilibrio inicial sea Y = 100, P = 100, i = 5%.</td></tr>
+        </table>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. GUIA ============ -->
+<section id="clase">
+  <h2><span class="num">4</span>Guía de clase</h2>
+  <div class="cols2">
+    <div class="card">
+      <h3>Preguntas para discutir</h3>
+      <ol class="q">
+        <li><b>Modo A.</b> Sube P de 100 a 130 con el deslizador. ¿Por qué cae Y si nadie cambió el gasto público, ni los impuestos, ni la cantidad de dinero? Nombra el canal completo, en orden.</li>
+        <li><b>Modo A.</b> ¿Qué pasaría con la pendiente de la DA si la inversión fuera <i>insensible</i> a la tasa de interés (b muy pequeño)? ¿Sirve de algo la política monetaria en ese mundo?</li>
+        <li><b>Modo B, expansión fiscal.</b> Compara el efecto en t = 1 con el de t = 20. ¿Cuánto quedó de producto adicional? ¿Y de tasa de interés? Define <i>crowding out</i> a partir de lo que viste.</li>
+        <li><b>Modo B, expansión monetaria.</b> Aplica +10% de dinero y espera al largo plazo. El nivel de precios sube exactamente 10% y la tasa vuelve a 5%. ¿Cómo se llama esa propiedad y qué implica para el debate sobre "imprimir dinero"?</li>
+        <li><b>Modo B, shock de costos.</b> Reproduce la combinación chilena de 2026: inflación arriba, producto abajo. Si fueras el Consejo del Banco Central con la TPM en 4,5%, ¿subes, bajas o mantienes? Argumenta con los dos gráficos, no con intuición.</li>
+        <li><b>Modo B, θ = 0.</b> Apaga el ajuste de expectativas y repite la expansión fiscal. ¿En qué se convierte el modelo? ¿Qué supuesto sobre los trabajadores estás haciendo implícitamente?</li>
+        <li><b>Puente con el dato.</b> Mira el panel 1 en la vista "brecha". El año 2020 y el año 2021 son, en el lenguaje del modelo, dos shocks distintos. ¿Cuáles, y qué curva movió cada uno?</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Los cinco errores clásicos</h3>
+      <ol class="q">
+        <li><b>Confundir un movimiento a lo largo de la DA con un desplazamiento.</b> Un cambio de P mueve a lo largo de la DA. Un cambio de G, T o M la desplaza. En el modo A la DA nunca se mueve: sólo se recorre.</li>
+        <li><b>Creer que la LM se desplaza sola.</b> En el modo B, la LM se mueve durante el ajuste porque P está cambiando — no porque el Banco Central haga algo. Es el efecto Keynes, y es lo que devuelve el producto al potencial.</li>
+        <li><b>Leer el eje del panel 3 como "tasa de crecimiento".</b> El eje es el <i>nivel</i> del producto. Volver al potencial no significa crecimiento cero: significa que la brecha se cerró.</li>
+        <li><b>Pensar que la OA de largo plazo es "el futuro".</b> Es una condición de consistencia: el nivel de producto en el que las expectativas de precios ya no se equivocan sistemáticamente.</li>
+        <li><b>Aplicar este modelo a Chile sin más.</b> Todo esto es economía <i>cerrada</i>. Falta el tipo de cambio, los términos de intercambio y el cobre — la unidad de economía abierta del curso. Nota que en el primer trimestre de 2026 la caída del PIB vino del sector externo, algo que este modelo, literalmente, no puede representar.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>Fuentes de los datos del panel 1.</b> Tasas de crecimiento anual del PIB real y cifras de coyuntura: Banco Central de Chile (Cuentas Nacionales, Imacec, Reunión de Política Monetaria y Encuesta de Expectativas Económicas de julio de 2026), reportadas por Diario Financiero, La Tercera y BioBioChile. El índice 2018 = 100 y la tendencia (filtro Hodrick-Prescott, λ = 100) son cálculos propios sobre esas tasas y tienen fines pedagógicos: no reemplazan las series oficiales en pesos encadenados. La cifra de 2026 es la proyección de mercado (1,3%), no un dato observado.</p>
+  <p>El laboratorio es un modelo calibrado con fines docentes. Los números no son estimaciones de la economía chilena.</p>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   0. Utilidades
+   ============================================================ */
+const NS = "http://www.w3.org/2000/svg";
+const fmt = (v,d=1) => v.toLocaleString("es-CL",{minimumFractionDigits:d,maximumFractionDigits:d});
+const sgn = (v,d=1) => (Math.abs(v) < 0.5/Math.pow(10,d) ? "" : (v>0?"+":"−")) + fmt(Math.abs(v),d);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+/* Construye una cadena de path a partir de puntos [[x,y],...] */
+function pathOf(pts){ return pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(2)+" "+p[1].toFixed(2)).join(" "); }
+
+/* ============================================================
+   1. PANEL HISTORICO — PIB real de Chile
+   ============================================================ */
+const HIST = {
+  years : [2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],
+  level : [72.83,77.06,81.76,86.09,89.53,91.14,93.24,94.83,96.15,100,100.60,94.36,105.40,107.62,108.15,110.97,113.74,115.22],
+  trend : [76.11,78.75,81.44,84.13,86.76,89.28,91.68,93.95,96.11,98.19,100.21,102.24,104.34,106.49,108.68,110.92,113.21,115.53],
+  gap   : [-4.31,-2.15,0.39,2.33,3.20,2.08,1.70,0.93,0.04,1.85,0.39,-7.71,1.02,1.06,-0.49,0.04,0.47,-0.27],
+  growth: [null,5.8,6.1,5.3,4.0,1.8,2.3,1.7,1.4,4.0,0.6,-6.2,11.7,2.1,0.5,2.6,2.5,1.3]
+};
+let histView = "nivel";
+const histSvg = document.getElementById("histSvg");
+
+function drawHist(){
+  const W=780,H=380,m={l:52,r:118,t:16,b:40};
+  const iw=W-m.l-m.r, ih=H-m.t-m.b;
+  const ys=HIST.years, n=ys.length;
+  const X = i => m.l + (i/(n-1))*iw;
+  let series, y0, y1, title, sub, unit, legend, nticks;
+
+  if(histView==="nivel"){
+    series=HIST.level; y0=65; y1=125; unit=""; nticks=6;
+    title="PIB real de Chile — nivel y tendencia";
+    sub="Índice 2018 = 100, construido con las tasas de crecimiento anual del Banco Central. Tendencia: filtro HP (λ = 100).";
+    legend='<span><i style="background:var(--s-is)"></i>PIB real (índice)</span><span><i class="dash"></i>Tendencia (HP)</span><span style="color:var(--muted)">Tramo punteado 2026 = proyección</span>';
+  } else if(histView==="brecha"){
+    series=HIST.gap; y0=-9; y1=6; unit="%"; nticks=5;
+    title="Brecha del producto — distancia respecto de la tendencia";
+    sub="Porcentaje. Positivo = economía sobrecalentada; negativo = capacidad ociosa. Es la variable que el modelo DA-OA explica.";
+    legend='<span><i style="background:var(--s-is)"></i>Brecha positiva — sobre la tendencia</span><span><i style="background:var(--s-lm)"></i>Brecha negativa — bajo la tendencia</span><span style="color:var(--muted)">Línea cero = producto potencial</span>';
+  } else {
+    series=HIST.growth; y0=-9; y1=12; unit="%"; nticks=7;
+    title="Crecimiento anual del PIB real";
+    sub="Variación porcentual respecto del año anterior. 2026: proyección de mercado (Encuesta de Expectativas Económicas, julio 2026).";
+    legend='<span><i style="background:var(--s-is)"></i>Expansión</span><span><i style="background:var(--s-lm)"></i>Contracción</span><span style="color:var(--muted)">Barra tenue en 2026 = proyección</span>';
+  }
+  const Y = v => m.t + ih - ((v-y0)/(y1-y0))*ih;
+  document.getElementById("histTitle").textContent = title;
+  document.getElementById("histSub").textContent = sub;
+  document.getElementById("histLegend").innerHTML = legend;
+
+  let s = "";
+  // gridlines
+  const ticks = nticks;
+  for(let g=0; g<=ticks; g++){
+    const v = y0 + (y1-y0)*g/ticks, yy = Y(v);
+    s += `<line x1="${m.l}" y1="${yy.toFixed(1)}" x2="${m.l+iw}" y2="${yy.toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${m.l-9}" y="${(yy+4).toFixed(1)}" text-anchor="end" font-size="11.5" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(v,0)}${unit}</text>`;
+  }
+  if(y0<0 && y1>0){ s += `<line x1="${m.l}" y1="${Y(0).toFixed(1)}" x2="${m.l+iw}" y2="${Y(0).toFixed(1)}" stroke="var(--axis)" stroke-width="1.5"/>`; }
+
+  // x labels
+  ys.forEach((yr,i)=>{
+    if(yr%2!==0 && yr!==2026) return;
+    s += `<text x="${X(i).toFixed(1)}" y="${H-14}" text-anchor="middle" font-size="11" fill="var(--muted)">${yr}</text>`;
+  });
+
+  // COVID shading
+  const cx0=X(HIST.years.indexOf(2020))-((iw/(n-1))*0.5), cw=(iw/(n-1));
+  s += `<rect x="${cx0.toFixed(1)}" y="${m.t}" width="${cw.toFixed(1)}" height="${ih}" fill="var(--grid)" opacity="0.55"/>`;
+  s += `<text x="${X(HIST.years.indexOf(2020)).toFixed(1)}" y="${m.t+14}" text-anchor="middle" font-size="10.5" fill="var(--muted)">2020</text>`;
+
+  if(histView==="nivel"){
+    // trend dashed
+    const tp = HIST.trend.map((v,i)=>[X(i),Y(v)]);
+    s += `<path d="${pathOf(tp)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5"/>`;
+    // level: solid up to 2025, dashed to 2026
+    const solid = HIST.level.slice(0,n-1).map((v,i)=>[X(i),Y(v)]);
+    s += `<path d="${pathOf(solid)}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-linejoin="round"/>`;
+    s += `<path d="${pathOf([[X(n-2),Y(HIST.level[n-2])],[X(n-1),Y(HIST.level[n-1])]])}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-dasharray="3 3"/>`;
+    // etiquetas directas separadas verticalmente
+    const yTop = Y(HIST.level[n-1]) - 16, yBot = Y(HIST.trend[n-1]) + 14;
+    s += `<line x1="${(m.l+iw).toFixed(1)}" y1="${Y(HIST.level[n-1]).toFixed(1)}" x2="${(m.l+iw+6)}" y2="${yTop.toFixed(1)}" stroke="var(--s-is)" stroke-width="1"/>`;
+    s += `<text x="${(m.l+iw+8)}" y="${yTop.toFixed(1)}" font-size="11.5" fill="var(--s-is)" font-weight="650">PIB real</text>`;
+    s += `<text x="${(m.l+iw+8)}" y="${(yTop+13).toFixed(1)}" font-size="10.5" fill="var(--muted)">2026 proy.</text>`;
+    s += `<line x1="${(m.l+iw).toFixed(1)}" y1="${Y(HIST.trend[n-1]).toFixed(1)}" x2="${(m.l+iw+6)}" y2="${yBot.toFixed(1)}" stroke="var(--muted)" stroke-width="1"/>`;
+    s += `<text x="${(m.l+iw+8)}" y="${yBot.toFixed(1)}" font-size="11.5" fill="var(--muted)">Tendencia</text>`;
+    HIST.level.forEach((v,i)=>{ if(i%2===0||i===n-1) s+=`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="3.2" fill="var(--surface-1)" stroke="var(--s-is)" stroke-width="2"/>`; });
+  } else {
+    const vals = series;
+    const bw = Math.min(26, (iw/(n-1))*0.62);
+    vals.forEach((v,i)=>{
+      if(v===null) return;
+      const base = (y0<0&&y1>0)?Y(0):Y(y0);
+      const yy = Y(v);
+      const top = Math.min(yy,base), h = Math.max(1.5,Math.abs(yy-base));
+      const col = v>=0 ? "var(--s-is)" : "var(--s-lm)";
+      s += `<rect x="${(X(i)-bw/2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${col}" opacity="${HIST.years[i]===2026?0.5:1}"/>`;
+    });
+    s += `<text x="${(m.l+iw+8)}" y="${(m.t+16)}" font-size="11.5" fill="var(--text-secondary)">${histView==="brecha"?"Sobre tendencia":"Expansión"}</text>`;
+    s += `<text x="${(m.l+iw+8)}" y="${(m.t+ih-4)}" font-size="11.5" fill="var(--text-secondary)">${histView==="brecha"?"Bajo tendencia":"Contracción"}</text>`;
+  }
+
+  // hover layer
+  s += `<g id="histHover"></g>`;
+  ys.forEach((yr,i)=>{
+    s += `<rect class="hbz" data-i="${i}" x="${(X(i)-(iw/(n-1))/2).toFixed(1)}" y="${m.t}" width="${(iw/(n-1)).toFixed(1)}" height="${ih}" fill="transparent" style="cursor:crosshair"/>`;
+  });
+
+  histSvg.innerHTML = s;
+
+  // tooltip behaviour
+  const hov = histSvg.querySelector("#histHover");
+  histSvg.querySelectorAll(".hbz").forEach(z=>{
+    z.addEventListener("mouseenter",()=>{
+      const i=+z.dataset.i;
+      const v = series[i];
+      if(v===null){hov.innerHTML="";return;}
+      const px=X(i), py=Y(v);
+      const lines = [
+        String(HIST.years[i]) + (HIST.years[i]===2026?" (proy.)":""),
+        "Índice: " + fmt(HIST.level[i]),
+        "Crecim.: " + (HIST.growth[i]===null?"—":sgn(HIST.growth[i])+"%"),
+        "Brecha: " + sgn(HIST.gap[i])+"%"
+      ];
+      const bw=126, bh=16*lines.length+12;
+      let bx = px+12; if(bx+bw>W-4) bx = px-bw-12;
+      let by = Math.max(m.t+2, Math.min(py-bh/2, m.t+ih-bh-2));
+      let t = `<line x1="${px.toFixed(1)}" y1="${m.t}" x2="${px.toFixed(1)}" y2="${m.t+ih}" stroke="var(--axis)" stroke-width="1"/>`;
+      t += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.5" fill="var(--s-is)" stroke="var(--surface-1)" stroke-width="2"/>`;
+      t += `<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw}" height="${bh}" rx="8" fill="var(--card)" stroke="var(--border)"/>`;
+      lines.forEach((L,k)=>{ t += `<text x="${(bx+10).toFixed(1)}" y="${(by+20+k*16).toFixed(1)}" font-size="11.5" fill="${k===0?'var(--text-primary)':'var(--text-secondary)'}" font-weight="${k===0?650:400}" style="font-variant-numeric:tabular-nums">${esc(L)}</text>`; });
+      hov.innerHTML = t;
+    });
+    z.addEventListener("mouseleave",()=>{hov.innerHTML="";});
+  });
+}
+
+function buildHistTable(){
+  let t = `<table><thead><tr><th>Año</th><th>Índice 2018=100</th><th>Crecim. anual %</th><th>Tendencia</th><th>Brecha %</th></tr></thead><tbody>`;
+  HIST.years.forEach((y,i)=>{
+    t += `<tr><td>${y}${y===2026?" (p)":""}</td><td>${fmt(HIST.level[i],2)}</td><td>${HIST.growth[i]===null?"—":fmt(HIST.growth[i])}</td><td>${fmt(HIST.trend[i],2)}</td><td>${fmt(HIST.gap[i],2)}</td></tr>`;
+  });
+  document.getElementById("histTable").innerHTML = t+"</tbody></table>";
+}
+
+document.querySelectorAll(".seg").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".seg").forEach(o=>o.setAttribute("aria-pressed", o===b?"true":"false"));
+    histView=b.dataset.view; drawHist();
+  });
+});
+
+/* ============================================================
+   2. MODELO
+   ============================================================ */
+const BASE = { c:0.6, b:4, k:0.4, h:3, Abar:60, M:2500, Yn:100, lambda:1.5, z:0 };
+let P0 = {...BASE};           // parámetros vigentes (con shock aplicado)
+let theta = 0.6;
+let Pe = 100;                 // precios esperados
+let hist = [];                // [{t,Y,P,i,Pe}]
+let shockLabel = "";
+let shockApplied = false;
+
+const D  = p => p.b*p.k + p.h*(1-p.c);
+const adY = (P,p) => (p.h*p.Abar + p.b*p.M/P) / D(p);
+const isI = (Y,p) => (p.Abar - (1-p.c)*Y)/p.b;
+const lmI = (Y,P,p) => (p.k*Y - p.M/P)/p.h;
+const oaP = (Y,p,pe) => pe + p.lambda*(Y-p.Yn) + p.z;
+
+function solveEq(p, pe){
+  const f = P => pe + p.lambda*(adY(P,p)-p.Yn) + p.z - P;
+  let lo=2, hi=4000;
+  for(let n=0;n<160;n++){ const mid=(lo+hi)/2; if(f(mid)>0) lo=mid; else hi=mid; }
+  const P=(lo+hi)/2, Y=adY(P,p);
+  return {P, Y, i: lmI(Y,P,p)};
+}
+function longRun(p){
+  // Y = Yn ; despejar P de la DA
+  const P = p.b*p.M / (p.Yn*D(p) - p.h*p.Abar);
+  return {P, Y:p.Yn, i: lmI(p.Yn,P,p)};
+}
+
+function resetModel(){
+  P0 = {...BASE, lambda: P0.lambda};
+  Pe = 100; hist = []; ghostState = null;
+  const e = solveEq(P0, Pe);
+  hist.push({t:0, ...e, Pe});
+  shockApplied=false; shockLabel="";
+  stopAnim();
+  render();
+  setNarrB(`<b>Equilibrio inicial.</b> Producto igual al potencial (Y = 100), precios estables en 100 y tasa de interés de 5,0%. Nada empuja a la economía en ninguna dirección: las expectativas de precios coinciden con los precios efectivos. Elige un shock y presiona <b>Aplicar</b>.`);
+}
+
+/* ============================================================
+   3. DIBUJO DE LOS TRES PANELES
+   ============================================================ */
+const W=440,H=350,M={l:50,r:18,t:22,b:40};
+const IW=W-M.l-M.r, IH=H-M.t-M.b;
+const YMIN=80, YMAX=120;
+const IMIN=-2, IMAX=14;
+const PMIN=70, PMAX=150;
+
+function frame(xlab, ylab, xd, yd, xt, yt, unitY, unitX){
+  const X = v => M.l + (v-xd[0])/(xd[1]-xd[0])*IW;
+  const Yc = v => M.t + IH - (v-yd[0])/(yd[1]-yd[0])*IH;
+  let s="";
+  for(let g=0; g<=yt; g++){
+    const v = yd[0]+(yd[1]-yd[0])*g/yt, yy=Yc(v);
+    s += `<line x1="${M.l}" y1="${yy.toFixed(1)}" x2="${M.l+IW}" y2="${yy.toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${M.l-8}" y="${(yy+4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(v,0)}${unitY||""}</text>`;
+  }
+  for(let g=0; g<=xt; g++){
+    const v = xd[0]+(xd[1]-xd[0])*g/xt, xx=X(v);
+    s += `<line x1="${xx.toFixed(1)}" y1="${M.t}" x2="${xx.toFixed(1)}" y2="${M.t+IH}" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${xx.toFixed(1)}" y="${(M.t+IH+16)}" text-anchor="middle" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(v,0)}${unitX||""}</text>`;
+  }
+  s += `<line x1="${M.l}" y1="${M.t+IH}" x2="${M.l+IW}" y2="${M.t+IH}" stroke="var(--axis)" stroke-width="1.5"/>`;
+  s += `<line x1="${M.l}" y1="${M.t}" x2="${M.l}" y2="${M.t+IH}" stroke="var(--axis)" stroke-width="1.5"/>`;
+  s += `<text x="${M.l+IW}" y="${H-6}" text-anchor="end" font-size="11.5" fill="var(--text-secondary)" font-weight="600">${xlab}</text>`;
+  s += `<text x="${M.l-6}" y="${M.t-8}" text-anchor="start" font-size="11.5" fill="var(--text-secondary)" font-weight="600">${ylab}</text>`;
+  return {s, X, Y:Yc};
+}
+
+function clampSeg(pts, yd){
+  return pts.filter(p=>p[1]>=yd[0]-0.001 && p[1]<=yd[1]+0.001);
+}
+
+/* --- IS-LM --- */
+function drawISLM(state){
+  const {p, P, Y, i, ghost} = state;
+  const f = frame("Producto  Y", "Tasa i (%)", [YMIN,YMAX],[IMIN,IMAX],4,4,"","");
+  const X=f.X, Yc=f.Y;
+  let s=f.s;
+  const line = (fn, color, wid, dash, op) => {
+    const pts=[];
+    for(let y=YMIN; y<=YMAX+0.001; y+=0.5){ const v=fn(y); if(v>=IMIN&&v<=IMAX) pts.push([X(y),Yc(v)]); }
+    if(pts.length<2) return "";
+    return `<path d="${pathOf(pts)}" fill="none" stroke="${color}" stroke-width="${wid}" ${dash?`stroke-dasharray="${dash}"`:""} opacity="${op||1}" stroke-linecap="round"/>`;
+  };
+  const labelAt = (fn, color, txt, yPos, weight) => {
+    const v = fn(yPos);
+    if(v<IMIN+0.4||v>IMAX-0.4) return "";
+    return `<text x="${(X(yPos)+5).toFixed(1)}" y="${(Yc(v)-6).toFixed(1)}" font-size="12" font-weight="${weight||650}" fill="${color}">${txt}</text>`;
+  };
+
+  // ghost (curvas iniciales) — sólo se dibuja la curva que efectivamente se movió
+  const isMoved = !!ghost && Math.abs(ghost.p.Abar - p.Abar) > 1e-9;
+  const lmMoved = !!ghost && Math.abs(ghost.p.M/ghost.P - p.M/P) > 1e-6;
+  if(isMoved){
+    s += line(y=>isI(y,ghost.p), "var(--s-is)", 2, "5 4", 0.35);
+    s += labelAt(y=>isI(y,ghost.p), "var(--s-is)", "IS₀", YMIN+4.5, 500);
+  }
+  if(lmMoved){
+    s += line(y=>lmI(y,ghost.P,ghost.p), "var(--s-lm)", 2, "5 4", 0.35);
+    s += labelAt(y=>lmI(y,ghost.P,ghost.p), "var(--s-lm)", "LM₀", YMIN+4.5, 500);
+  }
+  s += line(y=>isI(y,p), "var(--s-is)", 2.6, "", 1);
+  s += line(y=>lmI(y,P,p), "var(--s-lm)", 2.6, "", 1);
+  s += labelAt(y=>isI(y,p), "var(--s-is)", isMoved?"IS′":"IS", YMAX-6.5);
+  s += labelAt(y=>lmI(y,P,p), "var(--s-lm)", lmMoved?"LM′":"LM", YMAX-6.5);
+
+  // punto de equilibrio + guías
+  const px=X(Y), py=Yc(i);
+  s += `<line x1="${M.l}" y1="${py.toFixed(1)}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  s += `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px.toFixed(1)}" y2="${M.t+IH}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  s += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="6" fill="var(--text-primary)" stroke="var(--surface-1)" stroke-width="2.5"/>`;
+  s += `<text x="${(px+10).toFixed(1)}" y="${(py+16).toFixed(1)}" font-size="11.5" fill="var(--text-primary)" font-weight="620" style="font-variant-numeric:tabular-nums">i = ${fmt(i,2)}%</text>`;
+  // saldos reales
+  s += `<text x="${M.l+IW}" y="${M.t-8}" text-anchor="end" font-size="11.5" fill="var(--s-lm)" style="font-variant-numeric:tabular-nums">M/P = ${fmt(p.M/P,1)}</text>`;
+  document.getElementById("islmSvg").innerHTML = s;
+}
+
+/* --- DA-OA --- */
+function drawDAOA(state){
+  const {p, P, Y, ghost, pe, trace, marker} = state;
+  const f = frame("Producto  Y", "Precios P", [YMIN,YMAX],[PMIN,PMAX],4,4,"","");
+  const X=f.X, Yc=f.Y;
+  let s=f.s;
+
+  const daPts = (pp)=>{ const a=[]; for(let P_=PMIN; P_<=PMAX+0.001; P_+=0.75){ const yv=adY(P_,pp); if(yv>=YMIN&&yv<=YMAX) a.push([X(yv),Yc(P_)]); } return a; };
+  const oaPts = (pp,peX)=>{ const a=[]; for(let y=YMIN; y<=YMAX+0.001; y+=0.5){ const P_=oaP(y,pp,peX); if(P_>=PMIN&&P_<=PMAX) a.push([X(y),Yc(P_)]); } return a; };
+
+  const daMoved = !!ghost && (Math.abs(ghost.p.Abar-p.Abar)>1e-9 || Math.abs(ghost.p.M-p.M)>1e-9);
+  const oaMoved = !!ghost && (Math.abs(ghost.p.z-p.z)>1e-9 || Math.abs(ghost.p.Yn-p.Yn)>1e-9 || Math.abs(ghost.pe-pe)>1e-6);
+  if(daMoved){
+    const g1=daPts(ghost.p);
+    if(g1.length>1) s+=`<path d="${pathOf(g1)}" fill="none" stroke="var(--s-is)" stroke-width="2" stroke-dasharray="5 4" opacity="0.35"/>`;
+  }
+  if(oaMoved){
+    const g2=oaPts(ghost.p, ghost.pe);
+    if(g2.length>1) s+=`<path d="${pathOf(g2)}" fill="none" stroke="var(--s-oa)" stroke-width="2" stroke-dasharray="5 4" opacity="0.35"/>`;
+  }
+  if(ghost && Math.abs(ghost.p.Yn-p.Yn)>1e-9){
+    s += `<line x1="${X(ghost.p.Yn).toFixed(1)}" y1="${M.t}" x2="${X(ghost.p.Yn).toFixed(1)}" y2="${M.t+IH}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>`;
+  }
+
+  // OA largo plazo (vertical en Yn)
+  s += `<line x1="${X(p.Yn).toFixed(1)}" y1="${M.t}" x2="${X(p.Yn).toFixed(1)}" y2="${M.t+IH}" stroke="var(--muted)" stroke-width="2.4" stroke-dasharray="7 5"/>`;
+  s += `<text x="${(X(p.Yn)+5).toFixed(1)}" y="${(M.t+13)}" font-size="11.5" fill="var(--muted)" font-weight="620">OA largo plazo</text>`;
+
+  // trazo de la DA (modo A)
+  if(trace && trace.length){
+    trace.forEach(t=>{ s += `<circle cx="${X(t[0]).toFixed(1)}" cy="${Yc(t[1]).toFixed(1)}" r="2.6" fill="var(--s-is)" opacity="0.5"/>`; });
+  }
+
+  const da=daPts(p), oa=oaPts(p,pe);
+  if(da.length>1) s+=`<path d="${pathOf(da)}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-linecap="round"/>`;
+  if(oa.length>1) s+=`<path d="${pathOf(oa)}" fill="none" stroke="var(--s-oa)" stroke-width="2.6" stroke-linecap="round"/>`;
+  if(da.length>1){ const q=da[Math.max(0,da.length-3)]; s+=`<text x="${(q[0]-6).toFixed(1)}" y="${(q[1]+14).toFixed(1)}" text-anchor="end" font-size="12" font-weight="650" fill="var(--s-is)">${daMoved?"DA′":"DA"}</text>`; }
+  if(oa.length>1){ const q=oa[Math.round(oa.length*0.78)] || oa[oa.length-1];
+    s+=`<text x="${(q[0]-8).toFixed(1)}" y="${(q[1]+16).toFixed(1)}" text-anchor="end" font-size="12" font-weight="650" fill="var(--s-oa)">${oaMoved?"OA′ corto plazo":"OA corto plazo"}</text>`; }
+
+  // punto
+  const mk = marker || {Y, P};
+  const px=X(mk.Y), py=Yc(mk.P);
+  s += `<line x1="${M.l}" y1="${py.toFixed(1)}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  s += `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px.toFixed(1)}" y2="${M.t+IH}" stroke="var(--axis)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  s += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="6" fill="var(--text-primary)" stroke="var(--surface-1)" stroke-width="2.5"/>`;
+  s += `<text x="${(px+10).toFixed(1)}" y="${(py-8).toFixed(1)}" font-size="11.5" fill="var(--text-primary)" font-weight="620" style="font-variant-numeric:tabular-nums">(${fmt(mk.Y)} ; ${fmt(mk.P)})</text>`;
+  document.getElementById("daoaSvg").innerHTML = s;
+}
+
+/* --- Serie de tiempo --- */
+function drawTime(state){
+  const {series, p, cur} = state;
+  const N = 24;
+  const Wt=440, Ht=350;
+  const mm={l:46,r:16,t:22,b:26};
+  const mainH=176, spark=44, gapv=14;
+  const iw=Wt-mm.l-mm.r;
+  const X = t => mm.l + (t/N)*iw;
+  let s="";
+
+  // ---- principal: PIB ----
+  const vals = series.map(d=>d.Y);
+  const ctr = (p.Yn+100)/2;
+  let half = Math.max(8, Math.abs(p.Yn-ctr)+2, ...vals.map(v=>Math.abs(v-ctr)+1.5));
+  half = Math.ceil(half/2)*2;
+  let lo=ctr-half, hi=ctr+half;
+  const Y1 = v => mm.t + mainH - (v-lo)/(hi-lo)*mainH;
+  for(let g=0;g<=4;g++){
+    const v=lo+(hi-lo)*g/4, yy=Y1(v);
+    s+=`<line x1="${mm.l}" y1="${yy.toFixed(1)}" x2="${mm.l+iw}" y2="${yy.toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`;
+    s+=`<text x="${mm.l-7}" y="${(yy+4).toFixed(1)}" text-anchor="end" font-size="10.5" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(v,0)}</text>`;
+  }
+  s+=`<text x="${mm.l-6}" y="${mm.t-8}" font-size="11.5" fill="var(--text-secondary)" font-weight="600">Producto Y</text>`;
+  // potencial
+  s+=`<line x1="${mm.l}" y1="${Y1(p.Yn).toFixed(1)}" x2="${mm.l+iw}" y2="${Y1(p.Yn).toFixed(1)}" stroke="var(--muted)" stroke-width="2" stroke-dasharray="7 5"/>`;
+  s+=`<text x="${mm.l+iw}" y="${(Y1(p.Yn)-6).toFixed(1)}" text-anchor="end" font-size="10.5" fill="var(--muted)">PIB potencial</text>`;
+  if(series.length>1){
+    const pts = series.map(d=>[X(d.t),Y1(d.Y)]);
+    // área de brecha
+    const area = pts.map(q=>q).concat([[X(series[series.length-1].t),Y1(p.Yn)],[X(series[0].t),Y1(p.Yn)]]);
+    s+=`<path d="${pathOf(area)} Z" fill="var(--s-is)" opacity="0.10"/>`;
+    s+=`<path d="${pathOf(pts)}" fill="none" stroke="var(--s-is)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }
+  const last = series[series.length-1];
+  s+=`<circle cx="${X(last.t).toFixed(1)}" cy="${Y1(last.Y).toFixed(1)}" r="5" fill="var(--s-is)" stroke="var(--surface-1)" stroke-width="2"/>`;
+  if(shockApplied) s+=`<line x1="${X(0.5).toFixed(1)}" y1="${mm.t}" x2="${X(0.5).toFixed(1)}" y2="${(mm.t+mainH).toFixed(1)}" stroke="var(--crit)" stroke-width="1.5" stroke-dasharray="3 3"/><text x="${(X(0.5)+4).toFixed(1)}" y="${(mm.t+11)}" font-size="10" fill="var(--crit)" font-weight="620">shock</text>`;
+
+  // ---- sparklines ----
+  const sparkAt = (top, key, label, color, unit) => {
+    const v = series.map(d=>d[key]);
+    let a=Math.min(...v), b=Math.max(...v);
+    const mid=(a+b)/2; let hh=Math.max((b-a)/2*1.35, unit===2?0.6:1.5);
+    a=mid-hh; b=mid+hh;
+    const Yy = x => top + spark - (x-a)/(b-a)*spark;
+    let t = `<line x1="${mm.l}" y1="${(top+spark).toFixed(1)}" x2="${mm.l+iw}" y2="${(top+spark).toFixed(1)}" stroke="var(--grid)" stroke-width="1"/>`;
+    if(series.length>1) t += `<path d="${pathOf(series.map(d=>[X(d.t),Yy(d[key])]))}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>`;
+    t += `<circle cx="${X(last.t).toFixed(1)}" cy="${Yy(last[key]).toFixed(1)}" r="3.6" fill="${color}" stroke="var(--surface-1)" stroke-width="1.6"/>`;
+    t += `<text x="${mm.l-7}" y="${(top+8)}" text-anchor="end" font-size="10" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(b,1)}</text>`;
+    t += `<text x="${mm.l-7}" y="${(top+spark+3)}" text-anchor="end" font-size="10" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${fmt(a,1)}</text>`;
+    t += `<text x="${mm.l+2}" y="${(top-2)}" font-size="10.5" fill="var(--text-secondary)" font-weight="600">${label}</text>`;
+    t += `<text x="${mm.l+iw}" y="${(top-2)}" text-anchor="end" font-size="10.5" fill="${color}" font-weight="620" style="font-variant-numeric:tabular-nums">${fmt(last[key],unit===2?2:1)}${unit===2?"%":""}</text>`;
+    return t;
+  };
+  const t1 = mm.t+mainH+gapv+10;
+  const t2 = t1+spark+gapv+10;
+  s += sparkAt(t1,"P","Nivel de precios P","var(--s-oa)",1);
+  s += sparkAt(t2,"i","Tasa de interés i","var(--s-lm)",2);
+
+  // eje x
+  for(let g=0;g<=4;g++){
+    const tv=N*g/4;
+    s+=`<text x="${X(tv).toFixed(1)}" y="${(t2+spark+16)}" text-anchor="middle" font-size="10.5" fill="var(--muted)">t=${tv}</text>`;
+  }
+  document.getElementById("timeSvg").innerHTML = s;
+}
+
+/* ============================================================
+   4. ESTADO Y RENDER
+   ============================================================ */
+let mode = "A";
+let sliderP = 100;
+let trace = [];
+let ghostState = null;
+
+function render(){
+  const cur = hist[hist.length-1];
+  if(mode==="A"){
+    const p = {...BASE, lambda:P0.lambda};
+    const P = sliderP;
+    const Y = adY(P,p);
+    const i = lmI(Y,P,p);
+    drawISLM({p, P, Y, i, ghost: (Math.abs(P-100)>0.3)?{p, P:100}:null});
+    drawDAOA({p, P, Y, pe:100, trace, marker:{Y,P}, ghost:null});
+    drawTime({series:hist, p:P0, cur});
+    updateReadout({Y,P,i}, null, "A");
+    document.getElementById("subISLM").textContent = `Con P = ${fmt(P)}, los saldos reales valen M/P = ${fmt(p.M/P,1)}. Esa es la posición de la LM.`;
+    document.getElementById("subDAOA").textContent = `El punto marcado es el par (Y, P) que acaba de salir del IS-LM: un punto de la DA.`;
+    document.getElementById("subTime").textContent = `En el modo A el tiempo no corre: la serie espera en el equilibrio inicial. Pasa al modo B.`;
+  } else {
+    const p = P0, P=cur.P, Y=cur.Y, i=cur.i;
+    drawISLM({p, P, Y, i, ghost: ghostState});
+    drawDAOA({p, P, Y, pe:cur.Pe, ghost: ghostState});
+    drawTime({series:hist, p:P0, cur});
+    const prev = hist.length>1 ? hist[hist.length-2] : null;
+    updateReadout(cur, prev, "B");
+    document.getElementById("subISLM").textContent = shockApplied
+      ? `Periodo t = ${cur.t}. La LM se mueve porque P está cambiando, no porque el Banco Central actúe.`
+      : `Equilibrio inicial: Y = 100, i = 5,0%, P = 100.`;
+    document.getElementById("subDAOA").textContent = shockApplied
+      ? `Periodo t = ${cur.t}. La OA de corto plazo se desplaza cuando se corrigen los precios esperados Pᵉ.`
+      : `DA y OA se cruzan justo sobre la OA de largo plazo: no hay brecha.`;
+    document.getElementById("subTime").textContent = shockApplied
+      ? `Cada punto es un cruce DA-OA. Así se construye la serie del PIB, periodo a periodo.`
+      : `La trayectoria que genera el modelo, periodo a periodo. Aplica un shock para verla nacer.`;
+  }
+}
+
+function updateReadout(cur, prev, m){
+  const gap = (cur.Y - (m==="A"?BASE.Yn:P0.Yn))/(m==="A"?BASE.Yn:P0.Yn)*100;
+  document.getElementById("roY").textContent = fmt(cur.Y);
+  document.getElementById("roGap").textContent = sgn(gap)+"%";
+  document.getElementById("roP").textContent = fmt(cur.P);
+  document.getElementById("roI").textContent = fmt(cur.i,2)+"%";
+  const infl = prev ? (cur.P/prev.P-1)*100 : 0;
+  document.getElementById("roPi").textContent = sgn(infl)+"%";
+  document.getElementById("roYd").textContent = m==="A" ? "leído sobre la DA" : (hist.length>1?`t = ${cur.t}`:"nivel inicial");
+  document.getElementById("roGapd").textContent = Math.abs(gap)<0.15 ? "en el potencial" : (gap>0?"economía sobrecalentada":"capacidad ociosa");
+  document.getElementById("roPd").textContent = m==="A" ? "fijado por ti" : "equilibrio DA-OA";
+  document.getElementById("roPid").textContent = prev ? "respecto de t−1" : "sin variación";
+  document.getElementById("roId").textContent = "equilibrio IS-LM";
+}
+
+/* ============================================================
+   5. MODO A — construcción de la DA
+   ============================================================ */
+const pSlider=document.getElementById("pSlider");
+function narrateA(){
+  const p={...BASE, lambda:P0.lambda};
+  const P=sliderP, Y=adY(P,p), i=lmI(Y,P,p);
+  const Y0=adY(100,p), i0=lmI(Y0,100,p);
+  let txt;
+  if(Math.abs(P-100)<0.4){
+    txt = `<b>Punto de partida.</b> Con P = 100 los saldos reales son M/P = ${fmt(p.M/100,1)}, la tasa de equilibrio es ${fmt(i0,2)}% y el producto ${fmt(Y0)}. Mueve el deslizador y sigue la LM: ella es la que hace todo el trabajo.`;
+  } else {
+    const dir = P>100 ? "sube" : "baja";
+    const dir2 = P>100 ? "cae" : "aumenta";
+    const dir3 = P>100 ? "izquierda" : "derecha";
+    const dir4 = P>100 ? "sube" : "baja";
+    const dir5 = P>100 ? "cae" : "sube";
+    txt = `<b>El nivel de precios ${dir} a ${fmt(P)}.</b> Los saldos reales pasan de ${fmt(p.M/100,1)} a ${fmt(p.M/P,1)}: la oferta real de dinero ${dir2}. La <b>LM se desplaza a la ${dir3}</b>, la tasa de interés ${dir4} de ${fmt(i0,2)}% a ${fmt(i,2)}%, la inversión ${dir5} y con ella el producto: ${fmt(Y0)} → ${fmt(Y)}. Ese par (${fmt(Y)} ; ${fmt(P)}) es <b>un punto de la curva DA</b>. La DA no se movió: la recorriste.`;
+  }
+  document.getElementById("narrA").innerHTML = txt;
+}
+function syncA(){
+  sliderP = +pSlider.value;
+  document.getElementById("pVal").textContent = "P = "+fmt(sliderP);
+  document.getElementById("mrVal").textContent = "M/P = "+fmt(BASE.M/sliderP,1);
+  render(); narrateA();
+}
+pSlider.addEventListener("input", syncA);
+
+let sweepRaf=null;
+document.getElementById("sweepBtn").addEventListener("click", ()=>{
+  if(sweepRaf){cancelAnimationFrame(sweepRaf);sweepRaf=null;}
+  trace=[]; let v=80;
+  const stepF = ()=>{
+    v += 1.1;
+    pSlider.value = v; sliderP=v;
+    trace.push([adY(v,BASE), v]);
+    document.getElementById("pVal").textContent="P = "+fmt(v);
+    document.getElementById("mrVal").textContent="M/P = "+fmt(BASE.M/v,1);
+    render(); narrateA();
+    if(v<145) sweepRaf=requestAnimationFrame(stepF); else sweepRaf=null;
+  };
+  stepF();
+});
+document.getElementById("clearTraceBtn").addEventListener("click", ()=>{ trace=[]; render(); });
+
+/* ============================================================
+   6. MODO B — shocks
+   ============================================================ */
+let shockKind = "gasto";
+const SHOCKS = {
+  gasto:     {name:"Expansión fiscal (G ↑)",            apply:(p,m)=>{p.Abar += 6*m;},                    curve:"IS →"},
+  confianza: {name:"Caída de confianza (C, I ↓)",       apply:(p,m)=>{p.Abar -= 6*m;},                    curve:"IS ←"},
+  monexp:    {name:"Política monetaria expansiva",      apply:(p,m)=>{p.M *= (1+0.10*m);},                curve:"LM →"},
+  moncon:    {name:"Política monetaria contractiva",    apply:(p,m)=>{p.M *= (1-0.10*m);},                curve:"LM ←"},
+  costos:    {name:"Shock de costos",                   apply:(p,m)=>{p.z += 6*m;},                       curve:"OA ↑"},
+  potencial: {name:"Shock de productividad (Yn ↑)",     apply:(p,m)=>{p.Yn += 4*m;},                      curve:"OA-LP →"}
+};
+document.querySelectorAll("#shockChips .chip").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#shockChips .chip").forEach(o=>o.setAttribute("aria-pressed", o===b?"true":"false"));
+    shockKind=b.dataset.shock;
+  });
+});
+const magS=document.getElementById("magSlider"), thS=document.getElementById("thetaSlider"), laS=document.getElementById("lambdaSlider");
+magS.addEventListener("input",()=>document.getElementById("magVal").textContent=fmt(+magS.value)+"×");
+thS.addEventListener("input",()=>{theta=+thS.value;document.getElementById("thetaVal").textContent=fmt(theta,2);});
+laS.addEventListener("input",()=>{
+  P0.lambda=+laS.value; document.getElementById("lambdaVal").textContent=fmt(P0.lambda,2);
+  if(!shockApplied){ resetModelKeepLambda(); } else render();
+});
+function resetModelKeepLambda(){ const l=P0.lambda; resetModel(); P0.lambda=l; hist=[{t:0,...solveEq(P0,100),Pe:100}]; render(); }
+
+function setNarrB(html){ document.getElementById("narrB").innerHTML = html; }
+
+function applyShock(){
+  stopAnim();
+  const base0 = {...BASE, lambda:P0.lambda};
+  ghostState = {p:{...base0}, P:100, pe:100};
+  P0 = {...base0};
+  SHOCKS[shockKind].apply(P0, +magS.value);
+  shockLabel = SHOCKS[shockKind].name;
+  shockApplied = true;
+  Pe = 100;
+  hist = [{t:0, ...solveEq(base0,100), Pe:100}];
+  stepPeriod();
+}
+
+function stepPeriod(){
+  if(!shockApplied){ applyShock(); return; }
+  const last = hist[hist.length-1];
+  if(last.t>=24) return;
+  const e = solveEq(P0, Pe);
+  hist.push({t:last.t+1, ...e, Pe});
+  Pe = Pe + theta*(e.P - Pe);
+  // el shock de costos es transitorio: se disipa gradualmente
+  if(shockKind==="costos") P0.z *= 0.82;
+  render();
+  narrateB();
+}
+
+let animId=null;
+function stopAnim(){ if(animId){clearInterval(animId);animId=null;} }
+function animate(){
+  stopAnim();
+  animId = setInterval(()=>{
+    const last=hist[hist.length-1];
+    if(last.t>=24){ stopAnim(); narrateB(true); return; }
+    stepPeriod();
+  }, 320);
+}
+
+function narrateB(done){
+  const cur = hist[hist.length-1];
+  const t = cur.t;
+  const base0 = {...BASE, lambda:P0.lambda};
+  const lr = longRun(P0);
+  const gap = (cur.Y-P0.Yn)/P0.Yn*100;
+  const first = hist.length>1 ? hist[1] : cur;
+  let txt = `<b>${shockLabel} — ${SHOCKS[shockKind].curve}, periodo t = ${t}.</b> `;
+
+  if(shockKind==="gasto"||shockKind==="confianza"){
+    const up = shockKind==="gasto";
+    if(t<=1){
+      txt += `El gasto autónomo ${up?"sube":"cae"}: la <b>IS se desplaza a la ${up?"derecha":"izquierda"}</b> y arrastra con ella a la DA. En el impacto el producto pasa de 100 a ${fmt(cur.Y)} y la tasa de interés de 5,00% a ${fmt(cur.i,2)}% — ya hay algo de <i>crowding out</i>, porque más producto significa más demanda de dinero.`;
+    } else {
+      txt += `Los precios ${up?"subieron":"cayeron"} a ${fmt(cur.P)}, así que los saldos reales M/P ${up?"se contrajeron":"se expandieron"} y la <b>LM se desplaza sola</b>. Al mismo tiempo las expectativas Pᵉ se corrigen y la OA de corto plazo sube. El producto va de ${fmt(first.Y)} hacia ${fmt(cur.Y)}: la brecha se está cerrando (hoy ${sgn(gap)}%).`;
+    }
+    if(done||Math.abs(gap)<0.1) txt += ` <b>Largo plazo:</b> el producto vuelve al potencial (100), los precios se estabilizan en ${fmt(lr.P)} y la tasa queda en ${fmt(lr.i,2)}%. Todo el ${up?"impulso fiscal":"golpe de demanda"} terminó en ${up?"precios y tasa, no en producto: desplazamiento total de la inversión privada":"precios y tasa más bajos, con el producto de vuelta donde estaba"}.`;
+  }
+  else if(shockKind==="monexp"||shockKind==="moncon"){
+    const up = shockKind==="monexp";
+    if(t<=1){
+      txt += `La cantidad real de dinero ${up?"aumenta":"se reduce"}: la <b>LM se desplaza a la ${up?"derecha":"izquierda"}</b>, la tasa ${up?"cae":"sube"} a ${fmt(cur.i,2)}% y la inversión ${up?"se activa":"se frena"}. La DA se corre a la ${up?"derecha":"izquierda"} y el producto llega a ${fmt(cur.Y)}.`;
+    } else {
+      txt += `Los precios ya están en ${fmt(cur.P)}. Cada alza de P ${up?"devuelve":"deshace"} parte del efecto sobre M/P, y la LM ${up?"retrocede":"vuelve"}. Brecha actual: ${sgn(gap)}%.`;
+    }
+    if(done||Math.abs(gap)<0.1){
+      const pct=(lr.P/100-1)*100, mpct=(P0.M/BASE.M-1)*100;
+      txt += ` <b>Largo plazo — neutralidad del dinero:</b> el dinero nominal cambió ${sgn(mpct)}% y el nivel de precios terminó cambiando ${sgn(pct)}%. El producto volvió a 100 y la tasa a ${fmt(lr.i,2)}%. En el largo plazo la política monetaria fija el nivel de precios, no el producto — esta es la base de por qué el Banco Central tiene una meta de inflación y no una meta de PIB.`;
+    }
+  }
+  else if(shockKind==="costos"){
+    if(t<=1){
+      txt += `Sube el costo de producir: la <b>OA de corto plazo se desplaza hacia arriba</b>. La DA no se movió, así que la economía se desliza <i>a lo largo</i> de ella: precios ${fmt(cur.P)} (más altos) y producto ${fmt(cur.Y)} (más bajo). Esto es <b>estanflación</b>: inflación y recesión al mismo tiempo — exactamente la incomodidad que describe el Banco Central de Chile hoy.`;
+    } else {
+      txt += `El shock de costos se va disipando y, con brecha negativa (${sgn(gap)}%), la presión salarial cede: la <b>OA empieza a bajar de nuevo</b>. Producto en ${fmt(cur.Y)}, precios en ${fmt(cur.P)}. Nadie tocó la política fiscal ni la monetaria: el ajuste lo hace el mercado laboral.`;
+    }
+    if(done||Math.abs(gap)<0.1) txt += ` <b>Largo plazo:</b> siendo un shock transitorio, el producto vuelve a 100 y los precios a ${fmt(lr.P)}. El shock no dejó huella permanente, pero el costo se pagó con producto y empleo perdidos en el camino — de ahí el argumento a favor de anclar rápido las expectativas. <i>Ojo:</i> si el alza de costos fuera <b>permanente</b>, la economía se estabilizaría en Y = Yn − z/λ, es decir, el propio producto potencial caería. Ese es el debate detrás de un shock de precios de la energía que llegó para quedarse.`;
+  }
+  else if(shockKind==="potencial"){
+    if(t<=1){
+      txt += `El producto potencial sube a ${fmt(P0.Yn)}: la <b>OA de largo plazo se corre a la derecha</b> y con ella la OA de corto plazo. Los precios <i>bajan</i> a ${fmt(cur.P)} y el producto sube a ${fmt(cur.Y)}. Nota que la DA no se movió: es la oferta la que manda.`;
+    } else {
+      txt += `Precios más bajos significan más saldos reales, LM a la derecha, tasa más baja (${fmt(cur.i,2)}%) y más inversión. El producto se acerca al nuevo potencial: ${fmt(cur.Y)} de ${fmt(P0.Yn)}.`;
+    }
+    if(done||Math.abs(gap)<0.1) txt += ` <b>Largo plazo:</b> el producto se instala en ${fmt(P0.Yn)} con precios en ${fmt(lr.P)}. Este es el único shock del laboratorio que deja al país permanentemente más rico. Todo lo demás sólo mueve la economía alrededor de su potencial.`;
+  }
+  if(theta===0) txt += ` <span style="color:var(--crit)"><b>θ = 0:</b> apagaste el ajuste de expectativas, así que la economía se queda en el corto plazo para siempre.</span>`;
+  setNarrB(txt);
+}
+
+document.getElementById("applyBtn").addEventListener("click", ()=>{ applyShock(); animate(); });
+document.getElementById("stepBtn").addEventListener("click", ()=>{ stopAnim(); if(!shockApplied) applyShock(); else stepPeriod(); });
+document.getElementById("resetBtn").addEventListener("click", ()=>{ ghostState=null; resetModel(); });
+
+/* ============================================================
+   7. TABS Y TEMA
+   ============================================================ */
+function setMode(m){
+  mode=m; stopAnim();
+  document.getElementById("tabA").setAttribute("aria-selected", m==="A");
+  document.getElementById("tabB").setAttribute("aria-selected", m==="B");
+  document.getElementById("ctlA").hidden = m!=="A";
+  document.getElementById("ctlB").hidden = m!=="B";
+  if(m==="A"){ syncA(); } else { render(); if(shockApplied) narrateB(); }
+}
+document.getElementById("tabA").addEventListener("click",()=>setMode("A"));
+document.getElementById("tabB").addEventListener("click",()=>setMode("B"));
+
+const themeBtn=document.getElementById("themeBtn");
+themeBtn.addEventListener("click",()=>{
+  const d = document.documentElement.getAttribute("data-theme")==="dark";
+  document.documentElement.setAttribute("data-theme", d?"light":"dark");
+  themeBtn.textContent = d?"Modo oscuro":"Modo claro";
+  drawHist(); render();
+});
+if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+  document.documentElement.setAttribute("data-theme","dark");
+  themeBtn.textContent="Modo claro";
+}
+
+/* ============================================================
+   8. ARRANQUE
+   ============================================================ */
+buildHistTable();
+drawHist();
+resetModel();
+setMode("A");
+</script>
+</body>
+</html>
