@@ -105,6 +105,9 @@ table.t th,table.t td{border-bottom:1px solid var(--border);padding:8px 10px;tex
 table.t th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:650}
 table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 table.t tr.pend td{opacity:.32}
+table.t tr.ej{display:none}
+table.t tr.ej.open{display:table-row}
+table.t tr[data-i]:hover td{background:var(--wash)}
 table.t td.c{text-align:center}
 code{background:var(--wash);border-radius:5px;padding:1px 6px;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
@@ -168,11 +171,12 @@ footer a{color:var(--text-secondary)}
     <a href="#ley">2 · La ley que lo genera todo</a>
     <a href="#frontera">3 · La frontera y la PII</a>
     <a href="#residencia">4 · Quién es residente</a>
-    <a href="#lab">5 · Laboratorio</a>
-    <a href="#patrones">6 · Patrones</a>
-    <a href="#bdp">7 · Nace la balanza de pagos</a>
-    <a href="#chile">8 · Chile de verdad</a>
-    <a href="#clase">9 · Guía de clase</a>
+    <a href="#cuentas">5 · Las cuentas</a>
+    <a href="#lab">6 · Laboratorio</a>
+    <a href="#patrones">7 · Patrones</a>
+    <a href="#bdp">8 · Nace la balanza de pagos</a>
+    <a href="#chile">9 · Chile de verdad</a>
+    <a href="#clase">10 · Guía de clase</a>
   </nav>
 </header>
 
@@ -298,9 +302,63 @@ footer a{color:var(--text-secondary)}
   </div>
 </section>
 
-<!-- ================= 5. LABORATORIO ================= -->
+<!-- ================= 5. LAS CUENTAS ================= -->
+<section id="cuentas">
+  <h2><span class="num">5</span>Las cuentas: qué derecho es cada una</h2>
+  <p class="lede">Ya sabemos que en la PII solo hay derechos cruzados, y quién está a cada lado de la frontera. Falta lo último antes de mirar un balance: <b>qué derecho es cada cuenta</b>. Porque "inversión de cartera" no es una categoría burocrática — es una forma específica de tener un derecho sobre alguien que vive afuera.</p>
+
+  <div class="card" style="padding:12px 18px">
+    <table class="t" style="margin-top:0">
+      <thead><tr><th style="width:17%">Cuenta</th><th style="width:33%">¿Qué derecho representa?</th><th style="width:25%">Si Chile lo tiene → activo</th><th style="width:25%">Si Chile lo debe → pasivo</th></tr></thead>
+      <tbody id="cuentasTbl"></tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted);margin:10px 0 4px">Haz clic en cualquier fila para ver el caso concreto.</p>
+  </div>
+
+  <div class="klaw" style="margin-top:20px">
+    <b>El instrumento nunca te dice de qué lado del balance va.</b> Fíjate en que todas las cuentas aparecen en las dos columnas. Lo que decide el lado no es qué contrato es, sino <i>quién le debe a quién</i> — es decir, la dirección de la operación que lo creó.
+  </div>
+
+  <div class="cols2" style="margin-top:18px">
+    <div class="card" style="border-left:3px solid var(--pas)">
+      <h3 style="margin-top:0">La línea entre cartera y directa: 10%</h3>
+      <p style="color:var(--text-secondary);margin:0">La diferencia no es el monto sino el <b>control</b>. Desde el <b>10% del poder de voto</b> se considera inversión directa; bajo ese umbral, inversión de cartera. Un fondo puede poner mil millones de dólares repartidos en muchas empresas y seguir siendo cartera; otro puede poner cien y ser inversión directa. Importa porque son pasivos de naturaleza muy distinta: la directa no se va de un día para otro, la de cartera sí.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--pii)">
+      <h3 style="margin-top:0">Las reservas son la excepción</h3>
+      <p style="color:var(--text-secondary);margin:0">En el laboratorio verás una línea de <b>reservas internacionales</b> y no está en esta tabla, porque no es un instrumento: las reservas <i>son</i> bonos, depósitos y oro. Se clasifican aparte por <b>quién las tiene y para qué</b> — activos externos líquidos, bajo control del Banco Central, disponibles para necesidades de balanza de pagos. Es la única categoría de la PII definida por el tenedor y no por el contrato.</p>
+    </div>
+  </div>
+
+  <h3>Antes de pasar al laboratorio</h3>
+  <p class="lede" style="margin-bottom:12px">Cuatro situaciones. ¿Van al activo o al pasivo de Chile, y en qué cuenta? Haz clic para comprobar.</p>
+  <div class="quiz" id="drill">
+    <div class="q" data-a="nr" data-t="Pasivo · crédito comercial"
+         data-x="Chile recibió la máquina y todavía no paga: nació una obligación con un no residente. La máquina, en cambio, <b>no entra en la PII</b> — es una cosa, no un derecho sobre un extranjero.">
+      <div class="qq">Una empresa chilena importa maquinaria y queda debiendo a 90 días</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+    <div class="q" data-a="r" data-t="Activo · inversión de cartera"
+         data-x="Un residente adquiere un derecho económico sobre un emisor no residente. Y es <b>cartera</b>, no directa, porque el 2% está muy por debajo del umbral de 10%: no hay control ni influencia significativa.">
+      <div class="qq">Una AFP compra acciones de una empresa alemana, equivalentes al 2% del capital</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+    <div class="q" data-a="nr" data-t="Pasivo · inversión directa"
+         data-x="Es un derecho de un no residente sobre una empresa residente, así que va al pasivo. Y como el 30% supera el umbral de 10%, es <b>inversión directa</b>, no cartera — aunque el comprador sea un fondo y no una empresa operativa.">
+      <div class="qq">Un fondo estadounidense compra el 30% de una empresa chilena</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+    <div class="q" data-a="r" data-t="Activo · activos de reserva"
+         data-x="El instrumento es un bono, pero lo que define la clasificación es el tenedor: el Banco Central, con fines de balanza de pagos. Si el mismo bono lo comprara una AFP, sería inversión de cartera. <b>Mismo contrato, distinta cuenta.</b>">
+      <div class="qq">El Banco Central compra bonos del Tesoro de Estados Unidos para sus reservas</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10. LABORATORIO ================= -->
 <section id="lab">
-  <h2><span class="num">5</span>Laboratorio: dos balances, una sola realidad</h2>
+  <h2><span class="num">6</span>Laboratorio: dos balances, una sola realidad</h2>
   <p class="lede">Acá están los dos balances espejo. Ninguna operación se anota en uno solo: <b>cada línea que se ilumina a la izquierda se ilumina también a la derecha</b>, porque es el mismo objeto visto desde el otro lado. Avanza operación por operación y fíjate sobre todo en cuándo la PII se mueve y cuándo no.</p>
 
   <div class="steps" id="steps"></div>
@@ -333,18 +391,12 @@ footer a{color:var(--text-secondary)}
   <div class="narr" id="narrLab"></div>
   <div class="tags" id="tagsLab"></div>
 
-  <details style="margin-top:16px" class="card">
-    <summary style="cursor:pointer;font-size:13.5px;color:var(--text-secondary)">¿Qué derecho representa cada cuenta, y contra quién?</summary>
-    <table class="t">
-      <thead><tr><th>Cuenta</th><th>¿Qué derecho representa?</th><th>¿Contra quién?</th></tr></thead>
-      <tbody id="instrTbl"></tbody>
-    </table>
-  </details>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:14px">¿Se te olvidó qué derecho representa alguna cuenta? <a href="#cuentas" style="color:var(--act)">Vuelve a la sección 5</a>.</p>
 </section>
 
-<!-- ================= 6. PATRONES ================= -->
+<!-- ================= 10. PATRONES ================= -->
 <section id="patrones">
-  <h2><span class="num">6</span>El resumen de patrones</h2>
+  <h2><span class="num">7</span>El resumen de patrones</h2>
   <p class="lede">Esta tabla se va llenando a medida que avanzas en el laboratorio. Cuando esté completa, la pregunta se responde sola: ¿qué tienen en común las operaciones que mueven la PII?</p>
   <div class="card" style="padding:12px 16px">
     <table class="t">
@@ -355,9 +407,9 @@ footer a{color:var(--text-secondary)}
   <div class="narr" id="narrPat" style="border-left-color:var(--pii)"></div>
 </section>
 
-<!-- ================= 7. BALANZA DE PAGOS ================= -->
+<!-- ================= 10. BALANZA DE PAGOS ================= -->
 <section id="bdp">
-  <h2><span class="num">7</span>Y entonces nace la balanza de pagos</h2>
+  <h2><span class="num">8</span>Y entonces nace la balanza de pagos</h2>
   <p class="lede">Tenemos la PII inicial, la PII final y todas las operaciones del año. Surge sola la pregunta: <b>¿cómo resumiría el Banco Central todo lo ocurrido en un único informe?</b> La respuesta es la balanza de pagos, y sale de partir las operaciones en dos grupos.</p>
 
   <div class="cols2">
@@ -398,9 +450,9 @@ footer a{color:var(--text-secondary)}
   <p class="lede" style="margin-top:14px">En nuestro ejemplo la PII bajó de 50 a 40: Chile terminó el año <b>más financiado</b> por el resto del mundo. Eso es una entrada neta de capitales — y ahora los estudiantes pueden decirlo sin haber memorizado un solo signo.</p>
 </section>
 
-<!-- ================= 8. CHILE REAL ================= -->
+<!-- ================= 10. CHILE REAL ================= -->
 <section id="chile">
-  <h2><span class="num">8</span>Chile de verdad</h2>
+  <h2><span class="num">9</span>Chile de verdad</h2>
   <p class="lede">El ejemplo tenía cinco operaciones y números redondos. Esta es la misma estructura con las cifras reales, al cierre de 2024.</p>
 
   <div class="stat">
@@ -455,9 +507,9 @@ footer a{color:var(--text-secondary)}
   </div>
 </section>
 
-<!-- ================= 9. GUIA ================= -->
+<!-- ================= 10. GUIA ================= -->
 <section id="clase">
-  <h2><span class="num">9</span>Guía de clase</h2>
+  <h2><span class="num">10</span>Guía de clase</h2>
   <div class="cols2">
     <div class="card">
       <h3 style="margin-top:0">Preguntas para discutir</h3>
@@ -466,8 +518,8 @@ footer a{color:var(--text-secondary)}
         <li><b>Laboratorio, operaciones 1 y 3.</b> El crédito comercial aparece como activo en una y como pasivo en la otra. ¿Qué determina de qué lado del balance va un instrumento?</li>
         <li><b>Laboratorio, operación 2.</b> Corea paga y no pasa nada con la PII. ¿Significa que la operación es irrelevante? ¿Qué cambió?</li>
         <li><b>Laboratorio, operación 4.</b> Los activos suben 40 y los pasivos suben 40. Un país con PII de 40 y activos de 360 y otro con PII de 40 y activos de 60, ¿son igual de vulnerables? Argumenta con plazos y monedas.</li>
-        <li><b>Sección 7.</b> Sin mirar la tabla: de las cinco operaciones, ¿cuáles entran en la cuenta corriente? ¿Qué tienen en común?</li>
-        <li><b>Sección 8.</b> Chile tiene superávit comercial y déficit de renta al mismo tiempo. Explícalo usando solo el balance, sin hablar de comercio.</li>
+        <li><b>Sección 8.</b> Sin mirar la tabla: de las cinco operaciones, ¿cuáles entran en la cuenta corriente? ¿Qué tienen en común?</li>
+        <li><b>Sección 9.</b> Chile tiene superávit comercial y déficit de renta al mismo tiempo. Explícalo usando solo el balance, sin hablar de comercio.</li>
         <li><b>Puente.</b> Si la operación 4 hubiera sido la compra de <i>la mina misma</i> —el terreno y la concesión— en vez de las acciones de la empresa, la anotación cambia. ¿A qué cuenta iría, y por qué existe esa cuenta?</li>
       </ol>
     </div>
@@ -694,10 +746,58 @@ function pintarBdP(){
 }
 
 /* ============================================================
-   TABLA DE INSTRUMENTOS
+   TABLA DE CUENTAS (sección 5)
    ============================================================ */
-document.getElementById('instrTbl').innerHTML =
-  ACT.concat(PAS).map(x=>`<tr><td><b>${x.n}</b></td><td style="color:var(--text-secondary)">${x.d}</td><td style="color:var(--text-secondary)">${x.c}</td></tr>`).join('');
+const CUENTAS = [
+  {c:'Moneda extranjera',
+   d:'Derecho a utilizar un medio de pago frente al exterior.',
+   t:'Dólares en manos de residentes chilenos.',
+   p:'Pesos chilenos en manos de no residentes.',
+   e:'Un billete de dólar es un pasivo de la Reserva Federal — por eso tenerlo es un derecho <i>contra alguien</i> y no una cosa. Y simétricamente: los pesos que un turista argentino se lleva en el bolsillo son un pasivo de Chile frente al exterior. Pequeño, pero pasivo al fin.'},
+  {c:'Depósitos',
+   d:'Derecho de cobro frente a un banco.',
+   t:'Un residente con cuenta en un banco del exterior.',
+   p:'Un no residente con cuenta en un banco chileno.',
+   e:'Es literalmente el mismo contrato en los dos casos. Lo único que cambia es de qué lado de la frontera vive el titular y de cuál vive el banco.'},
+  {c:'Crédito comercial',
+   d:'Derecho a cobrar —u obligación de pagar— por una venta que ya se realizó.',
+   t:'Chile exportó y todavía no le pagan.',
+   p:'Chile importó y todavía no paga.',
+   e:'Este es el caso más nítido de que el instrumento no decide el lado. Las operaciones 1 y 3 del laboratorio usan esta misma cuenta: una en el activo, otra en el pasivo. Lo único que cambió fue la dirección de la venta.'},
+  {c:'Préstamos',
+   d:'Derecho a cobrar un préstamo otorgado, u obligación de devolver uno recibido.',
+   t:'Un banco chileno presta al exterior.',
+   p:'Una empresa chilena se endeuda con un banco extranjero.',
+   e:'Junto con los bonos, acá vive el grueso de la deuda externa chilena: US$244.965 millones al cierre de 2024, con 82,4% denominado en dólares. Que la deuda esté en una moneda que Chile no emite es, más adelante en el curso, la mitad del problema.'},
+  {c:'Inversión de cartera',
+   d:'Derecho económico sobre una empresa o un emisor, <b>sin</b> control.',
+   t:'Una AFP compra bonos del Tesoro de Estados Unidos.',
+   p:'Un fondo extranjero compra bonos de la Tesorería chilena.',
+   e:'Es la partida más grande del activo externo de Chile: US$195.103 millones al cierre de 2024, sobre todo carteras previsionales. El ahorro de las familias chilenas, colocado afuera.'},
+  {c:'Inversión directa',
+   d:'Derecho económico que incorpora <b>control o influencia significativa</b> sobre una empresa.',
+   t:'Falabella operando en Perú y Colombia.',
+   p:'Una minera extranjera controlando una empresa en Chile.',
+   e:'Es la partida más grande del pasivo externo de Chile: US$285.790 millones, el 54% de todo lo que el mundo tiene en el país. Es la operación 4 del laboratorio, acumulada durante décadas.'},
+  {c:'Derivados financieros',
+   d:'Derecho —o compromiso— cuyo valor depende del precio de otra cosa: un seguro de cambio, una cobertura de precio del cobre.',
+   t:'La cobertura está a favor del residente.',
+   p:'La cobertura está en su contra.',
+   e:'El único instrumento que puede <b>saltar de activo a pasivo sin que nadie haga nada</b>: basta que se mueva el precio de referencia. Por eso en la PII aparece en los dos lados a la vez, y por eso conviene mirarlo aparte.'}
+];
+document.getElementById('cuentasTbl').innerHTML = CUENTAS.map((x,i)=>
+  `<tr data-i="${i}" style="cursor:pointer"><td><b>${x.c}</b></td>`+
+  `<td style="color:var(--text-secondary)">${x.d}</td>`+
+  `<td style="color:var(--act)">${x.t}</td>`+
+  `<td style="color:var(--pas)">${x.p}</td></tr>`+
+  `<tr class="ej" data-e="${i}"><td colspan="4" style="background:var(--wash);color:var(--text-secondary);font-size:13px">${x.e}</td></tr>`
+).join('');
+document.querySelectorAll('#cuentasTbl tr[data-i]').forEach(r=>{
+  r.addEventListener('click',()=>{
+    const e = document.querySelector(`#cuentasTbl tr.ej[data-e="${r.dataset.i}"]`);
+    e.classList.toggle('open');
+  });
+});
 
 /* ============================================================
    CONTROLES
@@ -772,8 +872,8 @@ document.getElementById('consolidarReset').addEventListener('click',()=>{
 });
 pintarTri(false);
 
-/* quiz de residencia */
-document.querySelectorAll('#quiz .q').forEach(q=>{
+/* quiz de residencia y drill de cuentas */
+document.querySelectorAll('#quiz .q, #drill .q').forEach(q=>{
   q.addEventListener('click',()=>{
     if(q.classList.contains('open')) { q.classList.remove('open'); q.querySelector('.hint').style.display=''; return; }
     q.classList.add('open');
