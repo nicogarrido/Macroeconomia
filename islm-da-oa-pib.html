@@ -131,9 +131,29 @@ footer a{color:var(--text-secondary)}
 .tblwrap table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums;margin-top:8px}
 .tblwrap th,.tblwrap td{border-bottom:1px solid var(--grid);padding:4px 7px;text-align:right}
 .tblwrap th:first-child,.tblwrap td:first-child{text-align:left}
+
+/* --- barra de curso: salida hacia el índice, presente en toda la página --- */
+.coursebar{position:sticky;top:0;z-index:60;background:var(--page);border-bottom:1px solid var(--border)}
+.cbin{max-width:1360px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.cbin a.cb,.cbin button.cb{font-family:inherit;font-size:13px;line-height:1.2;cursor:pointer;
+  border:1px solid var(--border);background:var(--card);color:var(--text-secondary);
+  border-radius:999px;padding:6px 13px;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.cbin a.cb:hover,.cbin button.cb:hover{border-color:var(--axis);color:var(--text-primary)}
+.cbin a.cb.pri:hover{border-color:var(--s-is);color:var(--s-is)}
+.cb-crumb{margin-left:auto;font-size:12.5px;color:var(--muted);white-space:nowrap}
+@media(max-width:640px){.cb-crumb{display:none}}
 </style>
 </head>
 <body>
+<div class="coursebar">
+  <div class="cbin">
+    <a class="cb pri" href="index.html">← Material del curso</a>
+    <button class="cb" id="cbAtras" hidden>↩ Atrás</button>
+    <span class="cb-crumb">Repaso · Economía cerrada</span>
+    <button class="cb" id="themeBtn" aria-label="Cambiar tema">Modo oscuro</button>
+  </div>
+</div>
+
 <div class="wrap">
 
 <header class="top">
@@ -143,7 +163,6 @@ footer a{color:var(--text-secondary)}
       <h1>Del PIB en el tiempo a <em>IS-LM</em>, pasando por oferta y demanda agregada</h1>
       <p class="sub">Tres ventanas al mismo fenómeno. A la izquierda, el mercado de bienes y el de dinero (IS-LM) determinan la tasa de interés y el gasto para un nivel de precios dado. Al centro, barrer ese nivel de precios traza la curva de <b>demanda agregada</b>, que junto a la <b>oferta agregada</b> fija el equilibrio. A la derecha, ese equilibrio repetido periodo a periodo es exactamente la serie del PIB que leemos en el Imacec.</p>
     </div>
-    <button class="themebtn" id="themeBtn" aria-label="Cambiar tema">Modo oscuro</button>
   </div>
   <nav class="jump">
     <a href="#dato">1 · El dato: PIB de Chile</a>
@@ -1061,6 +1080,12 @@ buildHistTable();
 drawHist();
 resetModel();
 setMode("A");
+/* barra de curso */
+(function(){
+  var a=document.getElementById('cbAtras');
+  if(a && history.length>1){ a.hidden=false; a.addEventListener('click',function(){history.back();}); }
+})();
+
 </script>
 </body>
 </html>

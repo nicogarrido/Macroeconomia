@@ -169,9 +169,30 @@ ol.qs li b{color:var(--text-primary);font-weight:620}
 .st .l{font-size:12px;color:var(--muted);margin-top:2px}
 footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
 footer a{color:var(--text-secondary)}
+
+/* --- barra de curso: salida hacia el índice, presente en toda la página --- */
+.coursebar{position:sticky;top:0;z-index:60;background:var(--page);border-bottom:1px solid var(--border)}
+.cbin{max-width:1360px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.cbin a.cb,.cbin button.cb{font-family:inherit;font-size:13px;line-height:1.2;cursor:pointer;
+  border:1px solid var(--border);background:var(--card);color:var(--text-secondary);
+  border-radius:999px;padding:6px 13px;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.cbin a.cb:hover,.cbin button.cb:hover{border-color:var(--axis);color:var(--text-primary)}
+.cbin a.cb.pri{border-color:var(--border)}
+.cbin a.cb.pri:hover{border-color:var(--act,#2a78d6);color:var(--act,#2a78d6)}
+.cb-crumb{margin-left:auto;font-size:12.5px;color:var(--muted);white-space:nowrap}
+@media(max-width:640px){.cb-crumb{display:none}}
 </style>
 </head>
 <body>
+<div class="coursebar">
+  <div class="cbin">
+    <a class="cb pri" href="index.html">← Material del curso</a>
+    <button class="cb" id="cbAtras" hidden>↩ Atrás</button>
+    <span class="cb-crumb">Unidad I · Balanza de pagos</span>
+    <button class="cb" id="themeBtn">Modo oscuro</button>
+  </div>
+</div>
+
 <div class="wrap">
 
 <header class="top">
@@ -181,7 +202,6 @@ footer a{color:var(--text-secondary)}
       <h1>De la <em>Posición de Inversión Internacional</em> a la Balanza de Pagos</h1>
       <p class="sub">La balanza de pagos casi siempre se enseña al revés: primero las cuentas, después los signos, y al final —si alcanza— qué significan. Acá vamos en el otro sentido. Primero un balance, con activos, pasivos y patrimonio neto. Después el balance de un país frente al mundo. Y solo entonces la balanza de pagos, que resulta ser lo que siempre fue: el informe que explica cómo cambió ese balance durante el año.</p>
     </div>
-    <button class="themebtn" id="themeBtn">Modo oscuro</button>
   </div>
   <nav class="jump">
     <a href="#balance">1 · Qué es un balance</a>
@@ -586,8 +606,8 @@ footer a{color:var(--text-secondary)}
     <table class="t" style="margin-top:0">
       <thead><tr><th style="width:26%">Concepto</th><th style="width:26%">Fórmula</th><th>Qué mide</th></tr></thead>
       <tbody>
-        <tr><td><b>PIB</b><br><span style="color:var(--muted);font-size:12.5px">producto interno bruto</span></td><td class="mono">Y</td><td style="color:var(--text-secondary)">El ingreso que se genera por lo que se <b>produce dentro de las fronteras</b>, sin importar de quién sean los factores. Criterio <b>territorial</b>.</td></tr>
-        <tr><td><b>INB</b><br><span style="color:var(--muted);font-size:12.5px">ingreso nacional bruto</span></td><td class="mono">Y + RN</td><td style="color:var(--text-secondary)">Lo que <b>ganan los residentes</b>, produzcan donde produzcan. Criterio de <b>residencia</b>. Recuerda que un residente no necesita vivir en el país</td></tr>
+        <tr><td><b>PIB</b><br><span style="color:var(--muted);font-size:12.5px">producto interno bruto</span></td><td class="mono">Y</td><td style="color:var(--text-secondary)">Lo que se <b>produce dentro de las fronteras</b>, sin importar de quién sean los factores. Criterio <b>territorial</b>.</td></tr>
+        <tr><td><b>INB</b><br><span style="color:var(--muted);font-size:12.5px">ingreso nacional bruto</span></td><td class="mono">Y + RN</td><td style="color:var(--text-secondary)">Lo que <b>ganan los residentes</b>, produzcan donde produzcan. Criterio de <b>residencia</b>.</td></tr>
         <tr><td><b>YND</b><br><span style="color:var(--muted);font-size:12.5px">ingreso nacional disponible</span></td><td class="mono">Y + RN + TR  =  Y + F</td><td style="color:var(--text-secondary)">Lo que los residentes pueden efectivamente <b>disponer</b>: gastar o ahorrar.</td></tr>
       </tbody>
     </table>
@@ -1125,6 +1145,12 @@ if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matche
 
 pintar();
 pintarBdP();
+/* barra de curso */
+(function(){
+  var a=document.getElementById('cbAtras');
+  if(a && history.length>1){ a.hidden=false; a.addEventListener('click',function(){history.back();}); }
+})();
+
 </script>
 </body>
 </html>
