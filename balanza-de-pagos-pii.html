@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De la Posición de Inversión Internacional a la Balanza de Pagos · Macroeconomía II UNAB</title>
+<meta name="description" content="Clase interactiva: la balanza de pagos explicada desde los balances de residentes y no residentes. Macroeconomía II, ICOM401, Universidad Andrés Bello.">
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f4f4f1; --card:#ffffff;
+  --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+  --act:#2a78d6;   /* activos */
+  --pas:#eb6834;   /* pasivos */
+  --pii:#1baf7a;   /* patrimonio / PII */
+  --wash:#eaf2fd; --washp:#fdeee8; --washn:#e8f7f1;
+  --hi:#fff3cd; --hi-b:#fab219;
+  --good:#006300; --crit:#d03b3b;
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d; --card:#151514;
+  --text-primary:#ffffff; --text-secondary:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+  --act:#3987e5; --pas:#d95926; --pii:#199e70;
+  --wash:#132132; --washp:#2a1a12; --washn:#0f2620;
+  --hi:#3a3218; --hi-b:#fab219;
+  --good:#0ca30c; --crit:#e66767;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--page);color:var(--text-primary);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1360px;margin:0 auto;padding:0 20px 80px}
+button{font-family:inherit;font-size:14px;cursor:pointer}
+
+header.top{padding:34px 0 18px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.topbar{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.kicker{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:650}
+h1{font-size:clamp(25px,3.4vw,38px);line-height:1.14;margin:8px 0 12px;letter-spacing:-.022em;max-width:21ch}
+h1 em{font-style:normal;color:var(--act)}
+.sub{color:var(--text-secondary);max-width:80ch;margin:0}
+.themebtn{background:var(--card);border:1px solid var(--border);border-radius:999px;padding:7px 14px;color:var(--text-secondary)}
+.themebtn:hover{border-color:var(--axis)}
+nav.jump{display:flex;gap:7px;flex-wrap:wrap;margin:20px 0 0}
+nav.jump a{font-size:12.5px;color:var(--text-secondary);text-decoration:none;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:6px 12px}
+nav.jump a:hover{border-color:var(--act);color:var(--act)}
+
+section{margin:52px 0 0;scroll-margin-top:16px}
+h2{font-size:22px;margin:0 0 6px;letter-spacing:-.012em}
+h2 .num{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;border-radius:8px;background:var(--act);color:#fff;font-size:13px;margin-right:10px;vertical-align:2px;font-weight:650}
+h3{font-size:16px;margin:22px 0 6px}
+.lede{color:var(--text-secondary);max-width:84ch;margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.cols2{grid-template-columns:1fr}}
+
+/* ---------- balances ---------- */
+.bs{background:var(--surface-1);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.bs > h4{margin:0;padding:12px 16px;font-size:14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bs > h4 span{font-size:12px;color:var(--muted);font-weight:500}
+.bsgrid{display:grid;grid-template-columns:1fr 1fr}
+.bscol{padding:12px 0 6px}
+.bscol + .bscol{border-left:1px solid var(--border)}
+.bshead{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:680;padding:0 14px 8px}
+.bshead.a{color:var(--act)} .bshead.p{color:var(--pas)}
+.row{display:flex;justify-content:space-between;gap:8px;padding:5px 14px;font-size:13px;align-items:baseline;
+  border-left:3px solid transparent;transition:background .35s, border-color .35s}
+.row .nm{color:var(--text-secondary);min-width:0}
+.row .vl{font-variant-numeric:tabular-nums;font-weight:620;white-space:nowrap}
+.row.zero .nm,.row.zero .vl{opacity:.42}
+.row.hot{background:var(--hi);border-left-color:var(--hi-b)}
+.row .dl{font-size:11.5px;font-weight:680;font-variant-numeric:tabular-nums;margin-left:6px;white-space:nowrap}
+.row .dl.up{color:var(--good)} .row .dl.dn{color:var(--crit)}
+.tot{display:flex;justify-content:space-between;padding:8px 14px 4px;margin-top:6px;border-top:1px solid var(--border);font-size:13px;font-weight:680}
+.tot .vl{font-variant-numeric:tabular-nums}
+.tot.a{color:var(--act)} .tot.p{color:var(--pas)}
+.piirow{display:flex;justify-content:space-between;padding:9px 14px;background:var(--washn);border-top:1px solid var(--border);font-size:13.5px;font-weight:700;color:var(--pii)}
+.piirow .vl{font-variant-numeric:tabular-nums}
+
+/* ---------- controles ---------- */
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:8px 13px;color:var(--text-secondary);font-size:13px;text-align:left}
+.step:hover{border-color:var(--axis)}
+.step[aria-current="true"]{background:var(--act);border-color:var(--act);color:#fff;font-weight:640}
+.step.done{border-color:var(--act);color:var(--act)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--card);border-radius:9px;padding:9px 16px;color:var(--text-primary);font-weight:600}
+.btn.primary{background:var(--act);border-color:var(--act);color:#fff}
+.btn:hover{border-color:var(--axis)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.narr{margin-top:14px;background:var(--wash);border:1px solid var(--border);border-left:3px solid var(--act);border-radius:0 11px 11px 0;padding:14px 16px;font-size:14px}
+.narr b{color:var(--act)}
+.narr .op{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:650;margin-bottom:4px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tag{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:4px 11px;color:var(--text-secondary);background:var(--card)}
+.tag b{color:var(--text-primary)}
+
+/* ---------- tablas ---------- */
+table.t{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+table.t th,table.t td{border-bottom:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+table.t th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:650}
+table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t tr.pend td{opacity:.32}
+table.t td.c{text-align:center}
+code{background:var(--wash);border-radius:5px;padding:1px 6px;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+
+/* ---------- misc ---------- */
+.klaw{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--pii);border-radius:0 12px 12px 0;padding:14px 18px;margin:18px 0;font-size:15px}
+.klaw b{color:var(--pii)}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:820px){.mini{grid-template-columns:1fr}}
+.mb{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13px}
+.mb h5{margin:0 0 8px;font-size:13px}
+.mb .l{display:flex;justify-content:space-between;padding:3px 0;color:var(--text-secondary)}
+.mb .l b{font-variant-numeric:tabular-nums;color:var(--text-primary)}
+.mb .l.cx{text-decoration:line-through;opacity:.38}
+.mb .pn{display:flex;justify-content:space-between;border-top:1px solid var(--border);margin-top:6px;padding-top:6px;font-weight:680;color:var(--pii)}
+.quiz{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:820px){.quiz{grid-template-columns:1fr}}
+.q{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color .2s}
+.q:hover{border-color:var(--axis)}
+.q .qq{font-size:14px;font-weight:600;margin-bottom:4px}
+.q .qa{font-size:13.5px;color:var(--text-secondary);display:none}
+.q.open .qa{display:block}
+.q .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;border-radius:5px;padding:2px 7px;margin-bottom:6px}
+.q .badge.r{background:var(--washn);color:var(--pii)}
+.q .badge.nr{background:var(--washp);color:var(--pas)}
+.q .hint{font-size:12px;color:var(--muted);margin-top:2px}
+ol.qs{padding-left:20px;margin:6px 0 0}
+ol.qs li{margin-bottom:10px;color:var(--text-secondary)}
+ol.qs li b{color:var(--text-primary);font-weight:620}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px}
+@media(max-width:900px){.stat{grid-template-columns:repeat(2,1fr)}}
+.st{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.st .v{font-size:21px;font-weight:680;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.st .l{font-size:12px;color:var(--muted);margin-top:2px}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+footer a{color:var(--text-secondary)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="topbar">
+    <div>
+      <div class="kicker">Macroeconomía II · ICOM401 · UNAB · Unidad I</div>
+      <h1>De la <em>Posición de Inversión Internacional</em> a la Balanza de Pagos</h1>
+      <p class="sub">La balanza de pagos casi siempre se enseña al revés: primero las cuentas, después los signos, y al final —si alcanza— qué significan. Acá vamos en el otro sentido. Primero un balance, con activos, pasivos y patrimonio neto. Después el balance de un país frente al mundo. Y solo entonces la balanza de pagos, que resulta ser lo que siempre fue: el informe que explica cómo cambió ese balance durante el año.</p>
+    </div>
+    <button class="themebtn" id="themeBtn">Modo oscuro</button>
+  </div>
+  <nav class="jump">
+    <a href="#balance">1 · Qué es un balance</a>
+    <a href="#ley">2 · La ley que lo genera todo</a>
+    <a href="#frontera">3 · La frontera y la PII</a>
+    <a href="#residencia">4 · Quién es residente</a>
+    <a href="#lab">5 · Laboratorio</a>
+    <a href="#patrones">6 · Patrones</a>
+    <a href="#bdp">7 · Nace la balanza de pagos</a>
+    <a href="#chile">8 · Chile de verdad</a>
+    <a href="#clase">9 · Guía de clase</a>
+  </nav>
+</header>
+
+<!-- ================= 1. BALANCE ================= -->
+<section id="balance">
+  <h2><span class="num">1</span>Qué es un balance</h2>
+  <p class="lede">Antes de hablar de países, un balance cualquiera. El de una persona sirve, y de hecho sirve mejor, porque nadie duda de qué significa deberle plata a alguien.</p>
+
+  <div class="cols2">
+    <div class="card">
+      <h3 style="margin-top:0">Las tres piezas</h3>
+      <p style="color:var(--text-secondary);margin:0 0 12px">Un <b style="color:var(--act)">activo</b> es algo que vale y que es tuyo. Un <b style="color:var(--pas)">pasivo</b> es una obligación: algo que tienes que entregar. Y el <b style="color:var(--pii)">patrimonio neto</b> es lo que queda si vendieras todo y pagaras todo. No es lo que tienes: es lo que <i>de verdad</i> es tuyo.</p>
+      <p style="color:var(--text-secondary);margin:0"><code>Patrimonio neto = Activos − Pasivos</code></p>
+      <p style="color:var(--text-secondary);margin:12px 0 0">Eso es todo. Lo notable es que con esas tres definiciones, aplicadas a un país entero, sale la balanza de pagos completa.</p>
+    </div>
+
+    <div class="bs">
+      <h4>Balance de Ana <span>en millones de pesos</span></h4>
+      <div class="bsgrid">
+        <div class="bscol">
+          <div class="bshead a">Activo</div>
+          <div class="row"><span class="nm">Depósito en el banco</span><span class="vl">10</span></div>
+          <div class="row"><span class="nm">Bicicleta</span><span class="vl">5</span></div>
+          <div class="tot a"><span>Total</span><span class="vl">15</span></div>
+        </div>
+        <div class="bscol">
+          <div class="bshead p">Pasivo</div>
+          <div class="row zero"><span class="nm">—</span><span class="vl">0</span></div>
+          <div class="row" style="visibility:hidden"><span class="nm">.</span><span class="vl">.</span></div>
+          <div class="tot p"><span>Total</span><span class="vl">0</span></div>
+        </div>
+      </div>
+      <div class="piirow"><span>Patrimonio neto</span><span class="vl">15</span></div>
+    </div>
+  </div>
+
+  <h3>Pero hay dos tipos de activos, y la diferencia lo decide todo</h3>
+  <p class="lede" style="margin-bottom:12px">Mira los dos activos de Ana. Parecen equivalentes: los dos valen, los dos son suyos. No lo son.</p>
+
+  <div class="cols2">
+    <div class="card" style="border-left:3px solid var(--act)">
+      <h3 style="margin-top:0">El depósito es un <span style="color:var(--act)">derecho sobre alguien</span></h3>
+      <p style="color:var(--text-secondary);margin:0">Ana no tiene diez millones guardados en una caja. Tiene el <b>derecho a exigirle</b> diez millones a un banco. Hay un nombre al otro lado. Y en el balance de ese banco, esos mismos diez millones aparecen — como pasivo.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--muted)">
+      <h3 style="margin-top:0">La bicicleta es una <span style="color:var(--muted)">cosa</span></h3>
+      <p style="color:var(--text-secondary);margin:0">La bicicleta no es obligación de nadie. Si Ana la pierde, nadie se la debe. No hay contraparte, no aparece en el balance de ningún otro, y no se puede cancelar contra nada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. LA LEY ================= -->
+<section id="ley">
+  <h2><span class="num">2</span>La ley que lo genera todo</h2>
+
+  <div class="klaw">
+    <b>Todo activo financiero es, al mismo tiempo, el pasivo de alguien más.</b> Las cosas —casas, bicicletas, máquinas, minas— no son pasivo de nadie.
+  </div>
+
+  <p class="lede">Esta ley parece contable y es en realidad el motor de toda la clase. Compruébala: tres personas, sus balances, y qué pasa cuando los sumas.</p>
+
+  <div class="mini" id="miniBs">
+    <div class="mb">
+      <h5 style="color:var(--act)">Ana</h5>
+      <div class="l fin"><span>Depósito en el banco</span><b>10</b></div>
+      <div class="l"><span>Bicicleta</span><b>5</b></div>
+      <div class="pn"><span>Patrimonio neto</span><b>15</b></div>
+    </div>
+    <div class="mb">
+      <h5 style="color:var(--act)">El banco</h5>
+      <div class="l fin"><span>Préstamo a Pedro</span><b>10</b></div>
+      <div class="l fin"><span>Depósito de Ana</span><b>−10</b></div>
+      <div class="pn"><span>Patrimonio neto</span><b>0</b></div>
+    </div>
+    <div class="mb">
+      <h5 style="color:var(--act)">Pedro</h5>
+      <div class="l"><span>Casa</span><b>20</b></div>
+      <div class="l fin"><span>Préstamo del banco</span><b>−10</b></div>
+      <div class="pn"><span>Patrimonio neto</span><b>10</b></div>
+    </div>
+  </div>
+
+  <div class="acts" style="margin-top:14px">
+    <button class="btn primary" id="consolidarBtn">Consolidar los tres balances</button>
+    <button class="btn" id="consolidarReset">Volver</button>
+  </div>
+  <div class="narr" id="narrLey">
+    <span class="op">Suma los tres patrimonios</span>
+    15 + 0 + 10 = <b>25</b>. Ahora presiona el botón y fíjate en qué sobrevive.
+  </div>
+</section>
+
+<!-- ================= 3. FRONTERA ================= -->
+<section id="frontera">
+  <h2><span class="num">3</span>Traza una frontera y nace la PII</h2>
+  <p class="lede">Ahora el movimiento que crea todo. Toma el mundo entero y dibuja una línea: adentro los residentes de Chile, afuera los no residentes. Consolida todo lo de adentro, igual que recién.</p>
+
+  <div class="cols2">
+    <div class="card">
+      <h3 style="margin-top:0">Qué desaparece</h3>
+      <p style="color:var(--text-secondary);margin:0">Todos los derechos entre dos chilenos. El crédito hipotecario que un banco chileno le dio a una familia chilena se cancela contra sí mismo y no deja rastro. Para efectos de la posición de Chile <i>frente al mundo</i>, no existe.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Qué sobrevive</h3>
+      <p style="color:var(--text-secondary);margin:0">Solo lo que <b>cruza la línea</b>. Los derechos de residentes sobre no residentes quedan como activo. Los derechos de no residentes sobre residentes quedan como pasivo. La diferencia entre ambos es la <b style="color:var(--pii)">Posición de Inversión Internacional</b>.</p>
+    </div>
+  </div>
+
+  <div class="klaw" style="border-left-color:var(--pas)">
+    Y acá viene lo que sorprende: <b style="color:var(--pas)">la PII no contiene ninguna casa, ninguna carretera ni ninguna máquina chilena.</b> Solo contiene derechos cruzados. No es "el balance de Chile" en el sentido de todo lo que Chile tiene — es el saldo de quién le debe qué a quién a través de la frontera. Por eso un país puede ser riquísimo y tener PII negativa, sin ninguna contradicción.
+  </div>
+</section>
+
+<!-- ================= 4. RESIDENCIA ================= -->
+<section id="residencia">
+  <h2><span class="num">4</span>Quién es residente</h2>
+  <p class="lede">Si la frontera define todo, hay que saber dibujarla. Y no se dibuja por nacionalidad ni por pasaporte, sino por <b>centro de interés económico</b>: dónde la persona o empresa desarrolla su actividad de forma duradera. Prueba tu intuición — haz clic para ver la respuesta.</p>
+  <div class="quiz" id="quiz">
+    <div class="q" data-a="r" data-t="Residente de Chile"
+         data-x="La filial opera en Chile, produce en Chile y su centro de interés económico está en Chile. Es una empresa residente — aunque su dueño sea extranjero. Por eso la inversión extranjera directa en Chile es un <b>pasivo de un residente</b> frente a un no residente, y no una operación que ocurre 'afuera'.">
+      <div class="qq">La filial chilena de una minera canadiense</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+    <div class="q" data-a="nr" data-t="No residente"
+         data-x="Su centro de interés económico se trasladó. Si te manda plata a Chile, eso es una remesa desde el exterior y entra en la cuenta corriente como renta secundaria. La nacionalidad chilena no cambia nada.">
+      <div class="qq">Un chileno que vive en Madrid hace tres años</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+    <div class="q" data-a="r" data-t="Sigue siendo residente de Chile"
+         data-x="Esta es la que casi todos fallan. El manual trata a los estudiantes como residentes de su economía de origen <b>sin importar cuánto dure el programa</b>. Se entiende que su centro de interés sigue en el país que dejó. Lo que gasta allá es importación de servicios para Chile.">
+      <div class="qq">Una estudiante chilena haciendo un magíster de dos años en Boston</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+    <div class="q" data-a="nr" data-t="No residente, aunque esté en suelo chileno"
+         data-x="Las embajadas y consulados son enclaves: se consideran residentes del país que los envía, no del que los recibe. Lo que la embajada peruana compra en Santiago es, para Chile, una exportación. La frontera económica y la frontera geográfica no coinciden.">
+      <div class="qq">La embajada de Perú en Santiago</div>
+      <div class="hint">Clic para revelar</div><div class="qa"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. LABORATORIO ================= -->
+<section id="lab">
+  <h2><span class="num">5</span>Laboratorio: dos balances, una sola realidad</h2>
+  <p class="lede">Acá están los dos balances espejo. Ninguna operación se anota en uno solo: <b>cada línea que se ilumina a la izquierda se ilumina también a la derecha</b>, porque es el mismo objeto visto desde el otro lado. Avanza operación por operación y fíjate sobre todo en cuándo la PII se mueve y cuándo no.</p>
+
+  <div class="steps" id="steps"></div>
+  <div class="acts" style="margin-bottom:14px">
+    <button class="btn" id="prevBtn">← Anterior</button>
+    <button class="btn primary" id="nextBtn">Siguiente operación →</button>
+    <button class="btn" id="resetBtn">Volver al inicio</button>
+  </div>
+
+  <div class="cols2">
+    <div class="bs">
+      <h4><span>Balance de <b>CHILE</b> frente a no residentes</span><span>USD MM</span></h4>
+      <div class="bsgrid">
+        <div class="bscol"><div class="bshead a">Activo · derechos sobre no residentes</div><div id="clAct"></div><div class="tot a"><span>Total activos</span><span class="vl" id="clActTot">300</span></div></div>
+        <div class="bscol"><div class="bshead p">Pasivo · derechos de no residentes</div><div id="clPas"></div><div class="tot p"><span>Total pasivos</span><span class="vl" id="clPasTot">250</span></div></div>
+      </div>
+      <div class="piirow"><span>PII de Chile</span><span class="vl" id="clPii">+50</span></div>
+    </div>
+
+    <div class="bs">
+      <h4><span>Balance del <b>RESTO DEL MUNDO</b> frente a Chile</span><span>USD MM</span></h4>
+      <div class="bsgrid">
+        <div class="bscol"><div class="bshead a">Activo · derechos sobre Chile</div><div id="rmAct"></div><div class="tot a"><span>Total activos</span><span class="vl" id="rmActTot">250</span></div></div>
+        <div class="bscol"><div class="bshead p">Pasivo · derechos de Chile</div><div id="rmPas"></div><div class="tot p"><span>Total pasivos</span><span class="vl" id="rmPasTot">300</span></div></div>
+      </div>
+      <div class="piirow" style="background:var(--washp);color:var(--pas)"><span>PII del resto del mundo</span><span class="vl" id="rmPii">−50</span></div>
+    </div>
+  </div>
+
+  <div class="narr" id="narrLab"></div>
+  <div class="tags" id="tagsLab"></div>
+
+  <details style="margin-top:16px" class="card">
+    <summary style="cursor:pointer;font-size:13.5px;color:var(--text-secondary)">¿Qué derecho representa cada cuenta, y contra quién?</summary>
+    <table class="t">
+      <thead><tr><th>Cuenta</th><th>¿Qué derecho representa?</th><th>¿Contra quién?</th></tr></thead>
+      <tbody id="instrTbl"></tbody>
+    </table>
+  </details>
+</section>
+
+<!-- ================= 6. PATRONES ================= -->
+<section id="patrones">
+  <h2><span class="num">6</span>El resumen de patrones</h2>
+  <p class="lede">Esta tabla se va llenando a medida que avanzas en el laboratorio. Cuando esté completa, la pregunta se responde sola: ¿qué tienen en común las operaciones que mueven la PII?</p>
+  <div class="card" style="padding:12px 16px">
+    <table class="t">
+      <thead><tr><th>Operación</th><th class="c">Moneda ext.</th><th class="c">Crédito com.</th><th class="c">Otros activos</th><th class="c">Pasivos</th><th class="c">PII</th><th class="c">¿Real?</th><th class="c">¿Financiera?</th></tr></thead>
+      <tbody id="patTbl"></tbody>
+    </table>
+  </div>
+  <div class="narr" id="narrPat" style="border-left-color:var(--pii)"></div>
+</section>
+
+<!-- ================= 7. BALANZA DE PAGOS ================= -->
+<section id="bdp">
+  <h2><span class="num">7</span>Y entonces nace la balanza de pagos</h2>
+  <p class="lede">Tenemos la PII inicial, la PII final y todas las operaciones del año. Surge sola la pregunta: <b>¿cómo resumiría el Banco Central todo lo ocurrido en un único informe?</b> La respuesta es la balanza de pagos, y sale de partir las operaciones en dos grupos.</p>
+
+  <div class="cols2">
+    <div class="card" style="border-left:3px solid var(--act)">
+      <h3 style="margin-top:0">Cuenta corriente</h3>
+      <p style="color:var(--text-secondary);margin:0">Registra las operaciones que <b>crean, modifican o extinguen derechos patrimoniales</b> entre residentes y no residentes. Son las que mueven el patrimonio neto: exportar, importar, cobrar o pagar rentas, recibir remesas.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--pas)">
+      <h3 style="margin-top:0">Cuenta financiera</h3>
+      <p style="color:var(--text-secondary);margin:0">Registra la <b>forma específica que adoptan esos derechos</b> y cómo se liquidan después. Un crédito comercial que se convierte en moneda, moneda que se convierte en bonos. La composición, no el neto.</p>
+    </div>
+  </div>
+
+  <h3>El informe del año, armado con las cinco operaciones</h3>
+  <div class="card" style="padding:14px 18px">
+    <table class="t" style="margin-top:0">
+      <tbody id="bdpTbl"></tbody>
+    </table>
+  </div>
+
+  <div class="klaw" style="margin-top:18px">
+    <b>Cuenta corriente = −10. Cuenta financiera = −10. Variación de la PII = −10.</b> No es una coincidencia ni una regla que haya que memorizar: es la consecuencia de que todo derecho que entra en un balance salió del balance de alguien más. Cuando en la práctica no cuadra, la diferencia se anota como <i>errores y omisiones</i> — que es, literalmente, la confesión de lo que el Banco Central no logró observar.
+  </div>
+
+  <h3>La pregunta que reemplaza a la convención de signos</h3>
+  <p class="lede" style="margin-bottom:12px">En vez de partir memorizando cuándo va con más y cuándo con menos, una sola pregunta después de cada operación:</p>
+  <div class="card" style="text-align:center;font-size:17px;font-weight:600;padding:22px">
+    ¿El país quedó <span style="color:var(--pas)">más financiado</span> o <span style="color:var(--act)">menos financiado</span> por el resto del mundo?
+  </div>
+  <table class="t">
+    <thead><tr><th>Si quedó…</th><th>La PII…</th><th>En la convención de Mundell-Fleming…</th></tr></thead>
+    <tbody>
+      <tr><td><b>Más financiado</b></td><td>disminuye</td><td>entrada neta de capitales</td></tr>
+      <tr><td><b>Menos financiado</b>, o pasó a financiar al mundo</td><td>aumenta</td><td>salida neta de capitales</td></tr>
+      <tr><td>Igual, pero cambió la composición</td><td>no varía</td><td>reasignación de instrumentos, sin cambio patrimonial</td></tr>
+    </tbody>
+  </table>
+  <p class="lede" style="margin-top:14px">En nuestro ejemplo la PII bajó de 50 a 40: Chile terminó el año <b>más financiado</b> por el resto del mundo. Eso es una entrada neta de capitales — y ahora los estudiantes pueden decirlo sin haber memorizado un solo signo.</p>
+</section>
+
+<!-- ================= 8. CHILE REAL ================= -->
+<section id="chile">
+  <h2><span class="num">8</span>Chile de verdad</h2>
+  <p class="lede">El ejemplo tenía cinco operaciones y números redondos. Esta es la misma estructura con las cifras reales, al cierre de 2024.</p>
+
+  <div class="stat">
+    <div class="st"><div class="v" style="color:var(--act)">468.325</div><div class="l">Activos externos, US$ MM</div></div>
+    <div class="st"><div class="v" style="color:var(--pas)">524.950</div><div class="l">Pasivos externos, US$ MM</div></div>
+    <div class="st"><div class="v" style="color:var(--pii)">−56.625</div><div class="l">PII neta, US$ MM (18,0% del PIB)</div></div>
+    <div class="st"><div class="v">8×</div><div class="l">Los brutos son ocho veces el neto</div></div>
+  </div>
+
+  <div class="cols2" style="margin-top:16px">
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--act)">Lo que Chile tiene afuera</h3>
+      <table class="t" style="margin-top:4px">
+        <tbody>
+          <tr><td>Inversión de cartera</td><td class="n">195.103</td></tr>
+          <tr><td>Inversión directa</td><td class="n">161.832</td></tr>
+          <tr><td>Reservas del Banco Central</td><td class="n">44.421</td></tr>
+          <tr><td>Otra inversión</td><td class="n">42.816</td></tr>
+          <tr><td>Derivados</td><td class="n">24.153</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--text-secondary);font-size:13.5px;margin:10px 0 0">Sobre todo las carteras de las AFP y las reservas del Banco Central. El ahorro de las familias chilenas, colocado afuera.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--pas)">Lo que el mundo tiene en Chile</h3>
+      <table class="t" style="margin-top:4px">
+        <tbody>
+          <tr><td>Inversión directa</td><td class="n">285.790</td></tr>
+          <tr><td>Inversión de cartera</td><td class="n">132.982</td></tr>
+          <tr><td>Otra inversión</td><td class="n">79.980</td></tr>
+          <tr><td>Derivados</td><td class="n">26.198</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--text-secondary);font-size:13.5px;margin:10px 0 0">El 54% es inversión directa: la propiedad extranjera de la minería, sobre todo. Es exactamente la operación 4 del laboratorio, acumulada durante décadas.</p>
+    </div>
+  </div>
+
+  <h3>Tres cosas que esta estructura explica</h3>
+  <div class="cols2">
+    <div class="card">
+      <h3 style="margin-top:0">Por qué hay superávit comercial y déficit de renta</h3>
+      <p style="color:var(--text-secondary);margin:0">Los stocks generan flujos. Chile paga rendimiento de <b>acciones</b> sobre sus pasivos y cobra rendimiento de <b>bonos</b> sobre sus activos. Como el capital accionario rinde más que la renta fija, Chile paga más de lo que cobra aun teniendo posiciones de tamaño parecido. Es el espejo del "privilegio exorbitante" de Estados Unidos.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Por qué el bruto importa aunque el neto no cambie</h3>
+      <p style="color:var(--text-secondary);margin:0">No es la misma persona la que tiene el activo y el pasivo. Las AFP tienen la cartera externa; las mineras extranjeras tienen los pasivos. En una crisis nadie puede compensar unos con otros. Consolidar a todos los residentes en un "Chile" es un acto contable, no económico.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-top:0">Por qué la PII se mueve sin que ocurra ninguna operación</h3>
+    <p style="color:var(--text-secondary);margin:0">Con posiciones brutas de medio billón de dólares y una neta de 57 mil millones, un movimiento de 5% en el valor de los pasivos mueve la posición neta en unos US$26.000 millones: casi la mitad del total. Son los <b>efectos de valoración</b>, y por eso la variación de la PII no es igual a la cuenta corriente en el mundo real. Hay una paradoja muy chilena escondida acá: cuando sube el cobre, la minería extranjera en Chile vale más, los pasivos del país crecen y <b>la PII empeora</b> — justo cuando la cuenta corriente mejora.</p>
+  </div>
+</section>
+
+<!-- ================= 9. GUIA ================= -->
+<section id="clase">
+  <h2><span class="num">9</span>Guía de clase</h2>
+  <div class="cols2">
+    <div class="card">
+      <h3 style="margin-top:0">Preguntas para discutir</h3>
+      <ol class="qs">
+        <li><b>Sección 2.</b> Después de consolidar los tres balances, ¿por qué el patrimonio neto agregado es exactamente el valor de la bicicleta más la casa? ¿Qué dice eso sobre la riqueza financiera del planeta?</li>
+        <li><b>Laboratorio, operaciones 1 y 3.</b> El crédito comercial aparece como activo en una y como pasivo en la otra. ¿Qué determina de qué lado del balance va un instrumento?</li>
+        <li><b>Laboratorio, operación 2.</b> Corea paga y no pasa nada con la PII. ¿Significa que la operación es irrelevante? ¿Qué cambió?</li>
+        <li><b>Laboratorio, operación 4.</b> Los activos suben 40 y los pasivos suben 40. Un país con PII de 40 y activos de 360 y otro con PII de 40 y activos de 60, ¿son igual de vulnerables? Argumenta con plazos y monedas.</li>
+        <li><b>Sección 7.</b> Sin mirar la tabla: de las cinco operaciones, ¿cuáles entran en la cuenta corriente? ¿Qué tienen en común?</li>
+        <li><b>Sección 8.</b> Chile tiene superávit comercial y déficit de renta al mismo tiempo. Explícalo usando solo el balance, sin hablar de comercio.</li>
+        <li><b>Puente.</b> Si la operación 4 hubiera sido la compra de <i>la mina misma</i> —el terreno y la concesión— en vez de las acciones de la empresa, la anotación cambia. ¿A qué cuenta iría, y por qué existe esa cuenta?</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Los errores clásicos</h3>
+      <ol class="qs">
+        <li><b>Creer que la PII incluye lo que hay en el país.</b> No hay una sola casa chilena en la PII. Solo derechos cruzados. Por eso PII negativa no significa país pobre.</li>
+        <li><b>Pensar que la cuenta financiera "financia" a la corriente.</b> Son la misma operación vista desde dos lados, no dos hechos con una relación de causa. Cuando Codelco exporta a crédito, la exportación y el nacimiento del crédito son el mismo acto.</li>
+        <li><b>Confundir nacionalidad con residencia.</b> La filial chilena de una minera extranjera es residente. La estudiante chilena en Boston también. El pasaporte no define nada.</li>
+        <li><b>Suponer que si la PII no cambió, no pasó nada.</b> Las operaciones 2, 4 y 5 dejan la PII intacta y cambian por completo la estructura de riesgo del país.</li>
+        <li><b>Creer que ΔPII = cuenta corriente.</b> Es cierto en este ejemplo porque ignoramos los cambios de valoración. En Chile los efectos de valoración son enormes.</li>
+        <li><b>Memorizar los signos.</b> Si un estudiante puede responder "¿quedó más o menos financiado?", los signos salen solos. Si no puede, memorizarlos no le sirvió de nada.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>Fuentes.</b> Las cifras de la sección 8 provienen del anuario <i>Balanza de Pagos de Chile, Posición de Inversión Internacional y Deuda Externa</i> del Banco Central de Chile, al cierre de 2024. Las definiciones de residencia, el tratamiento de estudiantes y enclaves, y la distinción entre cuenta corriente, de capital y financiera siguen el <i>Manual de Balanza de Pagos y Posición de Inversión Internacional</i>, sexta edición (MBP6) del Fondo Monetario Internacional.</p>
+  <p>El ejemplo de las cinco operaciones es una construcción didáctica con números redondos: no representa magnitudes de la economía chilena. Está calibrado para que la cuenta corriente, la cuenta financiera y la variación de la PII coincidan exactamente, lo que en la práctica no ocurre por los efectos de valoración y los errores y omisiones.</p>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+const fmt = v => (v===0?"0":v.toLocaleString("es-CL"));
+const sgn = v => (v>0?"+":v<0?"−":"") + fmt(Math.abs(v));
+
+/* ============================================================
+   MODELO — las cuentas y su espejo
+   ============================================================ */
+const ACT = [
+  {id:'me', n:'Moneda extranjera',                  esp:'Circulante en manos de chilenos',      v0:20,
+   d:'Derecho a utilizar un medio de pago frente al exterior.', c:'Un banco central extranjero'},
+  {id:'dep',n:'Depósitos en el exterior',           esp:'Depósitos de chilenos',                v0:40,
+   d:'Derecho de cobro frente a un banco no residente.', c:'Un banco no residente'},
+  {id:'ccc',n:'Crédito comercial por cobrar',       esp:'Crédito comercial por pagar',          v0:0,
+   d:'Derecho a cobrar por una venta ya realizada.', c:'El cliente extranjero'},
+  {id:'ide',n:'Inversión directa en el exterior',   esp:'Empresas en manos chilenas',           v0:100,
+   d:'Derecho económico con control o influencia significativa sobre una empresa.', c:'Una empresa no residente'},
+  {id:'ice',n:'Inversión de cartera en el exterior',esp:'Títulos en manos chilenas',            v0:40,
+   d:'Derecho económico sobre un emisor, sin control.', c:'Un emisor no residente'},
+  {id:'res',n:'Reservas internacionales del BCCh',  esp:'Reservas en poder del Banco Central',  v0:100,
+   d:'Activos externos líquidos bajo control de la autoridad monetaria.', c:'Emisores extranjeros de alta liquidez'}
+];
+const PAS = [
+  {id:'ied',n:'Inversión directa en Chile',         esp:'Empresas chilenas en manos extranjeras',v0:120,
+   d:'Derecho económico de un no residente con control sobre una empresa chilena.', c:'Una empresa residente'},
+  {id:'icc',n:'Inversión de cartera en Chile',      esp:'Títulos chilenos',                      v0:50,
+   d:'Derecho económico de un no residente sobre un emisor chileno, sin control.', c:'Un emisor residente'},
+  {id:'pre',n:'Préstamos recibidos',                esp:'Préstamos otorgados a Chile',           v0:80,
+   d:'Obligación de devolver un préstamo recibido del exterior.', c:'Un acreedor no residente'},
+  {id:'ccp',n:'Crédito comercial por pagar',        esp:'Crédito comercial por cobrar',          v0:0,
+   d:'Obligación de pagar por una compra ya recibida.', c:'El proveedor extranjero'}
+];
+
+const OPS = [
+  {
+    t:'Exportación a crédito',
+    sub:'Codelco despacha cobre a Corea por USD 20 y le da 90 días para pagar.',
+    a:{ccc:+20}, p:{},
+    real:true, fin:true, cuenta:'Cuenta corriente + cuenta financiera',
+    pat:{me:'—',cred:'↑',otros:'—',pas:'—',pii:'↑'},
+    txt:`Salió cobre del país y todavía no entró nada a cambio: lo que entró fue un <b>derecho a cobrar</b>. En el balance de Chile nace un crédito comercial en el activo; en el de Corea, el mismo crédito nace en el pasivo. Es el mismo objeto anotado dos veces.<br><br>La PII sube de 50 a <b>70</b>. Y sube porque lo que Chile entregó —el cobre— no era un activo de su balance externo: era producción del período. <b>Esta es la única forma en que el patrimonio neto de un país frente al mundo puede crecer.</b>`
+  },
+  {
+    t:'Cobro de la exportación',
+    sub:'Corea paga los USD 20 y los dólares quedan en manos de residentes chilenos.',
+    a:{ccc:-20, me:+20}, p:{},
+    real:false, fin:true, cuenta:'Solo cuenta financiera',
+    pat:{me:'↑',cred:'↓',otros:'—',pas:'—',pii:'='},
+    txt:`El derecho a cobrar se transformó en un medio de pago. Chile dejó de tener un crédito contra Corea y pasó a tener moneda extranjera.<br><br>La PII <b>no se movió</b>: sigue en 70. Y sin embargo pasó algo importante — Chile cambió un activo ilíquido y con riesgo de contraparte por uno líquido. <b>Que la PII no cambie no significa que la operación sea irrelevante.</b> Significa que fue un cambio de composición, no de patrimonio.`
+  },
+  {
+    t:'Importación a crédito',
+    sub:'Una empresa chilena compra maquinaria alemana por USD 30 y queda debiendo.',
+    a:{}, p:{ccp:+30},
+    real:true, fin:true, cuenta:'Cuenta corriente + cuenta financiera',
+    pat:{me:'—',cred:'↑ (pasivo)',otros:'—',pas:'↑',pii:'↓'},
+    txt:`Entró una máquina al país y nació una obligación de pagarla. Fíjate en el detalle: es <b>el mismo instrumento de la operación 1</b> —crédito comercial— pero ahora del lado del pasivo. Lo único que cambió fue la dirección de la venta.<br><br>La máquina, eso sí, <b>no aparece en la PII</b>: es una cosa, no un derecho sobre un no residente. Por eso los activos externos no se mueven y solo suben los pasivos. La PII cae de 70 a <b>40</b>.`
+  },
+  {
+    t:'Venta de una minera a un no residente',
+    sub:'Una empresa canadiense compra por USD 40 las acciones de una minera chilena. El vendedor conserva los dólares.',
+    a:{me:+40}, p:{ied:+40},
+    real:false, fin:true, cuenta:'Solo cuenta financiera',
+    pat:{me:'↑',cred:'—',otros:'—',pas:'↑',pii:'='},
+    txt:`Acá está el caso más interesante. Chile gana un activo externo —los dólares— y al mismo tiempo gana un pasivo externo: la empresa chilena ahora pertenece a un no residente. Los dos lados del balance crecen 40.<br><br>La PII sigue en <b>40</b>, intacta. Pero los activos brutos pasaron de 320 a 360 y los pasivos de 280 a 320. <b>El país se hizo más grande por los dos lados sin hacerse más rico.</b> Repite esta operación durante treinta años y tienes la estructura real de la PII chilena.`
+  },
+  {
+    t:'Una AFP compra bonos del Tesoro',
+    sub:'Una administradora de fondos usa USD 25 de moneda extranjera para comprar bonos del Tesoro de Estados Unidos.',
+    a:{me:-25, ice:+25}, p:{},
+    real:false, fin:true, cuenta:'Solo cuenta financiera',
+    pat:{me:'↓',cred:'—',otros:'Cartera ↑',pas:'—',pii:'='},
+    txt:`El ahorro de las familias chilenas, canalizado por su AFP, cambia de instrumento: de moneda a bonos. Ningún bien cruzó la frontera y la PII no se mueve.<br><br>Esta operación es, en escala real, el rubro más grande de la cuenta financiera chilena. Cuando el Banco Central informa "salidas netas de capital explicadas por la inversión de los fondos de pensiones en el exterior", está describiendo exactamente esto.`
+  }
+];
+
+let paso = 0; // 0 = inicial, 1..5 = después de la operación n
+
+function estado(hasta){
+  const a={}, p={};
+  ACT.forEach(x=>a[x.id]=x.v0);
+  PAS.forEach(x=>p[x.id]=x.v0);
+  for(let i=0;i<hasta;i++){
+    for(const k in OPS[i].a) a[k]+=OPS[i].a[k];
+    for(const k in OPS[i].p) p[k]+=OPS[i].p[k];
+  }
+  return {a,p};
+}
+const suma = o => Object.values(o).reduce((s,v)=>s+v,0);
+
+/* ============================================================
+   RENDER DE LOS BALANCES
+   ============================================================ */
+function fila(nombre, valor, delta){
+  const hot = delta ? " hot" : "";
+  const zero = (valor===0 && !delta) ? " zero" : "";
+  const dl = delta ? `<span class="dl ${delta>0?"up":"dn"}">${sgn(delta)}</span>` : "";
+  return `<div class="row${hot}${zero}"><span class="nm">${nombre}</span><span class="vl">${fmt(valor)}${dl}</span></div>`;
+}
+
+function pintar(){
+  const {a,p} = estado(paso);
+  const op = paso>0 ? OPS[paso-1] : null;
+  const da = op ? op.a : {}, dp = op ? op.p : {};
+
+  document.getElementById('clAct').innerHTML = ACT.map(x=>fila(x.n, a[x.id], da[x.id])).join('');
+  document.getElementById('clPas').innerHTML = PAS.map(x=>fila(x.n, p[x.id], dp[x.id])).join('');
+  // el espejo: el activo de Chile es pasivo del resto del mundo, y viceversa
+  document.getElementById('rmAct').innerHTML = PAS.map(x=>fila(x.esp, p[x.id], dp[x.id])).join('');
+  document.getElementById('rmPas').innerHTML = ACT.map(x=>fila(x.esp, a[x.id], da[x.id])).join('');
+
+  const ta=suma(a), tp=suma(p);
+  document.getElementById('clActTot').textContent = fmt(ta);
+  document.getElementById('clPasTot').textContent = fmt(tp);
+  document.getElementById('rmActTot').textContent = fmt(tp);
+  document.getElementById('rmPasTot').textContent = fmt(ta);
+  document.getElementById('clPii').textContent = sgn(ta-tp);
+  document.getElementById('rmPii').textContent = sgn(tp-ta);
+
+  // pasos
+  document.querySelectorAll('#steps .step').forEach((b,i)=>{
+    b.setAttribute('aria-current', i===paso ? "true":"false");
+    b.classList.toggle('done', i>0 && i<paso);
+  });
+  document.getElementById('prevBtn').disabled = paso===0;
+  document.getElementById('nextBtn').disabled = paso===OPS.length;
+
+  // narrativa
+  const n = document.getElementById('narrLab');
+  if(!op){
+    n.innerHTML = `<span class="op">Punto de partida</span>Chile tiene derechos sobre no residentes por <b>300</b> y los no residentes tienen derechos sobre Chile por <b>250</b>. La PII es <b>+50</b>: en neto, Chile es acreedor del mundo por 50.<br><br>Fíjate en los dos balances antes de avanzar. No son dos tablas parecidas: cada línea de la izquierda <b>es</b> una línea de la derecha, vista desde el otro lado. Por eso la PII del resto del mundo es exactamente −50.`;
+    document.getElementById('tagsLab').innerHTML = '';
+  } else {
+    n.innerHTML = `<span class="op">Operación ${paso} · ${op.t}</span><b>${op.sub}</b><br><br>${op.txt}`;
+    document.getElementById('tagsLab').innerHTML =
+      `<span class="tag">¿Transacción real? <b>${op.real?'Sí':'No'}</b></span>`+
+      `<span class="tag">¿Transacción financiera? <b>${op.fin?'Sí':'No'}</b></span>`+
+      `<span class="tag">Registro: <b>${op.cuenta}</b></span>`+
+      `<span class="tag">PII: <b>${op.pat.pii==='='?'no cambia':(op.pat.pii==='↑'?'sube':'baja')}</b></span>`;
+  }
+  pintarPatrones();
+}
+
+/* ============================================================
+   TABLA DE PATRONES
+   ============================================================ */
+function pintarPatrones(){
+  let h='';
+  OPS.forEach((o,i)=>{
+    const vista = i < paso;
+    h += `<tr class="${vista?'':'pend'}"><td>${i+1}. ${o.t}</td>`+
+         `<td class="c">${vista?o.pat.me:'·'}</td><td class="c">${vista?o.pat.cred:'·'}</td>`+
+         `<td class="c">${vista?o.pat.otros:'·'}</td><td class="c">${vista?o.pat.pas:'·'}</td>`+
+         `<td class="c"><b>${vista?o.pat.pii:'·'}</b></td>`+
+         `<td class="c">${vista?(o.real?'✔':'—'):'·'}</td><td class="c">${vista?(o.fin?'✔':'—'):'·'}</td></tr>`;
+  });
+  document.getElementById('patTbl').innerHTML = h;
+  const np = document.getElementById('narrPat');
+  if(paso < OPS.length){
+    np.innerHTML = `Avanza en el laboratorio para completar la tabla. Llevas <b>${paso} de ${OPS.length}</b> operaciones.`;
+  } else {
+    np.innerHTML = `<b>Ahí está el patrón.</b> Las únicas dos operaciones que movieron la PII —la exportación y la importación— son exactamente las dos marcadas como transacción real. Todas las demás cambian la composición del balance y dejan el patrimonio neto intacto.<br><br>De ahí sale la definición: la <b>cuenta corriente</b> registra las operaciones que crean o extinguen patrimonio frente al exterior, y la <b>cuenta financiera</b> registra la forma que adoptan esos derechos y cómo se liquidan. No son dos listas arbitrarias de partidas: son las dos únicas cosas que le pueden pasar a un balance.`;
+  }
+}
+
+/* ============================================================
+   BALANZA DE PAGOS DEL AÑO
+   ============================================================ */
+function pintarBdP(){
+  const ini = estado(0), fin = estado(OPS.length);
+  const dA = ACT.map(x=>({n:x.n, d:fin.a[x.id]-ini.a[x.id]})).filter(r=>r.d!==0);
+  const dP = PAS.map(x=>({n:x.n, d:fin.p[x.id]-ini.p[x.id]})).filter(r=>r.d!==0);
+  const totA = dA.reduce((s,r)=>s+r.d,0), totP = dP.reduce((s,r)=>s+r.d,0);
+  const cc = 20-30, cf = totA-totP;
+  const pii0 = suma(ini.a)-suma(ini.p), pii1 = suma(fin.a)-suma(fin.p);
+
+  const sec = (t,c) => `<tr><td colspan="2" style="padding-top:16px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:${c};font-weight:680;border-bottom:none">${t}</td></tr>`;
+  const li  = (t,v,ind) => `<tr><td style="padding-left:${ind||10}px;color:var(--text-secondary)">${t}</td><td class="n">${sgn(v)}</td></tr>`;
+  const sub = (t) => `<tr><td style="padding-left:10px;color:var(--text-secondary)"><i>${t}</i></td><td class="n"></td></tr>`;
+  const tt  = (t,v,c) => `<tr><td style="font-weight:680;color:${c||'inherit'}">${t}</td><td class="n" style="font-weight:680;color:${c||'inherit'}">${sgn(v)}</td></tr>`;
+
+  let h = sec('Cuenta corriente','var(--act)');
+  h += li('Exportaciones de bienes (operación 1)', 20);
+  h += li('Importaciones de bienes (operación 3)', -30);
+  h += tt('Saldo de la cuenta corriente', cc, 'var(--act)');
+
+  h += sec('Cuenta financiera','var(--pas)');
+  h += sub('Adquisición neta de activos financieros');
+  dA.forEach(r=>{ h += li(r.n, r.d, 26); });
+  h += li('<b>Total activos</b>', totA, 14);
+  h += sub('Incurrimiento neto de pasivos');
+  dP.forEach(r=>{ h += li(r.n, r.d, 26); });
+  h += li('<b>Total pasivos</b>', totP, 14);
+  h += tt('Préstamo neto al resto del mundo  (activos − pasivos)', cf, 'var(--pas)');
+
+  h += sec('Comprobación','var(--pii)');
+  h += li(`PII inicial ${sgn(pii0)}  →  PII final ${sgn(pii1)}`, pii1-pii0);
+  h += tt('Errores y omisiones', cc-cf, 'var(--pii)');
+  document.getElementById('bdpTbl').innerHTML = h;
+}
+
+/* ============================================================
+   TABLA DE INSTRUMENTOS
+   ============================================================ */
+document.getElementById('instrTbl').innerHTML =
+  ACT.concat(PAS).map(x=>`<tr><td><b>${x.n}</b></td><td style="color:var(--text-secondary)">${x.d}</td><td style="color:var(--text-secondary)">${x.c}</td></tr>`).join('');
+
+/* ============================================================
+   CONTROLES
+   ============================================================ */
+document.getElementById('steps').innerHTML =
+  ['Balance inicial'].concat(OPS.map((o,i)=>`${i+1}. ${o.t}`))
+  .map((t,i)=>`<button class="step" data-i="${i}">${t}</button>`).join('');
+document.querySelectorAll('#steps .step').forEach(b=>{
+  b.addEventListener('click',()=>{ paso = +b.dataset.i; pintar(); });
+});
+document.getElementById('nextBtn').addEventListener('click',()=>{ if(paso<OPS.length){paso++;pintar();} });
+document.getElementById('prevBtn').addEventListener('click',()=>{ if(paso>0){paso--;pintar();} });
+document.getElementById('resetBtn').addEventListener('click',()=>{ paso=0;pintar(); });
+
+/* consolidación de los tres balances */
+document.getElementById('consolidarBtn').addEventListener('click',()=>{
+  document.querySelectorAll('#miniBs .l.fin').forEach(l=>l.classList.add('cx'));
+  document.getElementById('narrLey').innerHTML =
+    `<span class="op">Consolidado</span>Se tacharon todos los derechos: el depósito de Ana desapareció contra el pasivo del banco, y el préstamo del banco desapareció contra la deuda de Pedro. <b>Cada uno se canceló contra su contraparte.</b><br><br>Lo que sobrevive son la bicicleta (5) y la casa (20): <b>25</b>, exactamente la suma de los tres patrimonios. Es decir, el patrimonio neto de un grupo consolidado son solo las <i>cosas</i>.<br><br>Extendido al planeta entero, esto significa que <b>la riqueza financiera neta de la humanidad es cero</b>. Todo lo que alguien tiene por derecho, otro lo debe. Guarda esta idea: es la que va a hacer aparecer la PII.`;
+});
+document.getElementById('consolidarReset').addEventListener('click',()=>{
+  document.querySelectorAll('#miniBs .l.fin').forEach(l=>l.classList.remove('cx'));
+  document.getElementById('narrLey').innerHTML =
+    `<span class="op">Suma los tres patrimonios</span>15 + 0 + 10 = <b>25</b>. Ahora presiona el botón y fíjate en qué sobrevive.`;
+});
+
+/* quiz de residencia */
+document.querySelectorAll('#quiz .q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    if(q.classList.contains('open')) { q.classList.remove('open'); q.querySelector('.hint').style.display=''; return; }
+    q.classList.add('open');
+    q.querySelector('.hint').style.display='none';
+    q.querySelector('.qa').innerHTML =
+      `<span class="badge ${q.dataset.a}">${q.dataset.t}</span><br>${q.dataset.x}`;
+  });
+});
+
+/* tema */
+const themeBtn=document.getElementById('themeBtn');
+themeBtn.addEventListener('click',()=>{
+  const d = document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme', d?'light':'dark');
+  themeBtn.textContent = d?'Modo oscuro':'Modo claro';
+});
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+  themeBtn.textContent='Modo claro';
+}
+
+pintar();
+pintarBdP();
+</script>
+</body>
+</html>
