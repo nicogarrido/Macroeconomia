@@ -10,7 +10,7 @@ Facultad de Economía y Negocios, Universidad Andrés Bello.
 | `index.html` | Portada del curso: material, programa, calendario de 18 semanas, evaluación y bibliografía. |
 | `clase1-noticias-macro-chile-2026.html` | Clase 1 — la economía chilena en agosto de 2026, con gráficos, preguntas de discusión y un simulador IS-LM de economía cerrada. |
 | `islm-da-oa-pib.html` | Repaso de economía cerrada — tres paneles sincronizados (IS-LM, DA-OA y la serie del PIB en el tiempo), con construcción interactiva de la DA y seis shocks animados. |
-| `balanza-de-pagos-pii.html` | Unidad I — la balanza de pagos derivada desde los balances de residentes y no residentes. Siete operaciones sobre dos balances espejo, con la PII recalculándose y el informe del año armándose solo. |
+| `balanza-de-pagos-pii.html` | Unidad I — la balanza de pagos derivada desde los balances de residentes y no residentes. Siete operaciones sobre dos balances espejo, con la PII recalculándose, el informe del año armándose solo y la derivación algebraica de CC = S − I por dos caminos. |
 
 Todas las páginas son HTML autocontenido: sin dependencias externas, sin build,
 sin conexión necesaria. Se abren con doble clic o se publican tal cual.

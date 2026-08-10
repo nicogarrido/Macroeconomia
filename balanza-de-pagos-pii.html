@@ -142,6 +142,23 @@ code{background:var(--wash);border-radius:5px;padding:1px 6px;font-size:13px;fon
 .q .badge.r{background:var(--washn);color:var(--pii)}
 .q .badge.nr{background:var(--washp);color:var(--pas)}
 .q .hint{font-size:12px;color:var(--muted);margin-top:2px}
+/* derivaciones paso a paso */
+.deriv{margin-top:8px}
+.dstep{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+.dstep:last-child{border-bottom:none;padding-bottom:4px}
+.dnum{width:26px;height:26px;border-radius:8px;background:var(--wash);color:var(--act);
+  display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;margin-top:2px}
+.deq{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;line-height:1.65;
+  background:var(--surface-1);border:1px solid var(--border);border-radius:9px;
+  padding:12px 16px;margin:0 0 9px;overflow-x:auto;white-space:pre;color:var(--text-primary)}
+.deq b{color:var(--act);font-weight:700}
+.deq i{color:var(--pii);font-style:normal;font-weight:700}
+.dstep p{margin:0 0 8px;color:var(--text-secondary);font-size:14px}
+.dstep p:last-child{margin-bottom:0}
+.dstep .nota{font-size:12.5px;color:var(--muted);border-left:2px solid var(--border);padding-left:10px}
+.res{background:var(--washn);border:1px solid var(--border);border-left:3px solid var(--pii);
+  border-radius:0 11px 11px 0;padding:14px 18px;margin-top:16px;font-size:15px}
+.res .deq{background:var(--card);margin-bottom:10px}
 ol.qs{padding-left:20px;margin:6px 0 0}
 ol.qs li{margin-bottom:10px;color:var(--text-secondary)}
 ol.qs li b{color:var(--text-primary);font-weight:620}
@@ -176,7 +193,8 @@ footer a{color:var(--text-secondary)}
     <a href="#patrones">7 · Patrones</a>
     <a href="#bdp">8 · Nace la balanza de pagos</a>
     <a href="#chile">9 · Chile de verdad</a>
-    <a href="#clase">10 · Guía de clase</a>
+    <a href="#algebra">10 · Del balance al álgebra</a>
+    <a href="#clase">11 · Guía de clase</a>
   </nav>
 </header>
 
@@ -514,9 +532,156 @@ footer a{color:var(--text-secondary)}
   </div>
 </section>
 
-<!-- ================= 10. GUIA ================= -->
+<!-- ================= 10. ALGEBRA ================= -->
+<section id="algebra">
+  <h2><span class="num">10</span>Del balance al álgebra: <span class="mono" style="font-size:.85em">CC = S − I</span></h2>
+  <p class="lede">Hasta acá todo fueron balances. Ahora la misma verdad en símbolos — porque en los libros la vas a encontrar así, y porque el álgebra permite hacer preguntas que la tabla no. Vamos por dos caminos: uno sale del balance que ya construimos, el otro de las cuentas nacionales. Llegan al mismo lugar, y eso no es casualidad.</p>
+
+  <h3>Camino A — desde el balance</h3>
+  <div class="card" style="padding:6px 20px 16px">
+    <div class="deriv">
+
+      <div class="dstep"><div class="dnum">1</div><div>
+        <div class="deq"><i>W</i>  =  <b>K</b>  +  <b>PII</b></div>
+        <p>La riqueza neta de un país solo puede estar en dos partes: las <b>cosas</b> que hay adentro —máquinas, edificios, viviendas, infraestructura, que llamamos <span class="mono">K</span>— y los <b>derechos netos</b> sobre el resto del mundo, que es la PII. No hay una tercera.</p>
+        <p>Los derechos entre dos chilenos no aparecen: se cancelaron al consolidar. <b>Esta ecuación es la sección 2 escrita en símbolos.</b></p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">2</div><div>
+        <div class="deq">Δ<i>W</i>  =  <b>S</b></div>
+        <p>La riqueza de un país crece por una sola razón: porque ahorró. Ahorrar es, por definición, no consumir parte del ingreso — y lo que no se consume queda como riqueza.</p>
+        <p class="nota">Dejamos fuera los cambios de valoración. En la realidad la riqueza también cambia porque suben o bajan los precios de los activos, y en Chile ese efecto es enorme. Volvemos sobre eso al final.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">3</div><div>
+        <div class="deq">Δ<i>W</i>  =  Δ<b>K</b>  +  Δ<b>PII</b></div>
+        <p>Es la ecuación del paso 1, mirando cómo cambia en el período. La riqueza crece porque creció el capital físico, porque creció la posición externa, o por las dos.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">4</div><div>
+        <div class="deq">Δ<b>K</b>  =  <b>I</b></div>
+        <p>El aumento del capital físico <i>es</i> la inversión. No es un supuesto: es la definición de invertir.</p>
+        <p class="nota">Si trabajas con magnitudes brutas hay que restar la depreciación, <span class="mono">ΔK = I − δK</span>. Pero la depreciación aparece también en el ahorro bruto, así que se cancela y la identidad final es idéntica en términos brutos o netos — mientras no los mezcles.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">5</div><div>
+        <div class="deq"><b>S</b>  =  <b>I</b>  +  Δ<b>PII</b>          ⟹          Δ<b>PII</b>  =  <b>S</b> − <b>I</b></div>
+        <p>Juntando los pasos 2, 3 y 4. Léelo en palabras: <b>el ahorro que no se convirtió en capital físico tuvo que convertirse en derechos sobre extranjeros.</b> No hay dónde más ponerlo.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">6</div><div>
+        <div class="deq">Δ<b>PII</b>  =  <b>CC</b>          ⟹          <b>CC</b>  =  <b>S</b> − <b>I</b></div>
+        <p>Y este último paso no hay que demostrarlo: <b>ya lo comprobaste operación por operación en el laboratorio.</b> La PII se movió exactamente en el monto de la cuenta corriente, y solo en las operaciones de la cuenta corriente.</p>
+      </div></div>
+
+    </div>
+  </div>
+
+  <h3>La escalera del ingreso, y qué es <span class="mono">F</span></h3>
+  <p class="lede" style="margin-bottom:12px">Antes del segundo camino hace falta un concepto que en los libros suele pasar rápido y que en esta clase ya está ganado. Define:</p>
+  <div class="deq" style="max-width:420px">F  =  RN  +  TR</div>
+  <p class="lede" style="margin-bottom:16px"><b>RN</b> es la <b>renta primaria neta</b>: lo que los residentes reciben del exterior por sus factores —sueldos, dividendos, intereses— menos lo que les pagan a los no residentes por los suyos. <b>TR</b> es la <b>renta secundaria neta</b>: transferencias sin contrapartida, remesas sobre todo. En una frase: <b><span class="mono">F</span> es todo lo que un residente recibe del exterior sin haber producido nada este período, neto de lo que paga por lo mismo.</b></p>
+
+  <div class="card" style="padding:12px 18px">
+    <table class="t" style="margin-top:0">
+      <thead><tr><th style="width:26%">Concepto</th><th style="width:26%">Fórmula</th><th>Qué mide</th></tr></thead>
+      <tbody>
+        <tr><td><b>PIB</b><br><span style="color:var(--muted);font-size:12.5px">producto interno bruto</span></td><td class="mono">Y</td><td style="color:var(--text-secondary)">Lo que se <b>produce dentro de las fronteras</b>, sin importar de quién sean los factores. Criterio <b>territorial</b>.</td></tr>
+        <tr><td><b>INB</b><br><span style="color:var(--muted);font-size:12.5px">ingreso nacional bruto</span></td><td class="mono">Y + RN</td><td style="color:var(--text-secondary)">Lo que <b>ganan los residentes</b>, produzcan donde produzcan. Criterio de <b>residencia</b>.</td></tr>
+        <tr><td><b>YND</b><br><span style="color:var(--muted);font-size:12.5px">ingreso nacional disponible</span></td><td class="mono">Y + RN + TR  =  Y + F</td><td style="color:var(--text-secondary)">Lo que los residentes pueden efectivamente <b>disponer</b>: gastar o ahorrar.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="klaw" style="margin-top:16px">
+    Detente en el salto de la primera fila a la segunda, porque <b>ese salto es la sección 4</b>. El PIB usa criterio territorial; el ingreso nacional usa criterio de residencia. Escondida produce en Chile —entra al PIB— pero sus utilidades pertenecen a no residentes, y por eso se restan para llegar al ingreso nacional. <b><span class="mono">RN</span> no es una partida técnica: es la residencia entrando en la macroeconomía.</b>
+  </div>
+
+  <h3>Camino B — desde las cuentas nacionales</h3>
+  <div class="card" style="padding:6px 20px 16px">
+    <div class="deriv">
+
+      <div class="dstep"><div class="dnum">1</div><div>
+        <div class="deq"><b>Y</b>  =  C  +  I  +  G  +  ( X − M )</div>
+        <p>El PIB por el lado del gasto. Todo lo que se produce dentro del país lo consume alguien, se invierte, lo compra el Estado o se va al exterior.</p>
+        <p class="nota">Se restan las importaciones porque <span class="mono">C</span>, <span class="mono">I</span> y <span class="mono">G</span> incluyen bienes que no se produjeron acá. La resta no es "lo malo de importar": es corregir un doble conteo.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">2</div><div>
+        <div class="deq"><b>YND</b>  =  <b>Y</b>  +  <b>F</b></div>
+        <p>Pasamos de lo producido a lo disponible, con la escalera de arriba. Acá entran las utilidades que Escondida remesa: salen del ingreso de los residentes aunque la producción haya ocurrido en Chile.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">3</div><div>
+        <div class="deq"><b>S</b>  =  <b>YND</b>  −  C  −  G</div>
+        <p>Ahorro nacional: el ingreso del que se dispone, menos lo que se consume. Nota que se restan los <i>dos</i> consumos, el privado y el público.</p>
+        <p class="nota">Cuidado con <span class="mono">G</span>: es <b>consumo</b> de gobierno, no gasto público total. La inversión pública está dentro de <span class="mono">I</span>. Es el error más frecuente de este bloque.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">4</div><div>
+        <div class="deq"><b>S</b>  =  ( C + I + G + X − M )  +  <b>F</b>  −  C  −  G</div>
+        <p>Sustituyendo el paso 1 dentro del paso 3, vía el paso 2. Puro reemplazo, sin ningún supuesto nuevo.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">5</div><div>
+        <div class="deq"><b>S</b>  =  <b>I</b>  +  ( X − M )  +  <b>F</b></div>
+        <p>El consumo privado y el gasto de gobierno se cancelan solos: entraron por el PIB y salieron por el ahorro. Lo que sobrevive es la inversión y lo que cruza la frontera.</p>
+      </div></div>
+
+      <div class="dstep"><div class="dnum">6</div><div>
+        <div class="deq"><b>CC</b>  =  ( X − M )  +  <b>F</b>          ⟹          <b>S</b>  =  <b>I</b> + <b>CC</b>          ⟹          <b>CC</b>  =  <b>S</b> − <b>I</b></div>
+        <p>Ese paréntesis más <span class="mono">F</span> <i>es</i> la cuenta corriente: balanza de bienes y servicios, más renta primaria neta, más renta secundaria neta. Reconocerlo cierra la derivación.</p>
+      </div></div>
+
+    </div>
+  </div>
+
+  <div class="res">
+    <div class="deq"><b>CC</b>  =  <b>S</b>  −  <b>I</b></div>
+    <b>Los dos caminos llegan al mismo lugar, y eso no es casualidad.</b> El camino B parte de las cuentas nacionales y el resultado se siente como un truco algebraico: cancelas <span class="mono">C</span> y <span class="mono">G</span> y aparece. El camino A parte del balance, y ahí no hay truco: la riqueza solo puede estar en cosas o en derechos, y lo que no se fue a cosas se fue a derechos sobre extranjeros. <b>Es la misma identidad; el camino A explica por qué es cierta.</b>
+  </div>
+
+  <h3>Compruébalo con el laboratorio</h3>
+  <p class="lede" style="margin-bottom:12px">Las siete operaciones caen exactamente en los términos de la identidad. Estos números salen del propio laboratorio:</p>
+  <div class="card" style="padding:14px 20px"><div id="algLab"></div></div>
+
+  <h3>Por qué <span class="mono">F</span> es el término interesante</h3>
+  <div class="cols2">
+    <div class="card" style="border-left:3px solid var(--act)">
+      <h3 style="margin-top:0">Deja escrito que la cuenta corriente no es comercio</h3>
+      <p style="color:var(--text-secondary);margin:0">En <span class="mono">CC = (X − M) + F</span>, la balanza comercial puede ser positiva y la cuenta corriente negativa si <span class="mono">F</span> es suficientemente negativo. Es la operación 5 formalizada: Chile puede exportar más de lo que importa y aun así perder patrimonio ese año.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--pas)">
+      <h3 style="margin-top:0">Es la puerta por donde el stock entra en los flujos</h3>
+      <p style="color:var(--text-secondary);margin:0"><span class="mono">RN</span> no es un número autónomo: es el rendimiento de las posiciones de la PII, <span class="mono">RN = r<sub>A</sub>·A* − r<sub>L</sub>·L*</span>. Todo el balance del laboratorio reaparece adentro de <span class="mono">F</span>. La identidad macro y la contabilidad patrimonial no son dos cosas — <span class="mono">F</span> es la costura.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;border-left:3px solid var(--pii)">
+    <h3 style="margin-top:0">Y para Chile es persistentemente negativo</h3>
+    <p style="color:var(--text-secondary);margin:0 0 10px">Con US$285.790 millones de inversión directa extranjera pagando rendimiento de capital accionario, contra activos externos que rinden como renta fija, el país paga más de lo que cobra. En símbolos, eso significa:</p>
+    <div class="deq" style="max-width:280px">YND  &lt;  PIB</div>
+    <p style="color:var(--text-secondary);margin:10px 0 0">Chile dispone de menos de lo que produce, todos los años. Y no por mala gestión, sino por la estructura de propiedad de su stock de capital. Es un buen momento incómodo para dejar caer en clase.</p>
+  </div>
+
+  <h3>Dos advertencias antes de usarla</h3>
+  <div class="cols2">
+    <div class="card">
+      <h3 style="margin-top:0">Es una identidad, no una explicación</h3>
+      <p style="color:var(--text-secondary);margin:0"><span class="mono">CC = S − I</span> se cumple siempre, por construcción. <b>No dice que el ahorro cause la cuenta corriente.</b> Las tres variables se determinan juntas.</p>
+      <p style="color:var(--text-secondary);margin:10px 0 0">Cada vez que alguien afirma "Chile tiene déficit de cuenta corriente porque los chilenos no ahorran", está leyendo causalidad en una identidad — y es tan válido como decir que no ahorran porque hay déficit. La identidad restringe las combinaciones posibles; no explica ninguna. Para explicar hace falta un modelo, y ese es el IS-LM-BP de la Unidad II.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">La versión dinámica, y por qué la fórmula simple falla en Chile</h3>
+      <p style="color:var(--text-secondary);margin:0 0 8px">Encadenando la identidad año a año se llega a la ecuación que sostiene todo el análisis de sostenibilidad externa:</p>
+      <div class="deq" style="font-size:14px">PII<sub>t</sub>  =  (1 + r) · PII<sub>t−1</sub>  +  BBS<sub>t</sub></div>
+      <p style="color:var(--text-secondary);margin:8px 0 0">Pero fíjate en el laboratorio: antes de la operación 5 la PII era <b>+40</b> —Chile acreedor neto— y aun así pagó 8 de renta. Con <span class="mono">RN = r·PII</span> eso sería imposible. La razón es que <span class="mono">r<sub>L</sub> &gt; r<sub>A</sub></span>: los pasivos rinden como acciones y los activos como bonos. <b>Los stocks brutos entran en la ecuación de flujos, no solo el neto.</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11. GUIA ================= -->
 <section id="clase">
-  <h2><span class="num">10</span>Guía de clase</h2>
+  <h2><span class="num">11</span>Guía de clase</h2>
   <div class="cols2">
     <div class="card">
       <h3 style="margin-top:0">Preguntas para discutir</h3>
@@ -528,6 +693,8 @@ footer a{color:var(--text-secondary)}
         <li><b>Laboratorio, operación 5.</b> Escondida paga utilidades y la PII cae, sin que cruce ningún bien la frontera. ¿De dónde salió esa caída? Relaciónala con la operación 4 y explica por qué un país puede empobrecerse sin importar nada.</li>
         <li><b>Sección 8.</b> Sin mirar la tabla: de las siete operaciones, ¿cuáles entran en la cuenta corriente? ¿Qué tienen en común? Cuidado, porque una de ellas no mueve ningún bien.</li>
         <li><b>Laboratorio, operaciones 6 y 7.</b> Las dos mueven cartera y ninguna mueve la PII. Si mañana el Banco Central sube fuertemente la TPM, ¿cuál de las dos esperarías que aumente? ¿Y qué le pasa a los pasivos que entraron por la 7 si la tasa vuelve a bajar?</li>
+        <li><b>Sección 10.</b> El camino A y el camino B llegan a la misma ecuación. ¿Cuál de los dos te convence de que es <i>verdadera</i>, y cuál solo de que es <i>correcta</i>? ¿Qué diferencia hay entre esas dos cosas?</li>
+        <li><b>Sección 10.</b> Si <span class="mono">F</span> es negativo y la balanza comercial es positiva, ¿puede el país estar perdiendo patrimonio frente al mundo? Construye un ejemplo numérico y di qué operación del laboratorio lo produce.</li>
         <li><b>Sección 9.</b> Chile tiene superávit comercial y déficit de renta al mismo tiempo. Explícalo usando solo el balance, sin hablar de comercio.</li>
         <li><b>Puente.</b> Si la operación 4 hubiera sido la compra de <i>la mina misma</i> —el terreno y la concesión— en vez de las acciones de la empresa, la anotación cambia. ¿A qué cuenta iría, y por qué existe esa cuenta?</li>
       </ol>
@@ -591,7 +758,7 @@ const OPS = [
     t:'Exportación a crédito',
     sub:'Codelco despacha cobre a Corea por USD 20 y le da 90 días para pagar.',
     a:{ccc:+20}, p:{},
-    cc:{t:'Exportaciones de bienes', v:+20},
+    cc:{t:'Exportaciones de bienes', v:+20, tipo:'bs'},
     real:true, fin:true, cuenta:'Cuenta corriente + cuenta financiera',
     pat:{me:'—',cred:'↑',otros:'—',pas:'—',pii:'↑'},
     txt:`Salió cobre del país y todavía no entró nada a cambio: lo que entró fue un <b>derecho a cobrar</b>. En el balance de Chile nace un crédito comercial en el activo; en el de Corea, el mismo crédito nace en el pasivo. Es el mismo objeto anotado dos veces.<br><br>La PII sube de 50 a <b>70</b>. Y sube porque lo que Chile entregó —el cobre— no era un activo de su balance externo: era producción del período. <b>Esta es la única forma en que el patrimonio neto de un país frente al mundo puede crecer.</b>`
@@ -608,7 +775,7 @@ const OPS = [
     t:'Importación a crédito',
     sub:'Una empresa chilena compra maquinaria alemana por USD 30 y queda debiendo.',
     a:{}, p:{ccp:+30},
-    cc:{t:'Importaciones de bienes', v:-30},
+    cc:{t:'Importaciones de bienes', v:-30, tipo:'bs'}, inv:30,
     real:true, fin:true, cuenta:'Cuenta corriente + cuenta financiera',
     pat:{me:'—',cred:'↑ (pasivo)',otros:'—',pas:'↑',pii:'↓'},
     txt:`Entró una máquina al país y nació una obligación de pagarla. Fíjate en el detalle: es <b>el mismo instrumento de la operación 1</b> —crédito comercial— pero ahora del lado del pasivo. Lo único que cambió fue la dirección de la venta.<br><br>La máquina, eso sí, <b>no aparece en la PII</b>: es una cosa, no un derecho sobre un no residente. Por eso los activos externos no se mueven y solo suben los pasivos. La PII cae de 70 a <b>40</b>.`
@@ -625,7 +792,7 @@ const OPS = [
     t:'Escondida remesa utilidades a sus dueños',
     sub:'La minera —empresa residente en Chile— paga USD 8 de utilidades a los accionistas no residentes que la controlan.',
     a:{me:-8}, p:{},
-    cc:{t:'Renta de la inversión pagada al exterior', v:-8},
+    cc:{t:'Renta de la inversión pagada al exterior', v:-8, tipo:'F'},
     real:false, fin:true, cuenta:'Cuenta corriente + cuenta financiera',
     pat:{me:'↓',cred:'—',otros:'—',pas:'—',pii:'↓'},
     txt:`Aquí no cruzó ni un bien la frontera, y sin embargo <b>la PII cae de 40 a 32</b>: Chile es ocho más pobre que ayer. Es la prueba de que la cuenta corriente <b>no es comercio</b> — es todo aquello cuya contrapartida no es otro derecho financiero.<br><br>Fíjate en la cadena: en la operación 4 los no residentes adquirieron un derecho sobre una empresa chilena. Ese <i>stock</i> ahora genera un <i>flujo</i>. Ocho sobre un stock de 160 es un rendimiento de 5% — y esa renta sale del país todos los años, sin que nadie haga nada nuevo. <b>Los pasivos no son fotos: son cañerías.</b><br><br>Y ojo con la residencia: Escondida es una empresa <b>residente</b> en Chile. Lo que cruza la frontera no es la empresa, sino el pago a sus dueños. Por eso la operación existe.<br><br><span style="color:var(--muted)">Variante para discutir: si en vez de remesar las utilidades la empresa las <b>reinvirtiera</b>, la anotación en la cuenta corriente sería exactamente la misma —la renta se devengó igual— pero la contrapartida ya no sería una caída de moneda extranjera, sino un <b>aumento del pasivo de inversión directa</b>. Misma cuenta corriente, distinta cuenta financiera.</span>`
@@ -922,6 +1089,39 @@ if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matche
   document.documentElement.setAttribute('data-theme','dark');
   themeBtn.textContent='Modo claro';
 }
+
+/* ============================================================
+   SECCIÓN 10 — la identidad con los números del laboratorio
+   ============================================================ */
+(function(){
+  const ini = estado(0), fin = estado(OPS.length);
+  const pii0 = suma(ini.a)-suma(ini.p), pii1 = suma(fin.a)-suma(fin.p);
+  const dPII = pii1 - pii0;
+  const bs = OPS.filter(o=>o.cc&&o.cc.tipo==='bs').reduce((s,o)=>s+o.cc.v,0);
+  const F  = OPS.filter(o=>o.cc&&o.cc.tipo==='F').reduce((s,o)=>s+o.cc.v,0);
+  const X  = OPS.filter(o=>o.cc&&o.cc.tipo==='bs'&&o.cc.v>0).reduce((s,o)=>s+o.cc.v,0);
+  const M  = -OPS.filter(o=>o.cc&&o.cc.tipo==='bs'&&o.cc.v<0).reduce((s,o)=>s+o.cc.v,0);
+  const CC = bs + F;
+  const I  = OPS.reduce((s,o)=>s+(o.inv||0),0);
+  const S  = I + dPII;
+  const pad = (t,n)=>t+' '.repeat(Math.max(1,n-t.length));
+  const nm = v => String(v).replace('-','\u2212');
+  const eq = t => `<div class="deq">${t}</div>`;
+  document.getElementById('algLab').innerHTML =
+    `<p style="color:var(--text-secondary);margin:0 0 10px;font-size:14px"><b>1.</b> La cuenta corriente, separada en sus dos piezas:</p>` +
+    eq(`${pad('X − M',10)}=   ${pad(X+' − '+M,10)}=  ${nm(bs)}      bienes: operaciones 1 y 3\n`+
+       `${pad('F',10)}=   ${pad('',10)}=   ${nm(F)}      renta: operación 5\n`+
+       `${'─'.repeat(46)}\n`+
+       `<b>${pad('CC',10)}=   ${pad('',10)}=  ${nm(CC)}</b>`) +
+    `<p style="color:var(--text-secondary);margin:14px 0 10px;font-size:14px"><b>2.</b> Ahora el otro lado de la identidad. El laboratorio no muestra el ahorro —vive en las cuentas internas, que la PII deliberadamente excluye— pero se puede <b>recuperar</b>. Basta un dato: la máquina importada en la operación 3 era inversión, y fue la única del período.</p>` +
+    eq(`${pad('I',18)}=  ${I}                       la máquina de la operación 3\n`+
+       `${pad('ΔPII',18)}=  ${nm(dPII)}                      del laboratorio: ${sgn(pii0)} → ${sgn(pii1)}\n`+
+       `${'─'.repeat(52)}\n`+
+       `<b>${pad('S  =  I + ΔPII',18)}=  ${I} + (${nm(dPII)})  =  ${S}</b>`) +
+    `<p style="color:var(--text-secondary);margin:14px 0 10px;font-size:14px"><b>3.</b> Y la identidad cierra:</p>` +
+    eq(`<b>S − I   =   ${S} − ${I}   =   ${nm(S-I)}   =   CC</b>   ✓`) +
+    `<p style="color:var(--text-secondary);margin:14px 0 0;font-size:14px">Chile ahorró <b>${S}</b> e invirtió <b>${I}</b>. La diferencia de <b>${Math.abs(S-I)}</b> se la financió el resto del mundo — que es exactamente el saldo de la cuenta corriente. Fíjate en que la máquina no está en la PII, porque es una cosa y no un derecho: está en <span class="mono">K</span>. La identidad es la contabilidad que reúne las dos mitades.</p>`;
+})();
 
 pintar();
 pintarBdP();
