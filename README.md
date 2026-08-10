@@ -10,7 +10,7 @@ Facultad de Economía y Negocios, Universidad Andrés Bello.
 | `index.html` | Portada del curso: material, programa, calendario de 18 semanas, evaluación y bibliografía. |
 | `clase1-noticias-macro-chile-2026.html` | Clase 1 — la economía chilena en agosto de 2026, con gráficos, preguntas de discusión y un simulador IS-LM de economía cerrada. |
 | `islm-da-oa-pib.html` | Repaso de economía cerrada — tres paneles sincronizados (IS-LM, DA-OA y la serie del PIB en el tiempo), con construcción interactiva de la DA y seis shocks animados. |
-| `balanza-de-pagos-pii.html` | Unidad I — la balanza de pagos derivada desde los balances de residentes y no residentes. Cinco operaciones sobre dos balances espejo, con la PII recalculándose y el informe del año armándose solo. |
+| `balanza-de-pagos-pii.html` | Unidad I — la balanza de pagos derivada desde los balances de residentes y no residentes. Seis operaciones sobre dos balances espejo, con la PII recalculándose y el informe del año armándose solo. |
 
 Todas las páginas son HTML autocontenido: sin dependencias externas, sin build,
 sin conexión necesaria. Se abren con doble clic o se publican tal cual.
@@ -43,8 +43,10 @@ en billones de pesos de 2025; las constantes `ANCLA_BILLONES` y `ANCLA_ANIO` est
 aisladas al comienzo del script para poder cambiar el ancla en una línea. La cifra de
 2026 (1,3%) es la proyección de mercado, no un dato observado.
 
-En `balanza-de-pagos-pii.html`, el ejemplo de las cinco operaciones es una construcción
+En `balanza-de-pagos-pii.html`, el ejemplo de las seis operaciones es una construcción
 didáctica con números redondos, calibrada para que la cuenta corriente, la cuenta
-financiera y la variación de la PII coincidan exactamente en −10. Las cifras reales de
+financiera y la variación de la PII coincidan exactamente en −18. "Escondida" se usa
+como nombre reconocible de una empresa residente con dueños no residentes, no como
+referencia a sus cifras reales. Las cifras reales de
 la Posición de Inversión Internacional son del anuario de Balanza de Pagos del Banco
 Central al cierre de 2024. Las definiciones de residencia siguen el MBP6 del FMI.
