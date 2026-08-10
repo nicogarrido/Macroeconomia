@@ -112,14 +112,22 @@ code{background:var(--wash);border-radius:5px;padding:1px 6px;font-size:13px;fon
 /* ---------- misc ---------- */
 .klaw{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--pii);border-radius:0 12px 12px 0;padding:14px 18px;margin:18px 0;font-size:15px}
 .klaw b{color:var(--pii)}
-.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media(max-width:820px){.mini{grid-template-columns:1fr}}
-.mb{background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13px}
-.mb h5{margin:0 0 8px;font-size:13px}
-.mb .l{display:flex;justify-content:space-between;padding:3px 0;color:var(--text-secondary)}
-.mb .l b{font-variant-numeric:tabular-nums;color:var(--text-primary)}
-.mb .l.cx{text-decoration:line-through;opacity:.38}
-.mb .pn{display:flex;justify-content:space-between;border-top:1px solid var(--border);margin-top:6px;padding-top:6px;font-weight:680;color:var(--pii)}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:980px){.tri{grid-template-columns:1fr}}
+.tri .bs{display:flex;flex-direction:column}
+.tri .bs .bsgrid{flex:1}
+.tri .bs .bscol{display:flex;flex-direction:column}
+.tri .bs .tot{margin-top:auto}
+.bs.sm > h4{padding:10px 14px;font-size:13.5px}
+.bs.sm .row{font-size:12.5px;padding:4px 12px}
+.bs.sm .bshead{padding:0 12px 6px;font-size:10.5px}
+.bs.sm .tot{padding:7px 12px 3px;font-size:12.5px}
+.bs.sm .piirow{padding:8px 12px;font-size:13px}
+.row.cx .nm,.row.cx .vl{text-decoration:line-through;opacity:.34}
+.row .pr{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:4px;
+  background:var(--wash);color:var(--act);font-size:10px;font-weight:700;margin-right:6px;vertical-align:1px}
+.row.cx .pr{background:var(--hi);color:#8a6d1a;opacity:1;text-decoration:none}
+.dash-note{font-size:12.5px;color:var(--muted);padding:4px 12px}
 .quiz{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 @media(max-width:820px){.quiz{grid-template-columns:1fr}}
 .q{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:border-color .2s}
@@ -224,33 +232,17 @@ footer a{color:var(--text-secondary)}
     <b>Todo activo financiero es, al mismo tiempo, el pasivo de alguien más.</b> Las cosas —casas, bicicletas, máquinas, minas— no son pasivo de nadie.
   </div>
 
-  <p class="lede">Esta ley parece contable y es en realidad el motor de toda la clase. Compruébala: tres personas, sus balances, y qué pasa cuando los sumas.</p>
+  <p class="lede">Esta ley parece contable y es en realidad el motor de toda la clase. Compruébala: tres balances completos —con activo, pasivo y patrimonio neto— y qué pasa cuando los sumas. Los números con marca <span class="pr" style="display:inline-flex">①</span> y <span class="pr" style="display:inline-flex">②</span> son el mismo objeto anotado desde los dos lados.</p>
 
-  <div class="mini" id="miniBs">
-    <div class="mb">
-      <h5 style="color:var(--act)">Ana</h5>
-      <div class="l fin"><span>Depósito en el banco</span><b>10</b></div>
-      <div class="l"><span>Bicicleta</span><b>5</b></div>
-      <div class="pn"><span>Patrimonio neto</span><b>15</b></div>
-    </div>
-    <div class="mb">
-      <h5 style="color:var(--act)">El banco</h5>
-      <div class="l fin"><span>Préstamo a Pedro</span><b>10</b></div>
-      <div class="l fin"><span>Depósito de Ana</span><b>−10</b></div>
-      <div class="pn"><span>Patrimonio neto</span><b>0</b></div>
-    </div>
-    <div class="mb">
-      <h5 style="color:var(--act)">Pedro</h5>
-      <div class="l"><span>Casa</span><b>20</b></div>
-      <div class="l fin"><span>Préstamo del banco</span><b>−10</b></div>
-      <div class="pn"><span>Patrimonio neto</span><b>10</b></div>
-    </div>
-  </div>
+  <div class="tri" id="triBs"></div>
 
-  <div class="acts" style="margin-top:14px">
+  <div class="acts" style="margin-top:16px">
     <button class="btn primary" id="consolidarBtn">Consolidar los tres balances</button>
     <button class="btn" id="consolidarReset">Volver</button>
   </div>
+
+  <div id="consolWrap" style="margin-top:16px" hidden></div>
+
   <div class="narr" id="narrLey">
     <span class="op">Suma los tres patrimonios</span>
     15 + 0 + 10 = <b>25</b>. Ahora presiona el botón y fíjate en qué sobrevive.
@@ -720,17 +712,65 @@ document.getElementById('nextBtn').addEventListener('click',()=>{ if(paso<OPS.le
 document.getElementById('prevBtn').addEventListener('click',()=>{ if(paso>0){paso--;pintar();} });
 document.getElementById('resetBtn').addEventListener('click',()=>{ paso=0;pintar(); });
 
-/* consolidación de los tres balances */
+/* ============================================================
+   LOS TRES BALANCES DE LA SECCIÓN 2
+   ============================================================ */
+const PERSONAS = [
+  {n:'Ana', nota:'Ahorró y guardó la plata en el banco.',
+   act:[{t:'Depósito en el banco', v:10, par:'①'}, {t:'Bicicleta', v:5}],
+   pas:[]},
+  {n:'El banco', nota:'Recibió el depósito y lo prestó.',
+   act:[{t:'Préstamo a Pedro', v:10, par:'②'}],
+   pas:[{t:'Depósito de Ana', v:10, par:'①'}]},
+  {n:'Pedro', nota:'Se endeudó para comprar una casa.',
+   act:[{t:'Casa', v:20}],
+   pas:[{t:'Préstamo del banco', v:10, par:'②'}]}
+];
+
+function filaBs(l, tachada){
+  const pr = l.par ? `<span class="pr">${l.par}</span>` : '';
+  return `<div class="row${tachada&&l.par?' cx':''}"><span class="nm">${pr}${l.t}</span><span class="vl">${l.v}</span></div>`;
+}
+function balance(p, tachar){
+  const sa = p.act.reduce((s,l)=>s+l.v,0), sp = p.pas.reduce((s,l)=>s+l.v,0);
+  const col = (lineas, clase, titulo, total) => {
+    const cuerpo = lineas.length
+      ? lineas.map(l=>filaBs(l,tachar)).join('')
+      : `<div class="dash-note">No tiene</div>`;
+    return `<div class="bscol"><div class="bshead ${clase}">${titulo}</div>${cuerpo}`+
+           `<div class="tot ${clase}"><span>Total</span><span class="vl">${total}</span></div></div>`;
+  };
+  return `<div class="bs sm"><h4><span>${p.n}</span><span>${p.nota}</span></h4><div class="bsgrid">`+
+         col(p.act,'a','Activo', sa) + col(p.pas,'p','Pasivo', sp) +
+         `</div><div class="piirow"><span>Patrimonio neto</span><span class="vl">${sa-sp}</span></div></div>`;
+}
+function pintarTri(tachar){
+  document.getElementById('triBs').innerHTML = PERSONAS.map(p=>balance(p,tachar)).join('');
+}
+
+const NARR_LEY_0 = `<span class="op">Suma los tres patrimonios</span>15 + 0 + 10 = <b>25</b>. Ahora presiona el botón y fíjate en qué sobrevive.`;
+const NARR_LEY_1 = `<span class="op">Consolidado</span>Se tacharon los cuatro derechos, de a pares: el depósito que era <b>activo</b> de Ana desapareció contra el <b>pasivo</b> del banco, y el préstamo que era <b>activo</b> del banco desapareció contra el <b>pasivo</b> de Pedro. Cada uno se canceló contra su contraparte, porque siempre fueron el mismo objeto anotado dos veces.<br><br>Lo que sobrevive son la bicicleta (5) y la casa (20): <b>25</b>, exactamente la suma de los tres patrimonios. El patrimonio neto de un grupo consolidado son solo las <i>cosas</i>.<br><br>Extendido al planeta entero: <b>la riqueza financiera neta de la humanidad es cero</b>. Todo lo que alguien tiene por derecho, otro lo debe. Guarda esta idea — es la que va a hacer aparecer la PII.`;
+
 document.getElementById('consolidarBtn').addEventListener('click',()=>{
-  document.querySelectorAll('#miniBs .l.fin').forEach(l=>l.classList.add('cx'));
-  document.getElementById('narrLey').innerHTML =
-    `<span class="op">Consolidado</span>Se tacharon todos los derechos: el depósito de Ana desapareció contra el pasivo del banco, y el préstamo del banco desapareció contra la deuda de Pedro. <b>Cada uno se canceló contra su contraparte.</b><br><br>Lo que sobrevive son la bicicleta (5) y la casa (20): <b>25</b>, exactamente la suma de los tres patrimonios. Es decir, el patrimonio neto de un grupo consolidado son solo las <i>cosas</i>.<br><br>Extendido al planeta entero, esto significa que <b>la riqueza financiera neta de la humanidad es cero</b>. Todo lo que alguien tiene por derecho, otro lo debe. Guarda esta idea: es la que va a hacer aparecer la PII.`;
+  pintarTri(true);
+  const w = document.getElementById('consolWrap');
+  w.hidden = false;
+  w.innerHTML = `<div class="bs sm" style="max-width:520px"><h4><span>Balance consolidado de los tres</span><span>lo que queda en pie</span></h4>`+
+    `<div class="bsgrid"><div class="bscol"><div class="bshead a">Activo</div>`+
+    `<div class="row"><span class="nm">Bicicleta</span><span class="vl">5</span></div>`+
+    `<div class="row"><span class="nm">Casa</span><span class="vl">20</span></div>`+
+    `<div class="tot a"><span>Total</span><span class="vl">25</span></div></div>`+
+    `<div class="bscol"><div class="bshead p">Pasivo</div><div class="dash-note">Ninguno: todos se cancelaron</div>`+
+    `<div class="tot p"><span>Total</span><span class="vl">0</span></div></div></div>`+
+    `<div class="piirow"><span>Patrimonio neto</span><span class="vl">25</span></div></div>`;
+  document.getElementById('narrLey').innerHTML = NARR_LEY_1;
 });
 document.getElementById('consolidarReset').addEventListener('click',()=>{
-  document.querySelectorAll('#miniBs .l.fin').forEach(l=>l.classList.remove('cx'));
-  document.getElementById('narrLey').innerHTML =
-    `<span class="op">Suma los tres patrimonios</span>15 + 0 + 10 = <b>25</b>. Ahora presiona el botón y fíjate en qué sobrevive.`;
+  pintarTri(false);
+  document.getElementById('consolWrap').hidden = true;
+  document.getElementById('narrLey').innerHTML = NARR_LEY_0;
 });
+pintarTri(false);
 
 /* quiz de residencia */
 document.querySelectorAll('#quiz .q').forEach(q=>{
